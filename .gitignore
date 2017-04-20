@@ -34,3 +34,4 @@ build/
 
 # Python files for cocos tools
 *.pyc
+__pycache__/
