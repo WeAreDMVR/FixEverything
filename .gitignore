@@ -27,3 +27,10 @@
 *.exe
 *.out
 *.app
+
+# Build directories
+bin/
+build/
+
+# Python files for cocos tools
+*.pyc
