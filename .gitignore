@@ -10,8 +10,10 @@
 *.app
 
 # Build directories
-bin/
 *-build/
+bin/
+build/
+!Rhynos/cocos2d/build/
 
 # Python files for cocos tools
 *.pyc
