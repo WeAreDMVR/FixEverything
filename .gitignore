@@ -31,6 +31,7 @@
 # Build directories
 bin/
 build/
+*-build/
 
 # Python files for cocos tools
 *.pyc
