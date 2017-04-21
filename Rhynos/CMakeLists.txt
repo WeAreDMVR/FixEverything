@@ -1,6 +1,6 @@
 #/****************************************************************************
 # Copyright (c) 2013-2014 cocos2d-x.org
-# Copyright (c) 2015 Chukong Technologies Inc.
+# Copyright (c) 2015-2017 Chukong Technologies Inc.
 #
 # http://www.cocos2d-x.org
 #
@@ -111,7 +111,9 @@ endif()
 include_directories(
   /usr/local/include/GLFW
   /usr/include/GLFW
+  ${COCOS2D_ROOT}
   ${COCOS2D_ROOT}/cocos
+  ${COCOS2D_ROOT}/external
   ${COCOS2D_ROOT}/cocos/platform
   ${COCOS2D_ROOT}/cocos/audio/include/
   Classes
@@ -136,7 +138,22 @@ set(GAME_HEADERS
 )
 
 
-# Configure libcocos2d
+# Configure libcocos2d:
+# Uncomment to disable/enable compilation and linking of the following features:
+#set(USE_CHIPMUNK OFF CACHE BOOL "Use chipmunk for physics library")
+#set(USE_BOX2D ON CACHE BOOL "Use box2d for physics library")
+#set(USE_BULLET OFF CACHE BOOL "Use bullet for physics3d library")
+#set(USE_RECAST OFF CACHE BOOL "Use Recast for navigation mesh")
+#set(USE_WEBP OFF CACHE BOOL "Use WebP codec")
+#set(BUILD_SHARED_LIBS OFF CACHE BOOL "Build shared libraries")
+#set(DEBUG_MODE OFF CACHE BOOL "Debug or release?")
+#set(BUILD_EXTENSIONS OFF CACHE BOOL "Build extension library")
+#set(BUILD_EDITOR_SPINE OFF CACHE BOOL "Build editor support for spine")
+#set(BUILD_EDITOR_COCOSTUDIO OFF CACHE BOOL "Build editor support for cocostudio")
+#set(BUILD_EDITOR_COCOSBUILDER OFF CACHE BOOL "Build editor support for cocosbuilder")
+#set(BUILD_BOX2D OFF CACHE BOOL "Build box2d external without using it for physics library")
+#set(USE_PREBUILT_LIBS OFF CACHE BOOL "Use prebuilt libraries in external directory") # Note: there's no support for this in Linux
+#set(USE_SOURCES_EXTERNAL OFF CACHE BOOL "Use sources in external directory (automatically ON when USE_PREBUILT_LIBS is)") # Note: there's no support for this in Linux
 set(BUILD_CPP_EMPTY_TEST OFF CACHE BOOL "turn off build cpp-empty-test")
 set(BUILD_CPP_TESTS OFF CACHE BOOL "turn off build cpp-tests")
 set(BUILD_LUA_LIBS OFF CACHE BOOL "turn off build lua related targets")
