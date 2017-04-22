@@ -8,24 +8,30 @@ public:
 	pSprite(Sprite* sprite);
 
 	inline Sprite* getSprite();
-	inline pSprite::setPosition(Point p);
-	inline pSprite::getPositionX();
-	inline pSprite::getPositionY();
-	inline pSprite::setProperties(Value properties);
-	inline pSprite::getProperties();
-	void pSprite::addBodyToWorld(b2World* world, b2BodyType bodyType);
-    void pSprite::createRectangularFixture(TMXLayer* layer, const Size tileSize, int x, int y);
+	inline void setSprite(Sprite* sprite);
+	inline void setPosition(Point p);
+	inline int getPositionX();
+	inline int getPositionY();
+	inline void setProperties(ValueMap& properties);
+	inline ValueMap& getProperties();
+	void addBodyToWorld(b2World* world);
+	void pSprite::addBodyToWorldAtPosition(b2World * world, Point p);
+    void createRectangularFixture(TMXLayer* layer, const Size tileSize, int x, int y);
+    void createRectangularFixture();
+    // NOTE: Does NOT remove sprite from Level
+    // Level must do that
+    void removeBodyFromWorld(b2World *world);
 
 private:
 	typedef Node super;
 	typedef Vec2 Point;
 
 protected:
-	b2Body*  _body;
-	Sprite*  _sprite;
-	Value    _properties;
-	int      _xposition;
-	int      _yposition;
+	b2Body*   _body;
+	Sprite*   _sprite;
+	ValueMap& _properties;
+	int       _xposition;
+	int       _yposition;
 }
 
 enum class FilterCategory {

@@ -44,12 +44,12 @@ void Level::createFixtures(TMXLayer* layer) {
 			if (tileSprite)
 				// get properties of the tile
 				int tileGid = layer->tileGIDAt(Point(x,y));
-				Value properties = this->_map->propertiesForGID(tileGid);
+				ValueMap& properties = this->_map->propertiesForGID(tileGid).asValueMap();
 				// create pSprite
 				pSprite *psprite = new pSprite(tileSprite);
 				Point position = positionForTileCoord(Point(x,y));
 				psprite->setPosition(position);
-				psprite->set_properties(properties);
+				psprite->setProperties(properties);
 				// load pSprite
 				psprite->addBodyToWorld(this->_world);
 				auto tileSize = this->_map->getTileSize();
@@ -78,6 +78,27 @@ void Level::loadObjects() {
 
 pSprite* Level::addObject(const std::string className, ValueMap& properties) {
 	// create object
+	auto name = properties.at("name").asString().c_str();
+	// create sprite (Assumes a Spritesheet has been loaded)
+	// <name> property should have the name of the .png image for the sprite
+	auto sprite = Sprite::createWithSpriteFrameName(name);
+	pSprite* object;
+	switch (className) {
+		case "Player":
+			// create Player
+			object = new Player(sprite);
+			break;
+		default:
+			// create pSprite
+			object = new pSprite(sprite);
+	}
+	int x = properties.at("x");
+	int y = properties.at("y");
+	object->setPosition(Point(x, y));
+	object->setProperties(properties);
+	object->addBodyToWorld(this->world);
+	object->createRectangularFixture();
+	this->_sprites.push_back(object);
 }
 
 Point Level::positionForTileCoord(Point coordinate) {
