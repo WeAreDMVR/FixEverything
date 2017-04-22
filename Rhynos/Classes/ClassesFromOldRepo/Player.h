@@ -32,10 +32,13 @@ public:
 	void applyMoveRight();
 	void applyMoveLeft();
 	void applyJump();
+	void resetJumpTime();
 
 private:
 	typedef pSprite super;
 	typedef Vec2 Point;
+
+	bool canJump();
 protected:
 	// current health of player
 	int _health;
@@ -55,6 +58,8 @@ protected:
 	float _jmp;
 	// the player's max speed
 	float _maxSpeed;
+	// the player's current jump time
+	float _jumpTime;
 	// the player's max jump time
 	float _maxJumpTime;
 	// the player's status
