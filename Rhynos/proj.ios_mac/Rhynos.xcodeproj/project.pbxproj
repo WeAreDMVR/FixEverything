@@ -64,6 +64,14 @@
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
 		CD0F1F121EABCC9000B6B63D /* Rhyno.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0F1F101EABCC9000B6B63D /* Rhyno.cpp */; };
 		CD0F1F131EABCC9800B6B63D /* Rhyno.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0F1F101EABCC9000B6B63D /* Rhyno.cpp */; };
+		CD7A0C9F1EABD74D0062C56B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C991EABD74D0062C56B /* Player.cpp */; };
+		CD7A0CA01EABD74D0062C56B /* pSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9B1EABD74D0062C56B /* pSprite.cpp */; };
+		CD7A0CA11EABD74D0062C56B /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9D1EABD74D0062C56B /* World.cpp */; };
+		CD7A0CA51EABD7E90062C56B /* Level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0CA31EABD7E90062C56B /* Level.cpp */; };
+		CDEE03381EABDE6F00B3971D /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C991EABD74D0062C56B /* Player.cpp */; };
+		CDEE033A1EABDE7300B3971D /* pSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9B1EABD74D0062C56B /* pSprite.cpp */; };
+		CDEE033B1EABDE7700B3971D /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9D1EABD74D0062C56B /* World.cpp */; };
+		CDEE033C1EABDE7B00B3971D /* Level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0CA31EABD7E90062C56B /* Level.cpp */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
@@ -166,6 +174,14 @@
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		CD0F1F101EABCC9000B6B63D /* Rhyno.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rhyno.cpp; sourceTree = "<group>"; };
 		CD0F1F111EABCC9000B6B63D /* Rhyno.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rhyno.h; sourceTree = "<group>"; };
+		CD7A0C991EABD74D0062C56B /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
+		CD7A0C9A1EABD74D0062C56B /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
+		CD7A0C9B1EABD74D0062C56B /* pSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pSprite.cpp; sourceTree = "<group>"; };
+		CD7A0C9C1EABD74D0062C56B /* pSprite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = pSprite.h; sourceTree = "<group>"; };
+		CD7A0C9D1EABD74D0062C56B /* World.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = World.cpp; sourceTree = "<group>"; };
+		CD7A0C9E1EABD74D0062C56B /* World.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = World.h; sourceTree = "<group>"; };
+		CD7A0CA31EABD7E90062C56B /* Level.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Level.cpp; sourceTree = "<group>"; };
+		CD7A0CA41EABD7E90062C56B /* Level.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Level.h; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -313,6 +329,14 @@
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
 				CD0F1F101EABCC9000B6B63D /* Rhyno.cpp */,
 				CD0F1F111EABCC9000B6B63D /* Rhyno.h */,
+				CD7A0C991EABD74D0062C56B /* Player.cpp */,
+				CD7A0C9A1EABD74D0062C56B /* Player.h */,
+				CD7A0C9B1EABD74D0062C56B /* pSprite.cpp */,
+				CD7A0C9C1EABD74D0062C56B /* pSprite.h */,
+				CD7A0C9D1EABD74D0062C56B /* World.cpp */,
+				CD7A0C9E1EABD74D0062C56B /* World.h */,
+				CD7A0CA31EABD7E90062C56B /* Level.cpp */,
+				CD7A0CA41EABD7E90062C56B /* Level.h */,
 			);
 			name = Classes;
 			path = ../Classes;
@@ -513,10 +537,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD7A0CA51EABD7E90062C56B /* Level.cpp in Sources */,
 				46880B8819C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				CD0F1F121EABCC9000B6B63D /* Rhyno.cpp in Sources */,
+				CD7A0CA11EABD74D0062C56B /* World.cpp in Sources */,
+				CD7A0C9F1EABD74D0062C56B /* Player.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
+				CD7A0CA01EABD74D0062C56B /* pSprite.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -525,6 +553,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDEE033C1EABDE7B00B3971D /* Level.cpp in Sources */,
+				CDEE033B1EABDE7700B3971D /* World.cpp in Sources */,
+				CDEE033A1EABDE7300B3971D /* pSprite.cpp in Sources */,
+				CDEE03381EABDE6F00B3971D /* Player.cpp in Sources */,
 				CD0F1F131EABCC9800B6B63D /* Rhyno.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,

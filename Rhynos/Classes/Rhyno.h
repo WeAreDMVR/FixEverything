@@ -1,5 +1,5 @@
-#ifndef __RHYNO_SCENE_H__
-#define __RHYNO_SCENE_H__
+#ifndef __RHYNO_H__
+#define __RHYNO_H__
 
 #include "cocos2d.h"
 
@@ -15,6 +15,13 @@ public:
     
     // implement the "static create()" method manually
     CREATE_FUNC(Rhyno);
+
+    void update(float) override;
+
+private:
+    // For fixed step physics
+    float _currentTime;
+    float _lastTime;
 };
 
-#endif // __RHYNO_SCENE_H__
+#endif // __RHYNO_H__

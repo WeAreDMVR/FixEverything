@@ -1,5 +1,6 @@
 #include "Rhyno.h"
 #include "SimpleAudioEngine.h"
+#include "World.h"
 
 USING_NS_CC;
 
@@ -55,17 +56,35 @@ bool Rhyno::init()
     this->addChild(label, 1);
 
     // add "Rhyno" splash screen"
-    auto sprite = Sprite::create("HelloWorld.png");
+    //auto sprite = Sprite::create("HelloWorld.png");
 
     // position the sprite on the center of the screen
-    sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
+    //sprite->setPosition(Vec2(visibleSize.width/2 + origin.x, visibleSize.height/2 + origin.y));
 
     // add the sprite as a child to this layer
-    this->addChild(sprite, 0);
+    //this->addChild(sprite, 0);
+    
+    //////////////////////////////
+    // 4. New Code
+    World world;
+    this->_world = world;
+
+    this->_currentTime = 0.0;
+    this->_lastTime = 0.0;
+    this->scheduleUpdate();
+    
     
     return true;
 }
 
+void Rhyno::update(float delta) {
+    _currentTime += delta;
+    
+    if (_currentTime >= _lastTime + TimeStep || _lastTime == 0.0) {
+        _lastTime = _currentTime;
+        World::step();
+    }
+}
 
 void Rhyno::menuCloseCallback(Ref* pSender)
 {
@@ -75,11 +94,5 @@ void Rhyno::menuCloseCallback(Ref* pSender)
     #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     exit(0);
 #endif
-    
-    /*To navigate back to native iOS screen(if present) without quitting the application  ,do not use Director::getInstance()->end() and exit(0) as given above,instead trigger a custom event created in RootViewController.mm as below*/
-    
-    //EventCustom customEndEvent("game_scene_close_event");
-    //_eventDispatcher->dispatchEvent(&customEndEvent);
-    
     
 }

@@ -1,17 +1,19 @@
 #include "Player.h"
 
+using namespace cocos2d;
+
 Player::Player(Sprite* sprite ): pSprite(sprite) {}
 
-inline void Player::setProperties(ValueMap& properties) {
+inline void Player::setProperties(ValueMap* properties) {
 	this->_properties = properties;
-	this->_health = properties->at("Health");
+	this->_health = properties->at("Health").asInt();
 	this->_maxHealth = this->_health;
-	this->_damage = properties->at("Damage");
-	this->_acc = properties->at("Acceleration");
-	this->_decc = properties->at("Decceleration");
-	this->_jmp  = properties->at("JumpAcceleration");
-	this->_maxSpeed = properties->at("MaxSpeed");
-	this->_maxJumpTime = properties->at("MaxJumpTime");
+	this->_damage = properties->at("Damage").asInt();
+	this->_acc = properties->at("Acceleration").asFloat();
+	this->_dec = properties->at("Decceleration").asFloat();
+	this->_jmp  = properties->at("JumpAcceleration").asFloat();
+	this->_maxSpeed = properties->at("MaxSpeed").asFloat();
+	this->_maxJumpTime = properties->at("MaxJumpTime").asFloat();
 	this->_status = PlayerStatus::normal;
 }
 
@@ -45,19 +47,19 @@ inline PlayerStatus Player::getStatus() {
 		this->_acc = acc;
 	}
 	inline void Player::setAccelerationToDefault() {
-		this->_acc = this->getProperties()->at("Acceleration");
+		this->_acc = this->getProperties()->at("Acceleration").asFloat();
 	}
 	inline void Player::setDecceleration(float dec) {
 		this->_dec = dec;
 	}
 	inline void Player::setDeccelerationToDefault() {
-		this->_dec = this->getProperties()->at("Decceleration");
+		this->_dec = this->getProperties()->at("Decceleration").asFloat();
 	}
 	inline void Player::setJumpAcceleration(float jmp) {
 		this->_jmp = jmp;
 	}
 	inline void Player::setJumpAccelerationToDefault() {
-		this->_jmp = this->getProperties()->at("JumpAcceleration");
+		this->_jmp = this->getProperties()->at("JumpAcceleration").asFloat();
 	}
 
 bool Player::isFloating() {
@@ -77,12 +79,12 @@ int Player::hurtBy(int damage) {
 
 int Player::healBy(int health) {
 	this->_health = std::min(this->getHealth() + health, this->getMaxHealth());
-	this->getHealth();
+	return this->getHealth();
 }
 
 Point Player::getDefaultPosition() {
-	int x = this->getProperties()->at("x");
-	int y = this->getProperties()->at("y");
+	int x = this->getProperties()->at("x").asInt();
+	int y = this->getProperties()->at("y").asInt();
 	return Point(x, y);
 }
 

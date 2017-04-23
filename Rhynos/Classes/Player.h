@@ -1,9 +1,15 @@
 #include "pSprite.h"
 
+enum class PlayerStatus {
+    normal,
+    invincible
+};
+
 class Player: public pSprite {
+
 public:
-	Player(Sprite* sprite);
-	inline void setProperties(ValueMap& properties);
+    Player(cocos2d::Sprite* sprite);
+    inline void setProperties(cocos2d::ValueMap* properties);
 	inline int getHealth();
 	inline int getMaxHealth();
 	inline int getDamage();
@@ -22,12 +28,12 @@ public:
 	int hurtBy(int damage);
 	int healBy(int health);
 	
-	Point getDefaultPosition();
-	Point getCurrentPosition();
+    cocos2d::Point getDefaultPosition();
+    cocos2d::Point getCurrentPosition();
 	// NOTE: do not remove or add sprite to Level
 	// Level must do that
-	void destroy();
-	void respawnAt(Point p);
+	void destroy(b2World* world);
+    void respawnAt(b2World* world, cocos2d::Point p);
 
 	void applyMoveRight();
 	void applyMoveLeft();
@@ -36,9 +42,9 @@ public:
 
 private:
 	typedef pSprite super;
-	typedef Vec2 Point;
 
 	bool canJump();
+
 protected:
 	// current health of player
 	int _health;
@@ -65,9 +71,4 @@ protected:
 	// the player's status
 	PlayerStatus _status;
 
-}
-
-enum class PlayerStatus {
-	normal,
-	invincible
-}
+};
