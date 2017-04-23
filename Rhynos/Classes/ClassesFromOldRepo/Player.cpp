@@ -101,14 +101,74 @@ void Player::respawnAt(b2World* world, Point p) {
 	this->createRectangularFixture();
 }
 
+// currently using forces for a slow acceleration to top speed
 void Player::applyMoveRight() {
-
+	// check if player was moving backward
+	b2Vec2& worldCenter = this->_body->GetWorldCenter();
+	b2Vec2 force;
+	bool accelerating;
+	if (this->_body->GetLinearVelocity().x < 0) {
+		force = b2Vec2(this->_dec, 0);
+		accelerating = false;
+	} else {
+		force = b2Vec2(this->_acc, 0);
+		accelerating = true;
+	}
+	// rate limit to max speed
+	b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
+	if ((abs(linearVelocity.x) < this->_maxSpeed && accelerating) || !accelerating) {
+		this->_body->ApplyForce(force, worldCenter);
+	} 
 }
 
 void Player::applyMoveLeft() {
+	// check if player was moving backward
+	b2Vec2& worldCenter = this->_body->GetWorldCenter();
+	b2Vec2 force;
+	bool accelerating;
+	if (this->_body->GetLinearVelocity().x > 0) {
+		force = b2Vec2(-this->_dec, 0);
+		accelerating = false;
+	} else {
+		force = b2Vec2(-this->_acc, 0);
+		accelerating = true;
+	}
+	// rate limit to max speed
+	b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
+	if ((abs(linearVelocity.x) < this->_maxSpeed && accelerating) || !accelerating) {
+		this->_body->ApplyForce(force, worldCenter);
+	} 
 
 }
 
 void Player::applyJump() {
-	
+	// apply jump impluse / force
+	b2Vec2& worldCenter = this->_body->GetWorldCenter();
+	if (this->canJump()) {
+		if (this->_jumpTime < 0) {
+			this->_body->ApplyLinearImpulse(b2Vec2(0,this->_jmp), worldCenter);
+		} else {
+			this->_body->ApplyForce(b2Vec2(0,this->_jmp), worldCenter);
+		}
+		this->_jumpTime += TimeStep;
+	} 
+	// apply drag force if horizontal velocity exceeds Air and in air
+	b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
+	if(linearVelocity.x >= Air && linearVelocity.y != 0) {
+		this->_body->ApplyForce(b2Vec2(0, Drag), worldCenter)
+	}
+}
+
+void Player::resetJumpTime() {
+	this->_jumpTime = 0.0;
+}
+
+// currently does not account for slopes!
+// players can't initiate a jump in free-fall
+bool Player::canJump() {
+	if (this->_body->GetLinearVelocity().y >= 0 && this->_jumpTime < this->_maxJumpTime) {
+		return true;
+	} else {
+		return false;
+	}
 }
