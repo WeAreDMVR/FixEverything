@@ -1,4 +1,4 @@
-#include "box2d/Box2D/Box2D.h"
+#include <Box2D/Box2D.h>
 
 const float TimeStep = 1 / 60.0;
 const float PixelsPerMeter = 45.0;
@@ -11,5 +11,6 @@ const float Air = 50;
 
 class World {
 public:
-	b2World* init();
-}
+	static b2World* init();
+    void step();
+};
