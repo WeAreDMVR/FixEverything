@@ -1,5 +1,7 @@
 #include "Level.h"
 
+using namespace cocos2d;
+
 Level::Level() {
 }
 
@@ -20,7 +22,7 @@ Level* Level::createWithMap(const std::string& tmxFile) {
 void Level::loadLayers() {
 	// Physics Layers handling
 	// isolate the "metax" layers from the map
-	const std::string& = "meta";
+	const std::string& meta = "meta";
 	for(int i = 1; i <= 3; i++) {
 		auto layer = this->_map->getLayer(meta + std::to_string(i));
 		if (layer != nullptr) {
@@ -40,21 +42,23 @@ void Level::createFixtures(TMXLayer* layer) {
 	for (int y = 0; y < layerSize.height; y++) {
 		for (int x = 0; x < layerSize.width; x++) {
 			// generate fixture if a sprite in this position
-			auto tileSprite = layer->getTileAt(Point(x,y));
-			if (tileSprite)
+            auto tileSprite = layer->getTileAt(Point(x,y));
+            if (tileSprite) {
 				// get properties of the tile
-				int tileGid = layer->tileGIDAt(Point(x,y));
-				ValueMap& properties = this->_map->propertiesForGID(tileGid).asValueMap();
+                int tileGID = layer->getTileGIDAt(Point(x,y));
+
+                ValueMap& properties = this->_map->getPropertiesForGID(tileGID).asValueMap();
 				// create pSprite
 				pSprite *psprite = new pSprite(tileSprite);
-				Point position = positionForTileCoord(Point(x,y));
+                Point position = positionForTileCoord(Point(x,y));
 				psprite->setPosition(position);
-				psprite->setProperties(properties);
+				psprite->setProperties(&properties);
 				// load pSprite
 				psprite->addBodyToWorld(this->_world);
 				auto tileSize = this->_map->getTileSize();
 				psprite->createRectangularFixture(layer, tileSize, x, y);
-				this->_sprites.push_back(psprite);
+				this->_sprites.push_back(*psprite);
+            }
 		}
 	}
 }
@@ -62,7 +66,7 @@ void Level::createFixtures(TMXLayer* layer) {
 //TODO
 void Level::loadObjects() {
 	// get objectGroups of map
-	auto objectGroups = map->getObjectGroups();
+	auto objectGroups = _map->getObjectGroups();
 	for (auto& objectGroup : objectGroups) {
 		// get objects from each objectGroup
 		auto objects = objectGroup->getObjects();
@@ -81,35 +85,33 @@ pSprite* Level::addObject(const std::string className, ValueMap& properties) {
 	auto name = properties.at("name").asString().c_str();
 	// create sprite (Assumes a Spritesheet has been loaded)
 	// <name> property should have the name of the .png image for the sprite
-	auto sprite = Sprite::createWithSpriteFrameName(name);
+    auto sprite = Sprite::createWithSpriteFrameName(name);
 	pSprite* object;
-	switch (className) {
-		case "Player":
-			// create Player
-			object = new Player(sprite);
-			break;
-		default:
-			// create pSprite
-			object = new pSprite(sprite);
+    if (className == "Player") {
+        // create Player
+        object = new Player(sprite);
+    } else {
+        // create pSprite
+        object = new pSprite(sprite);
 	}
-	int x = properties.at("x");
-	int y = properties.at("y");
+	int x = properties.at("x").asInt();
+	int y = properties.at("y").asInt();
 	object->setPosition(Point(x, y));
-	object->setProperties(properties);
-	object->addBodyToWorld(this->world);
+	object->setProperties(&properties);
+	object->addBodyToWorld(this->_world);
 	object->createRectangularFixture();
-	this->_sprites.push_back(object);
+	this->_sprites.push_back(*object);
 }
 
 Point Level::positionForTileCoord(Point coordinate) {
-	Size tileSize = _map->getTileSize();
+    Size tileSize = _map->getTileSize();
 	int x = coordinate.x * tileSize.width;
 	int y = (tileSize.height * tileSize.height) - (coordinate.y * tileSize.height);
-	return Point(x, y);
+    return Point(x, y);
 }
 
 Point Level::tileCoordForPosition(Point position) {
-	Size tileSize = _map->getTileSize();
+    Size tileSize = _map->getTileSize();
     int x = position.x / tileSize.width;
     int y = ((tileSize.height * tileSize.height) - position.y) / tileSize.height;
     return Point(x, y);

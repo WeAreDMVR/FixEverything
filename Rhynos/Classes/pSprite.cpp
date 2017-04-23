@@ -1,12 +1,20 @@
 #include "pSprite.h"
 
+using namespace cocos2d;
+
 pSprite::pSprite() {
-	_sprite = Sprite::create();
+    _sprite = Sprite::create();
 }
 
 pSprite::pSprite(Sprite* sprite) {
 	_sprite = sprite;
 }
+
+// Copy constructor for push_back
+pSprite::pSprite(const pSprite& obj) {
+    // TODO
+}
+
 
 inline Sprite* pSprite::getSprite() {
 	return this->_sprite;
@@ -29,12 +37,12 @@ inline int pSprite::getPositionY() {
 	return this->_yposition;
 }
 
-inline void pSprite::setProperties(ValueMap& properties) {
+inline void pSprite::setProperties(ValueMap* properties) {
 	_properties = properties;
 	// TODO: set Sprite properties
 }
 
-inline ValueMap& pSprite::getProperties() {
+inline ValueMap* pSprite::getProperties() {
 	return _properties;
 }
 
@@ -57,7 +65,7 @@ void pSprite::createRectangularFixture(TMXLayer* layer, const Size tileSize, int
 	fixtureDef.restitution = Restitution;
 	// NOTE: tile sprite must have a CategoryBits property
 	//fixtureDef.filter.categoryBits = this->getProperties()->valueForKey("CategoryBits");
-	fixtureDef.filter.categoryBits = this->getProperties()->at("CategoryBits");
+	fixtureDef.filter.categoryBits = this->getProperties()->at("CategoryBits").asByte();
 	fixtureDef.filter.maskBits = 0xffff;
 	
 	this->_body->CreateFixture(&fixtureDef);
@@ -65,8 +73,8 @@ void pSprite::createRectangularFixture(TMXLayer* layer, const Size tileSize, int
 
 void pSprite::createRectangularFixture() {
 	// get position and size
-	int width = this->getProperties().at("width");
-	int height = this->getProperties().at("height");
+	int width = this->getProperties()->at("width").asInt();
+	int height = this->getProperties()->at("height").asInt();
 	// create shape
 	b2PolygonShape shape;
 	shape.SetAsBox(
@@ -78,7 +86,7 @@ void pSprite::createRectangularFixture() {
 	fixtureDef.density = Density;
 	fixtureDef.friction = Friction;
 	fixtureDef.restitution = Restitution;
-	fixtureDef.filter.categoryBits = this->getProperties->at("CategoryBits");
+	fixtureDef.filter.categoryBits = this->getProperties()->at("CategoryBits").asByte();
 	fixtureDef.filter.maskBits = 0xffff;
 
 	this->_body->CreateFixture(&fixtureDef);
@@ -88,11 +96,11 @@ void pSprite::addBodyToWorld(b2World* world) {
 	b2BodyDef bodyDef;
 	// NOTE: tile sprite must have a BodyType property
 	//bodyDef.type = this->getProperties()->valueForKey("BodyType");
-	bodyDef.type = this->getProperties()->at("BodyType");
+	bodyDef.type = (b2BodyType) this->getProperties()->at("BodyType").asUnsignedInt();
 	bodyDef.position.Set(
 		this->getPositionX() / PixelsPerMeter,
 		this->getPositionY() / PixelsPerMeter);
-	bodyDef.userDate = this;
+	bodyDef.userData = this;
 	bodyDef.fixedRotation = true;
 
 	this->_body = world->CreateBody(&bodyDef); 
@@ -102,11 +110,11 @@ void pSprite::addBodyToWorldAtPosition(b2World * world, Point p) {
 	b2BodyDef bodyDef;
 	// NOTE: tile sprite must have a BodyType property
 	//bodyDef.type = this->getProperties()->valueForKey("BodyType");
-	bodyDef.type = this->getProperties()->at("BodyType");
+	bodyDef.type = (b2BodyType) this->getProperties()->at("BodyType").asUnsignedInt();
 	bodyDef.position.Set(
 		p.x / PixelsPerMeter,
 		p.y / PixelsPerMeter);
-	bodyDef.userDate = this;
+	bodyDef.userData = this;
 	bodyDef.fixedRotation = true;
 
 	this->_body = world->CreateBody(&bodyDef); 
