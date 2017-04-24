@@ -10,5 +10,8 @@ b2World* World::init() {
 }
 
 void World::step(b2World* world) {
-	
+	static int velocityIterations = 8;
+	static int positionIterations = 2;
+
+	world->step(TimeInterval, velocityIterations, positionIterations);
 }

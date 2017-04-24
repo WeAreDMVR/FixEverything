@@ -13,6 +13,7 @@ Level* Level::createWithMap(const std::string& tmxFile) {
 		ret->_map = map;
 		ret->_world = world; 
 		ret->autorelease();
+		ret->schedule(schedule_selector(Level::update), TimeStep);
 		return ret;
 	} else {
 		return nullptr;
@@ -116,4 +117,28 @@ Point Level::tileCoordForPosition(Point position) {
     int x = position.x / tileSize.width;
     int y = ((tileSize.height * tileSize.height) - position.y) / tileSize.height;
     return Point(x, y);
+}
+
+double Level::getCurrentTime() {
+	typedef std::chrono::high_resolution_clock hclock;
+	typedef std::chrono::duration::<double, std::chrono::seconds> dsec;
+
+	static startTime = hclock::now();
+	dsec timeLapse = hclock::now() - startTime;
+
+	return timeLapse.count(); 
+}
+
+void Level::update(float dt) {
+	currentTime = this->getCurrentTime();
+	if (!this->_lastTime)
+		this->_lastTime = currentTime;
+
+	double frameTime = currentTime - this->_lastTime;
+	this->_lastTime = currentTime;
+
+	while (frameTime > TimeStep) {
+		World::step(this->_world);
+		frameTime -= TimeStep;
+	}
 }
