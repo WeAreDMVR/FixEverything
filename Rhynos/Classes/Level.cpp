@@ -101,6 +101,7 @@ pSprite* Level::addObject(const std::string className, ValueMap& properties) {
 	object->addBodyToWorld(this->_world);
 	object->createRectangularFixture();
 	this->_sprites.push_back(*object);
+    return object;
 }
 
 Point Level::positionForTileCoord(Point coordinate) {

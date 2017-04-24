@@ -106,7 +106,7 @@ void Player::respawnAt(b2World* world, Point p) {
 // currently using forces for a slow acceleration to top speed
 void Player::applyMoveRight() {
 	// check if player was moving backward
-	b2Vec2& worldCenter = this->_body->GetWorldCenter();
+	const b2Vec2& worldCenter = this->_body->GetWorldCenter();
 	b2Vec2 force;
 	bool accelerating;
 	if (this->_body->GetLinearVelocity().x < 0) {
@@ -117,15 +117,15 @@ void Player::applyMoveRight() {
 		accelerating = true;
 	}
 	// rate limit to max speed
-	b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
-	if ((abs(linearVelocity.x) < this->_maxSpeed && accelerating) || !accelerating) {
-		this->_body->ApplyForce(force, worldCenter);
+	const b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
+	if ((std::abs(linearVelocity.x) < this->_maxSpeed && accelerating) || !accelerating) {
+		this->_body->ApplyForce(force, worldCenter, false);
 	} 
 }
 
 void Player::applyMoveLeft() {
 	// check if player was moving backward
-	b2Vec2& worldCenter = this->_body->GetWorldCenter();
+	const b2Vec2& worldCenter = this->_body->GetWorldCenter();
 	b2Vec2 force;
 	bool accelerating;
 	if (this->_body->GetLinearVelocity().x > 0) {
@@ -136,28 +136,28 @@ void Player::applyMoveLeft() {
 		accelerating = true;
 	}
 	// rate limit to max speed
-	b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
-	if ((abs(linearVelocity.x) < this->_maxSpeed && accelerating) || !accelerating) {
-		this->_body->ApplyForce(force, worldCenter);
+	const b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
+	if ((std::abs(linearVelocity.x) < this->_maxSpeed && accelerating) || !accelerating) {
+		this->_body->ApplyForce(force, worldCenter, false);
 	} 
 
 }
 
 void Player::applyJump() {
 	// apply jump impluse / force
-	b2Vec2& worldCenter = this->_body->GetWorldCenter();
+	const b2Vec2& worldCenter = this->_body->GetWorldCenter();
 	if (this->canJump()) {
 		if (this->_jumpTime < 0) {
-			this->_body->ApplyLinearImpulse(b2Vec2(0,this->_jmp), worldCenter);
+			this->_body->ApplyLinearImpulse(b2Vec2(0,this->_jmp), worldCenter, false);
 		} else {
-			this->_body->ApplyForce(b2Vec2(0,this->_jmp), worldCenter);
+			this->_body->ApplyForce(b2Vec2(0,this->_jmp), worldCenter, false);
 		}
 		this->_jumpTime += TimeStep;
 	} 
 	// apply drag force if horizontal velocity exceeds Air and in air
-	b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
+	const b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
 	if(linearVelocity.x >= Air && linearVelocity.y != 0) {
-		this->_body->ApplyForce(b2Vec2(0, Drag), worldCenter)
+        this->_body->ApplyForce(b2Vec2(0, Drag), worldCenter, false);
 	}
 }
 

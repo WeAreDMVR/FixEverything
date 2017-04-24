@@ -1,4 +1,3 @@
-#include "cocos2d.h"
 #include "World.h"
 
 class pSprite : public cocos2d::Node {
@@ -10,11 +9,23 @@ public:
 
     inline cocos2d::Sprite* getSprite();
     inline void setSprite(cocos2d::Sprite* sprite);
-    inline void setPosition(cocos2d::Point p);
-	inline int getPositionX();
-	inline int getPositionY();
-    inline void setProperties(cocos2d::ValueMap* properties);
-    inline cocos2d::ValueMap* getProperties();
+    inline void setPosition(cocos2d::Point p) {
+        _xposition = p.x;
+        _yposition = p.y;
+    }
+    inline int getPositionX() {
+        return this->_xposition;
+    }
+    inline int getPositionY() {
+        return this->_yposition;
+    }
+    inline void setProperties(cocos2d::ValueMap* properties) {
+        _properties = properties;
+        // TODO: set Sprite properties
+    }
+    inline cocos2d::ValueMap* getProperties() {
+        return _properties;
+    }
 	void addBodyToWorld(b2World* world);
     void addBodyToWorldAtPosition(b2World * world, cocos2d::Point p);
     void createRectangularFixture(cocos2d::TMXLayer* layer, const cocos2d::Size tileSize, int x, int y);

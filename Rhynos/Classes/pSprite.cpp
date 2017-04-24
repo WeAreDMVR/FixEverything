@@ -24,28 +24,6 @@ inline void pSprite::setSprite(Sprite* sprite) {
 	this->_sprite = sprite;
 }
 
-inline void pSprite::setPosition(Point p) {
-	_xposition = p.x;
-	_yposition = p.y;
-}
-
-inline int pSprite::getPositionX() {
-	return this->_xposition;
-}
-
-inline int pSprite::getPositionY() {
-	return this->_yposition;
-}
-
-inline void pSprite::setProperties(ValueMap* properties) {
-	_properties = properties;
-	// TODO: set Sprite properties
-}
-
-inline ValueMap* pSprite::getProperties() {
-	return _properties;
-}
-
 void pSprite::createRectangularFixture(TMXLayer* layer, const Size tileSize, int x, int y) {
 	// get position and size
 	auto position = layer->getPositionAt(Point(x,y));

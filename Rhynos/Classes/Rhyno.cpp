@@ -66,8 +66,6 @@ bool Rhyno::init()
     
     //////////////////////////////
     // 4. New Code
-    World world;
-    this->_world = world;
 
     this->_currentTime = 0.0;
     this->_lastTime = 0.0;
@@ -82,7 +80,7 @@ void Rhyno::update(float delta) {
     
     if (_currentTime >= _lastTime + TimeStep || _lastTime == 0.0) {
         _lastTime = _currentTime;
-        World::step();
+        //World::step(this->_world);
     }
 }
 

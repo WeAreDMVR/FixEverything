@@ -2,13 +2,14 @@
 #define __RHYNO_H__
 
 #include "cocos2d.h"
+#include <Box2D/Box2D.h>
 
 class Rhyno : public cocos2d::Scene
 {
 public:
     static cocos2d::Scene* createScene();
 
-    virtual bool init();
+    virtual bool init() override;
     
     // a selector callback
     void menuCloseCallback(cocos2d::Ref* pSender);

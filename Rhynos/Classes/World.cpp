@@ -9,6 +9,6 @@ b2World* World::init() {
 	return world;
 }
 
-void World::step() {
+void World::step(b2World* world) {
 	
 }

@@ -12,5 +12,5 @@ const float Air = 50;
 class World {
 public:
 	static b2World* init();
-    void step();
+    static void step(b2World* world);
 };
