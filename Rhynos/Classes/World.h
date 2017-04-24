@@ -10,7 +10,7 @@ const float Drag = -0.21;
 const float Air = 50;
 
 class World {
-public:
-	static b2World* init();
-    static void step(b2World* world);
+ public:
+  static b2World* init();
+  static void step(b2World* world);
 };
