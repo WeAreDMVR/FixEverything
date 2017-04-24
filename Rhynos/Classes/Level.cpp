@@ -87,6 +87,7 @@ pSprite* Level::addObject(const std::string className, ValueMap& properties) {
 	// create sprite (Assumes a Spritesheet has been loaded)
 	// <name> property should have the name of the .png image for the sprite
     auto sprite = Sprite::createWithSpriteFrameName(name);
+    this->addChild(sprite);
 	pSprite* object;
     if (className == "Player") {
         // create Player
