@@ -2,11 +2,12 @@
 #define _RHYNO_H_
 
 #include "KeyboardPoller.h"
+#include "Level.h"
+#include "Player.h"
 
 #include <Box2D/Box2D.h>
 
 #include "cocos2d.h"
-#include "Level.h"
 
 class Rhyno : public KeyboardPoller {
  public:
@@ -26,7 +27,7 @@ class Rhyno : public KeyboardPoller {
   // For fixed step physics
   float _currentTime;
   float _lastTime;
-  cocos2d::Sprite* _sprite;
+  Player* _player;
 };
 
 #endif  // _RHYNO_H_
