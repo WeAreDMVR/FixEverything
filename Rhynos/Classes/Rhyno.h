@@ -6,10 +6,11 @@
 #include <Box2D/Box2D.h>
 
 #include "cocos2d.h"
+#include "Level.h"
 
 class Rhyno : public KeyboardPoller {
  public:
-  static cocos2d::Scene* createScene();
+  static Level* createScene();
 
   virtual bool init() override;
 
