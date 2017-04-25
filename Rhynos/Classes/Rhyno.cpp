@@ -1,5 +1,5 @@
+#include "Level.h"
 #include "Rhyno.h"
-
 #include "World.h"
 
 #include <Box2D/Box2D.h>
@@ -12,17 +12,16 @@ using cocos2d::EventListenerKeyboard;
 using cocos2d::Label;
 using cocos2d::Menu;
 using cocos2d::MenuItemImage;
-using cocos2d::Scene;
 using cocos2d::Sprite;
 using cocos2d::Vec2;
 
 Scene* Rhyno::createScene() {
-  Scene* scene = Scene::create();
+  Level* level = Level::createWithMap("maps/spring_map.tmx");
   Rhyno* rhynoGame = Rhyno::create();
 
-  scene->addChild(rhynoGame);
+  level->addChild(rhynoGame);
 
-  return scene;
+  return level;
 }
 
 // on "init" you need to initialize your instance
