@@ -4,4 +4,7 @@
 
 From 1.2 GB to 75MB!
 
-Use /tools/bin/cocos and manually add it to $PATH
+To run on Linux:
+tools/bin/cocos run -s Rhynos -p linux
+
+Replace linux with mac for compile & run on a Mac computer
