@@ -1,7 +1,8 @@
-#ifndef __RHYNO_H__
-#define __RHYNO_H__
+#ifndef _RHYNO_H_
+#define _RHYNO_H_
 
 #include <Box2D/Box2D.h>
+
 #include "cocos2d.h"
 
 class Rhyno : public cocos2d::Scene {
@@ -24,4 +25,4 @@ class Rhyno : public cocos2d::Scene {
   float _lastTime;
 };
 
-#endif  // __RHYNO_H__
+#endif  // _RHYNO_H_

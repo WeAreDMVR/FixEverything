@@ -125,12 +125,12 @@ if ( WIN32 )
 )
 endif( WIN32 )
 
-file(GLOB GAME_SRC
+file(GLOB_RECURSE GAME_SRC
   Classes/*.cpp
   ${PLATFORM_SPECIFIC_SRC}
 )
 
-file(GLOB GAME_HEADERS
+file(GLOB_RECURSE GAME_HEADERS
   Classes/*.h
   ${PLATFORM_SPECIFIC_HEADERS}
 )
@@ -138,8 +138,8 @@ file(GLOB GAME_HEADERS
 
 # Configure libcocos2d:
 # Uncomment to disable/enable compilation and linking of the following features:
-#set(USE_CHIPMUNK OFF CACHE BOOL "Use chipmunk for physics library")
-#set(USE_BOX2D ON CACHE BOOL "Use box2d for physics library")
+set(USE_CHIPMUNK OFF CACHE BOOL "Don't use chipmunk for physics library")
+set(USE_BOX2D ON CACHE BOOL "Use box2d for physics library")
 #set(USE_BULLET OFF CACHE BOOL "Use bullet for physics3d library")
 #set(USE_RECAST OFF CACHE BOOL "Use Recast for navigation mesh")
 #set(USE_WEBP OFF CACHE BOOL "Use WebP codec")

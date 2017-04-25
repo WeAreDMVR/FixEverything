@@ -1,7 +1,9 @@
 #include "World.h"
 
+#include <Box2D/Box2D.h>
+
 b2World* World::init() {
-  b2Vec2 gravity(0, Gravity);
+  const b2Vec2 gravity(0, Gravity);
   b2World* world = new b2World(gravity);
   world->SetAllowSleeping(true);
   world->SetContinuousPhysics(true);
@@ -10,8 +12,8 @@ b2World* World::init() {
 }
 
 void World::step(b2World* world) {
-  static int velocityIterations = 8;
-  static int positionIterations = 2;
+  static constexpr int velocityIterations = 8;
+  static constexpr int positionIterations = 2;
 
-  world->step(TimeInterval, velocityIterations, positionIterations);
+  world->Step(TimeStep, velocityIterations, positionIterations);
 }

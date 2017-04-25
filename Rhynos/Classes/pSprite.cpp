@@ -1,6 +1,11 @@
 #include "pSprite.h"
 
-using namespace cocos2d;
+#include "cocos2d.h"
+
+using cocos2d::Point;
+using cocos2d::Size;
+using cocos2d::Sprite;
+using cocos2d::TMXLayer;
 
 pSprite::pSprite() { _sprite = Sprite::create(); }
 

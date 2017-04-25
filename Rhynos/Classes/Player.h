@@ -1,3 +1,6 @@
+#ifndef _PLAYER_H_
+#define _PLAYER_H_
+
 #include "pSprite.h"
 
 enum class PlayerStatus { normal, invincible };
@@ -67,3 +70,5 @@ class Player : public pSprite {
   // the player's status
   PlayerStatus _status;
 };
+
+#endif  // _PLAYER_H_

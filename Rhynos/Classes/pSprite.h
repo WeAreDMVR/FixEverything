@@ -1,4 +1,9 @@
+#ifndef _PSPRITE_H_
+#define _PSPRITE_H_
+
 #include "World.h"
+
+#include "cocos2d.h"
 
 class pSprite : public cocos2d::Node {
   friend cocos2d::Sprite;
@@ -17,11 +22,11 @@ class pSprite : public cocos2d::Node {
   }
   inline int getPositionX() { return this->_xposition; }
   inline int getPositionY() { return this->_yposition; }
-  inline void setProperties(cocos2d::ValueMap* properties) {
+  inline void setProperties(const cocos2d::ValueMap* properties) {
     _properties = properties;
     // TODO: set Sprite properties
   }
-  inline cocos2d::ValueMap* getProperties() { return _properties; }
+  inline const cocos2d::ValueMap* getProperties() { return _properties; }
   void addBodyToWorld(b2World* world);
   void addBodyToWorldAtPosition(b2World* world, cocos2d::Point p);
   void createRectangularFixture(cocos2d::TMXLayer* layer,
@@ -37,7 +42,7 @@ class pSprite : public cocos2d::Node {
  protected:
   b2Body* _body;
   cocos2d::Sprite* _sprite;
-  cocos2d::ValueMap* _properties;
+  const cocos2d::ValueMap* _properties;
   int _xposition;
   int _yposition;
 };
@@ -50,3 +55,5 @@ enum class FilterCategory {
   SolidTrack3 = 0x05,
   NonSolidTrack3 = 0x06
 };
+
+#endif  // _PSPRITE_H_
