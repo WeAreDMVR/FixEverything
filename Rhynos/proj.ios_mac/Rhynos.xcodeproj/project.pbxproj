@@ -73,6 +73,8 @@
 		CDEE033B1EABDE7700B3971D /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9D1EABD74D0062C56B /* World.cpp */; };
 		CDEE033C1EABDE7B00B3971D /* Level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0CA31EABD7E90062C56B /* Level.cpp */; };
 		CDFBA3EE1EAFBBB80082DC3D /* KeyboardPoller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDFBA3ED1EAFBBB80082DC3D /* KeyboardPoller.cpp */; };
+		CDFBA3F61EAFC1B10082DC3D /* images in Resources */ = {isa = PBXBuildFile; fileRef = CDFBA3F51EAFC1B10082DC3D /* images */; };
+		CDFBA3F71EAFC2280082DC3D /* images in Resources */ = {isa = PBXBuildFile; fileRef = CDFBA3F51EAFC1B10082DC3D /* images */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
@@ -183,7 +185,9 @@
 		CD7A0C9E1EABD74D0062C56B /* World.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = World.h; sourceTree = "<group>"; };
 		CD7A0CA31EABD7E90062C56B /* Level.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Level.cpp; sourceTree = "<group>"; };
 		CD7A0CA41EABD7E90062C56B /* Level.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Level.h; sourceTree = "<group>"; };
-		CDFBA3ED1EAFBBB80082DC3D /* KeyboardPoller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KeyboardPoller.cpp; path = ../Classes/KeyboardPoller.cpp; sourceTree = "<group>"; };
+		CDFBA3ED1EAFBBB80082DC3D /* KeyboardPoller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = KeyboardPoller.cpp; sourceTree = "<group>"; };
+		CDFBA3F01EAFC1650082DC3D /* KeyboardPoller.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KeyboardPoller.h; sourceTree = "<group>"; };
+		CDFBA3F51EAFC1B10082DC3D /* images */ = {isa = PBXFileReference; lastKnownFileType = folder; path = images; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -273,7 +277,6 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
-				CDFBA3ED1EAFBBB80082DC3D /* KeyboardPoller.cpp */,
 				46880B8319C43A87006E1F66 /* Classes */,
 				46880B7519C43A67006E1F66 /* Resources */,
 				1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */,
@@ -315,6 +318,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CDFBA3F51EAFC1B10082DC3D /* images */,
 				521A8EA819F11F5000D177D7 /* fonts */,
 				3EACC98E19EE6D4300EB3C5E /* res */,
 				46880B7619C43A67006E1F66 /* CloseNormal.png */,
@@ -328,6 +332,8 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				CDFBA3ED1EAFBBB80082DC3D /* KeyboardPoller.cpp */,
+				CDFBA3F01EAFC1650082DC3D /* KeyboardPoller.h */,
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
 				46880B8519C43A87006E1F66 /* AppDelegate.h */,
 				CD0F1F101EABCC9000B6B63D /* Rhyno.cpp */,
@@ -494,6 +500,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDFBA3F61EAFC1B10082DC3D /* images in Resources */,
 				5087E78117EB970100C73F5D /* Icon-120.png in Resources */,
 				5087E78617EB970100C73F5D /* Icon-76.png in Resources */,
 				5087E77F17EB970100C73F5D /* Default@2x.png in Resources */,
@@ -524,6 +531,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDFBA3F71EAFC2280082DC3D /* images in Resources */,
 				46880B8219C43A67006E1F66 /* HelloWorld.png in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
 				3EACC99019EE6D4300EB3C5E /* res in Resources */,
