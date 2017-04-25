@@ -93,24 +93,15 @@ bool Rhyno::init() {
   this->_lastTime = 0.0;
   this->scheduleUpdate();
 
-/*
-  _sprite = Sprite::create("images/blob_rimuru.png");
-  _sprite->setPosition(this->getContentSize().width / 2,
-                       this->getContentSize().height / 2);
-  _sprite->setAnchorPoint(Vec2(0, 0));
-  _sprite->setPosition(Vec2(5, 60));
-  */
-
   TMXTiledMap* tileMap = TMXTiledMap::create("images/spring_map.tmx");
   TMXObjectGroup* objectGroup = tileMap->objectGroupNamed("blob_layer");
-  if(objectGroup == NULL){
+  if (objectGroup == NULL) {
     CCLOG("TileMap has no objects layer");
     return false;
   }
-  auto& objects = objectGroup->getObjects(); //Currently just one object
+  auto& objects = objectGroup->getObjects();  // Currently just one object
   _sprite = Sprite::create("images/blob_rimuru.png");
-  for (auto& obj : objects)
-  {
+  for (auto& obj : objects) {
     cocos2d::ValueMap& dict = obj.asValueMap();
 
     float x = dict["x"].asFloat()+50;
@@ -119,9 +110,10 @@ bool Rhyno::init() {
 }
   //TMXLayer* background = tileMap->getLayer("background");
   //TMXLayer* ground = tileMap->getLayer("ground");
+
   this->addChild(tileMap, 0);
   this->addChild(_sprite, 0);
-  
+
   return true;
 }
 
@@ -133,13 +125,13 @@ void Rhyno::update(float delta) {
     // World::step(this->_world);
   }
 
-  const Vec2& loc = _sprite->getPosition();
+  const Point loc = _sprite->getPosition();
   if (isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW) ||
       isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
-    _sprite->setPosition(loc.x - 100.0 * delta, loc.y);
+    _sprite->setPosition(loc.x - (100 * delta), loc.y);
   } else if (isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW) ||
              isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
-    _sprite->setPosition(loc.x + 100.0 * delta, loc.y);
+    _sprite->setPosition(loc.x + (100 * delta), loc.y);
   } else if (isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW) ||
              isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
     //_sprite->setPosition(loc.x, loc.y + 100.0 * delta);
