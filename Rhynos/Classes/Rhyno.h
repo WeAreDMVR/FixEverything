@@ -3,6 +3,8 @@
 
 #include "KeyboardPoller.h"
 
+#include <Box2D/Box2D.h>
+
 #include "cocos2d.h"
 
 class Rhyno : public KeyboardPoller {

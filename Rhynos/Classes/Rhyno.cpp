@@ -2,14 +2,14 @@
 
 #include "World.h"
 
+#include <Box2D/Box2D.h>
+
 using cocos2d::Color4B;
 using cocos2d::Director;
 using cocos2d::Event;
 using cocos2d::EventKeyboard;
 using cocos2d::EventListenerKeyboard;
 using cocos2d::Label;
-using cocos2d::Layer;
-using cocos2d::LayerColor;
 using cocos2d::Menu;
 using cocos2d::MenuItemImage;
 using cocos2d::Scene;
@@ -36,7 +36,9 @@ bool Rhyno::init() {
   const auto& visibleSize = Director::getInstance()->getVisibleSize();
   const Vec2& origin = Director::getInstance()->getVisibleOrigin();
 
-  LayerColor* background = LayerColor::create(Color4B(0xCF, 0x53, 0x00, 0xFF));
+  Sprite* background = Sprite::create("images/spring_layer.png");
+  background->setAnchorPoint(Vec2(0, 0));
+  background->setPosition(Vec2(0, 0));
   this->addChild(background, 0);
 
   /////////////////////////////
@@ -93,6 +95,8 @@ bool Rhyno::init() {
   _sprite = Sprite::create("images/blob_rimuru.png");
   _sprite->setPosition(this->getContentSize().width / 2,
                        this->getContentSize().height / 2);
+  _sprite->setAnchorPoint(Vec2(0, 0));
+  _sprite->setPosition(Vec2(5, 60));
 
   this->addChild(_sprite, 0);
 
@@ -110,16 +114,16 @@ void Rhyno::update(float delta) {
   const Vec2& loc = _sprite->getPosition();
   if (isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW) ||
       isKeyPressed(EventKeyboard::KeyCode::KEY_A)) {
-    _sprite->setPosition(loc.x - 1, loc.y);
+    _sprite->setPosition(loc.x - 100.0 * delta, loc.y);
   } else if (isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW) ||
              isKeyPressed(EventKeyboard::KeyCode::KEY_D)) {
-    _sprite->setPosition(loc.x + 1, loc.y);
+    _sprite->setPosition(loc.x + 100.0 * delta, loc.y);
   } else if (isKeyPressed(EventKeyboard::KeyCode::KEY_UP_ARROW) ||
              isKeyPressed(EventKeyboard::KeyCode::KEY_W)) {
-    _sprite->setPosition(loc.x, loc.y + 1);
+    //_sprite->setPosition(loc.x, loc.y + 100.0 * delta);
   } else if (isKeyPressed(EventKeyboard::KeyCode::KEY_DOWN_ARROW) ||
              isKeyPressed(EventKeyboard::KeyCode::KEY_S)) {
-    _sprite->setPosition(loc.x, loc.y - 1);
+    //_sprite->setPosition(loc.x, loc.y - 100.0 * delta);
   }
 }
 
