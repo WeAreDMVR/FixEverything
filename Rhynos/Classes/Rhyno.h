@@ -1,11 +1,11 @@
 #ifndef _RHYNO_H_
 #define _RHYNO_H_
 
-#include <Box2D/Box2D.h>
+#include "KeyboardPoller.h"
 
 #include "cocos2d.h"
 
-class Rhyno : public cocos2d::Scene {
+class Rhyno : public KeyboardPoller {
  public:
   static cocos2d::Scene* createScene();
 
@@ -23,6 +23,7 @@ class Rhyno : public cocos2d::Scene {
   // For fixed step physics
   float _currentTime;
   float _lastTime;
+  cocos2d::Sprite* _sprite;
 };
 
 #endif  // _RHYNO_H_

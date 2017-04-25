@@ -22,9 +22,6 @@ class Level : public cocos2d::Scene {
   cocos2d::Point tileCoordForPosition(const cocos2d::Point& position);
 
  private:
-  typedef Scene super;
-  typedef std::vector<pSprite> pSpriteVector;
-
   void createFixtures(cocos2d::TMXLayer* layer);
   pSprite* addObject(const std::string& className,
                      const cocos2d::ValueMap& properties);
@@ -33,7 +30,7 @@ class Level : public cocos2d::Scene {
  protected:
   b2World* _world;
   const cocos2d::TMXTiledMap* _map;
-  pSpriteVector _sprites;
+  std::vector<pSprite> _sprites;
   double _lastTime;
 };
 

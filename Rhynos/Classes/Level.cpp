@@ -101,22 +101,21 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
   // <name> property should have the name of the .png image for the sprite
   const auto& sprite = Sprite::createWithSpriteFrameName(name);
   this->addChild(sprite);
-  pSprite* object;
   if (className == "Player") {
     // create Player
-    object = new Player(sprite);
+    this->_sprites.push_back(Player(sprite));
   } else {
     // create pSprite
-    object = new pSprite(sprite);
+    this->_sprites.push_back(pSprite(sprite));
   }
+  pSprite& object = *this->_sprites.end();
   const int x = properties.at("x").asInt();
   const int y = properties.at("y").asInt();
-  object->setPosition(Point(x, y));
-  object->setProperties(&properties);
-  object->addBodyToWorld(this->_world);
-  object->createRectangularFixture();
-  this->_sprites.push_back(*object);
-  return object;
+  object.setPosition(Point(x, y));
+  object.setProperties(&properties);
+  object.addBodyToWorld(this->_world);
+  object.createRectangularFixture();
+  return &object;
 }
 
 Point Level::positionForTileCoord(const Point& coordinate) {
