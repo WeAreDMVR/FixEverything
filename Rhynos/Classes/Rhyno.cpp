@@ -1,7 +1,7 @@
+#include <typeinfo>
 #include "Level.h"
 #include "Rhyno.h"
 #include "World.h"
-#include <typeinfo>
 
 #include <Box2D/Box2D.h>
 
@@ -18,9 +18,8 @@ using cocos2d::MenuItemImage;
 using cocos2d::Sprite;
 using cocos2d::Vec2;
 
-
 Level* Rhyno::createScene() {
-  Level* level = Level::createWithMap("maps/spring_map.tmx");
+  Level* level = Level::createWithMap("images/spring_map.tmx");
   Rhyno* rhynoGame = Rhyno::create();
 
   level->addChild(rhynoGame);
@@ -42,7 +41,7 @@ bool Rhyno::init() {
   Sprite* background = Sprite::create("images/spring_layer.png");
   background->setAnchorPoint(Vec2(0, 0));
   background->setPosition(Vec2(0, 0));
-  //this->addChild(background, 0);
+  // this->addChild(background, 0);
 
   /////////////////////////////
   // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -101,11 +100,11 @@ bool Rhyno::init() {
   _sprite->setAnchorPoint(Vec2(0, 0));
   _sprite->setPosition(Vec2(5, 60));
 
-
-  cocos2d::TMXTiledMap *tileMap = cocos2d::TMXTiledMap::create("maps/spring_map.tmx");
-  cocos2d::TMXLayer *bg = tileMap->layerNamed("background");
+  cocos2d::TMXTiledMap* tileMap =
+      cocos2d::TMXTiledMap::create("images/spring_map.tmx");
+  cocos2d::TMXLayer* bg = tileMap->layerNamed("Background");
   CCLOG("tilemap: %s", typeid(bg).name());
-  //auto ground = tileMap->layerNamed("ground");
+  // auto ground = tileMap->layerNamed("ground");
   this->addChild(tileMap, 3);
 
   this->addChild(_sprite, 0);
