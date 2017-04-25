@@ -1,16 +1,21 @@
+#ifndef _WORLD_H_
+#define _WORLD_H_
+
 #include <Box2D/Box2D.h>
 
-const float TimeStep = 1 / 60.0;
-const float PixelsPerMeter = 45.0;
-const float Gravity = -0.249;
-const float Friction = 0.46875;
-const float Density = 1.0;
-const float Restitution = 0.0;
-const float Drag = -0.21;
-const float Air = 50;
+constexpr float TimeStep = 1 / 60.0;
+constexpr float PixelsPerMeter = 45.0;
+constexpr float Gravity = -0.249;
+constexpr float Friction = 0.46875;
+constexpr float Density = 1.0;
+constexpr float Restitution = 0.0;
+constexpr float Drag = -0.21;
+constexpr float Air = 50;
 
 class World {
-public:
-	static b2World* init();
-    static void step(b2World* world);
+ public:
+  static b2World* init();
+  static void step(b2World* world);
 };
+
+#endif  // _WORLD_H_

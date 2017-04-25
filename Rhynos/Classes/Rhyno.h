@@ -1,28 +1,29 @@
-#ifndef __RHYNO_H__
-#define __RHYNO_H__
+#ifndef _RHYNO_H_
+#define _RHYNO_H_
+
+#include "KeyboardPoller.h"
 
 #include "cocos2d.h"
-#include <Box2D/Box2D.h>
 
-class Rhyno : public cocos2d::Scene
-{
-public:
-    static cocos2d::Scene* createScene();
+class Rhyno : public KeyboardPoller {
+ public:
+  static cocos2d::Scene* createScene();
 
-    virtual bool init() override;
-    
-    // a selector callback
-    void menuCloseCallback(cocos2d::Ref* pSender);
-    
-    // implement the "static create()" method manually
-    CREATE_FUNC(Rhyno);
+  virtual bool init() override;
 
-    void update(float) override;
+  // a selector callback
+  void menuCloseCallback(cocos2d::Ref* pSender);
 
-private:
-    // For fixed step physics
-    float _currentTime;
-    float _lastTime;
+  // implement the "static create()" method manually
+  CREATE_FUNC(Rhyno);
+
+  void update(float) override;
+
+ private:
+  // For fixed step physics
+  float _currentTime;
+  float _lastTime;
+  cocos2d::Sprite* _sprite;
 };
 
-#endif // __RHYNO_H__
+#endif  // _RHYNO_H_
