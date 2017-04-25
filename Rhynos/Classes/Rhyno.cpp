@@ -17,6 +17,8 @@ using cocos2d::Menu;
 using cocos2d::MenuItemImage;
 using cocos2d::Sprite;
 using cocos2d::Vec2;
+using cocos2d::TMXTiledMap;
+using cocos2d::TMXLayer;
 
 
 Level* Rhyno::createScene() {
@@ -102,8 +104,8 @@ bool Rhyno::init() {
   _sprite->setPosition(Vec2(5, 60));
 
 
-  cocos2d::TMXTiledMap *tileMap = cocos2d::TMXTiledMap::create("maps/spring_map.tmx");
-  cocos2d::TMXLayer *bg = tileMap->layerNamed("background");
+  TMXTiledMap *tileMap = TMXTiledMap::create("maps/spring_map.tmx");
+  TMXLayer *bg = tileMap->layerNamed("background");
   CCLOG("tilemap: %s", typeid(bg).name());
   //auto ground = tileMap->layerNamed("ground");
   this->addChild(tileMap, 3);
