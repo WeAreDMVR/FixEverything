@@ -7,6 +7,7 @@
 
 #define COCOS2D_DEBUG 1
 
+using cocos2d::Point;
 using cocos2d::Color4B;
 using cocos2d::Director;
 using cocos2d::Event;
@@ -114,7 +115,7 @@ bool Rhyno::init() {
 
     float x = dict["x"].asFloat()+50;
     float y = dict["y"].asFloat()+100;
-    _sprite->setPosition(cocos2d::Point(x,y));
+    _sprite->setPosition(Point(x,y));
 }
   //TMXLayer* background = tileMap->getLayer("background");
   //TMXLayer* ground = tileMap->getLayer("ground");
