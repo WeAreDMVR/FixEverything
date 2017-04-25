@@ -72,6 +72,7 @@
 		CDEE033A1EABDE7300B3971D /* pSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9B1EABD74D0062C56B /* pSprite.cpp */; };
 		CDEE033B1EABDE7700B3971D /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9D1EABD74D0062C56B /* World.cpp */; };
 		CDEE033C1EABDE7B00B3971D /* Level.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0CA31EABD7E90062C56B /* Level.cpp */; };
+		CDFBA3EE1EAFBBB80082DC3D /* KeyboardPoller.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CDFBA3ED1EAFBBB80082DC3D /* KeyboardPoller.cpp */; };
 		D44C620C132DFF330009C878 /* OpenAL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620B132DFF330009C878 /* OpenAL.framework */; };
 		D44C620E132DFF430009C878 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620D132DFF430009C878 /* AVFoundation.framework */; };
 		D44C6210132DFF4E0009C878 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D44C620F132DFF4E0009C878 /* AudioToolbox.framework */; };
@@ -182,6 +183,7 @@
 		CD7A0C9E1EABD74D0062C56B /* World.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = World.h; sourceTree = "<group>"; };
 		CD7A0CA31EABD7E90062C56B /* Level.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Level.cpp; sourceTree = "<group>"; };
 		CD7A0CA41EABD7E90062C56B /* Level.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Level.h; sourceTree = "<group>"; };
+		CDFBA3ED1EAFBBB80082DC3D /* KeyboardPoller.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KeyboardPoller.cpp; path = ../Classes/KeyboardPoller.cpp; sourceTree = "<group>"; };
 		D44C620B132DFF330009C878 /* OpenAL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenAL.framework; path = System/Library/Frameworks/OpenAL.framework; sourceTree = SDKROOT; };
 		D44C620D132DFF430009C878 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		D44C620F132DFF4E0009C878 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
@@ -271,6 +273,7 @@
 		29B97314FDCFA39411CA2CEA /* CustomTemplate */ = {
 			isa = PBXGroup;
 			children = (
+				CDFBA3ED1EAFBBB80082DC3D /* KeyboardPoller.cpp */,
 				46880B8319C43A87006E1F66 /* Classes */,
 				46880B7519C43A67006E1F66 /* Resources */,
 				1AC6FAE5180E9839004C840B /* cocos2d_libs.xcodeproj */,
@@ -553,6 +556,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CDFBA3EE1EAFBBB80082DC3D /* KeyboardPoller.cpp in Sources */,
 				CDEE033C1EABDE7B00B3971D /* Level.cpp in Sources */,
 				CDEE033B1EABDE7700B3971D /* World.cpp in Sources */,
 				CDEE033A1EABDE7300B3971D /* pSprite.cpp in Sources */,
