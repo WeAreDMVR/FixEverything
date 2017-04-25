@@ -19,6 +19,7 @@ using cocos2d::Sprite;
 using cocos2d::Vec2;
 using cocos2d::TMXTiledMap;
 using cocos2d::TMXLayer;
+using cocos2d::TMXObjectGroup;
 
 Level* Rhyno::createScene() {
   Level* level = Level::createWithMap("images/spring_map.tmx");
@@ -39,11 +40,6 @@ bool Rhyno::init() {
 
   const auto& visibleSize = Director::getInstance()->getVisibleSize();
   const Vec2& origin = Director::getInstance()->getVisibleOrigin();
-
-  Sprite* background = Sprite::create("images/spring_layer.png");
-  background->setAnchorPoint(Vec2(0, 0));
-  background->setPosition(Vec2(0, 0));
-  // this->addChild(background, 0);
 
   /////////////////////////////
   // 2. add a menu item with "X" image, which is clicked to quit the program
@@ -96,19 +92,35 @@ bool Rhyno::init() {
   this->_lastTime = 0.0;
   this->scheduleUpdate();
 
+/*
   _sprite = Sprite::create("images/blob_rimuru.png");
   _sprite->setPosition(this->getContentSize().width / 2,
                        this->getContentSize().height / 2);
   _sprite->setAnchorPoint(Vec2(0, 0));
   _sprite->setPosition(Vec2(5, 60));
+  */
 
-  TMXTiledMap* tileMap = TMXTiledMap::create("maps/spring_map.tmx");
-  TMXLayer* bg = tileMap->layerNamed("background");
-  CCLOG("tilemap: %s", typeid(bg).name());
-  // auto ground = tileMap->layerNamed("ground");
-  this->addChild(tileMap, 3);
+  TMXTiledMap* tileMap = TMXTiledMap::create("images/spring_map.tmx");
+  TMXObjectGroup* objectGroup = tileMap->objectGroupNamed("blob_layer");
+  if(objectGroup == NULL){
+    CCLOG("TileMap has no objects layer");
+    return false;
+  }
+  auto& objects = objectGroup->getObjects(); //Currently just one object
+  _sprite = Sprite::create("images/blob_rimuru.png");
+  for (auto& obj : objects)
+  {
+    cocos2d::ValueMap& dict = obj.asValueMap();
 
+    float x = dict["x"].asFloat()+50;
+    float y = dict["y"].asFloat()+100;
+    _sprite->setPosition(cocos2d::Point(x,y));
+}
+  //TMXLayer* background = tileMap->getLayer("background");
+  //TMXLayer* ground = tileMap->getLayer("ground");
+  this->addChild(tileMap, 0);
   this->addChild(_sprite, 0);
+  
   return true;
 }
 
