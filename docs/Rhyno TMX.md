@@ -13,13 +13,14 @@ Every TMX map consists of many layers of tiles and objects. A Rhyno TMX map foll
 A Level loads the meta layers of a given TMX map by calling the function **Level::loadLayers()**, which itself calls **Level::createFixtures()**. This function iterates over every tile in the meta layer, creates a _pSprite_ for each, and inserts that _pSprite_ into the Level's physic's world (**Level::_world**) as a rectangular fixture.
 
 Because meta layer tiles are destined to become objects in the physics simulation there are a number of properties that they must have in order to behave well with our engine. Here is the list of essential properties for meta tiles (subject to expansion):
+
 | Name         | Type | Description |
-|--------------|------|-------------|
-| CategoryBits | int |an int representation of a byte corresponding to the object's **FilterClass** (see pSprite.h)|
-| BodyType     | int |an int corresponding to the b2BodyType of the tile: 0 = **static**, 1 = **kinematic**, and 2 = **dynamic**|
-| Damage 	   | int |the amount of damage this tile does to **destructable** sprites upon collision|
-|Destructable |bool |whether or not an object takes damage when a collision occurs|
-|Floating |bool |whether or not an object is affected by gravity|
+| ------------ | ---- | ----------- |
+| CategoryBits | int  | an int representation of a byte corresponding to the object's **FilterClass** (see pSprite.h) |
+| BodyType     | int  | an int corresponding to the b2BodyType of the tile: 0 = **static**, 1 = **kinematic**, and 2 = **dynamic** |
+| Damage       | int  | the amount of damage this tile does to **destructable** sprites upon collision |
+| Destructable  | bool | whether or not an object takes damage when a collision occurs |
+| Floating      | bool | whether or not an object is affected by gravity |
 
 If you were creating a standard floor tile on layer 1, for example, you would want to set the following values:
 
@@ -42,18 +43,19 @@ This guide probably explains things better than I could:
 
 In short, we're loading sprites from a sprite sheet. There are a number of tools online for creating sprite sheets like ShoeBox and Texture Packer. Once you have a sprite sheet, you need to load it into cocos2d's Sprite Frame Cache:
 
-    auto spritecache = SpriteFrameCache::getInstance();
-	    spritecache>addSpriteFrameWithFile("sprites.plist");
+    `auto spritecache = SpriteFrameCache::getInstance();`
+    `spritecache>addSpriteFrameWithFile("sprites.plist");`
 
 Once that's done, you just load the sprite by image name, as usual.
 
 Like meta tiles, objects have several essential properties, listed below:
+
 | Name         | Type | Description |
 |--------------|------|-------------|
-| CategoryBits | int |an int representation of a byte corresponding to the object's **FilterClass** (see pSprite.h)|
-| BodyType     | int |an int corresponding to the b2BodyType of the tile: 0 = **static**, 1 = **kinematic**, and 2 = **dynamic**|
-| Damage 	   | int |the amount of damage this tile does to **destructable** sprites upon collision|
-| Health       | int |the max health of a sprite|
+| CategoryBits | int  |an int representation of a byte corresponding to the object's **FilterClass** (see pSprite.h)|
+| BodyType     | int  |an int corresponding to the b2BodyType of the tile: 0 = **static**, 1 = **kinematic**, and 2 = **dynamic**|
+| Damage       | int  |the amount of damage this tile does to **destructable** sprites upon collision|
+| Health       | int  |the max health of a sprite|
 |name          | string | the file name of the sprite's image (must be in the sprite sheet)|
 |type          | string | the **className** of the sprite (ex. "Player")|
 |x             | int    |default x position|
@@ -61,6 +63,7 @@ Like meta tiles, objects have several essential properties, listed below:
  
 
 The Player sprite also must have the following properties:
+
 | Name         | Type | Description |
 |--------------|------|-------------|
 |Acceleration  | float |the acceleration of the player|
