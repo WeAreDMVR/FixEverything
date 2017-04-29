@@ -30,7 +30,7 @@ class Level : public cocos2d::Scene {
  protected:
   b2World* _world;
   const cocos2d::TMXTiledMap* _map;
-  std::vector<pSprite> _sprites;
+  std::vector<pSprite*> _sprites;
   double _lastTime;
 };
 

@@ -11,9 +11,8 @@ pSprite::pSprite() { _sprite = Sprite::create(); }
 
 pSprite::pSprite(Sprite* sprite) { _sprite = sprite; }
 
-// Copy constructor for push_back
-pSprite::pSprite(const pSprite& obj) {
-  // TODO
+pSprite::pSprite(const pSprite& object) {
+    _sprite = object._sprite;
 }
 
 inline Sprite* pSprite::getSprite() { return this->_sprite; }

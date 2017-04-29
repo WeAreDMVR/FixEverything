@@ -6,6 +6,9 @@
 
 #include <string>
 
+using cocos2d::Event;
+using cocos2d::EventKeyboard;
+using cocos2d::EventListenerKeyboard;
 using cocos2d::Point;
 using cocos2d::Size;
 using cocos2d::Sprite;
@@ -25,11 +28,23 @@ Level* Level::createWithMap(const string& tmxFile) {
     ret->_map = map;
     ret->_world = world;
     ret->autorelease();
-    ret->schedule(schedule_selector(Level::update), TimeStep);
+    //ret->schedule(schedule_selector(Level::update), TimeStep);
+    ret->scheduleUpdate();
     return ret;
   } else {
     return nullptr;
   }
+
+  // Set up the keyboard listener
+  auto keyListener = cocos2d::EventListenerKeyboard::create();
+  keyListener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
+        switch(keyCode) {
+          case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+                break;
+      }
+  };
+
+  ret->_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener,ret);
 }
 
 void Level::loadLayers() {
@@ -55,23 +70,23 @@ void Level::createFixtures(TMXLayer* layer) {
   for (int y = 0; y < layerSize.height; y++) {
     for (int x = 0; x < layerSize.width; x++) {
       // generate fixture if a sprite in this position
-      const auto& tileSprite = layer->getTileAt(Point(x, y));
+      Sprite* tileSprite = layer->getTileAt(Point(x, y));
       if (tileSprite) {
         // get properties of the tile
         const int tileGID = layer->getTileGIDAt(Point(x, y));
 
-        const ValueMap& properties =
+        const cocos2d::ValueMap properties =
             this->_map->getPropertiesForGID(tileGID).asValueMap();
         // create pSprite
-        this->_sprites.emplace_back(tileSprite);
-        pSprite& psprite = *this->_sprites.end();
+        this->_sprites.emplace_back(new pSprite(tileSprite));
+        pSprite* psprite = this->_sprites.back();
         const Point& position = positionForTileCoord(Point(x, y));
-        psprite.setPosition(position);
-        psprite.setProperties(&properties);
+        psprite->setPosition(position);
+        psprite->setProperties(&properties);
         // load pSprite
-        psprite.addBodyToWorld(this->_world);
+        psprite->addBodyToWorld(this->_world);
         const auto& tileSize = this->_map->getTileSize();
-        psprite.createRectangularFixture(layer, tileSize, x, y);
+        psprite->createRectangularFixture(layer, tileSize, x, y);
       }
     }
   }
@@ -99,23 +114,23 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
   const auto& name = properties.at("name").asString().c_str();
   // create sprite (Assumes a Spritesheet has been loaded)
   // <name> property should have the name of the .png image for the sprite
-  const auto& sprite = Sprite::createWithSpriteFrameName(name);
+  cocos2d::Sprite* sprite = Sprite::createWithSpriteFrameName(name);
   this->addChild(sprite);
   if (className == "Player") {
     // create Player
-    this->_sprites.push_back(Player(sprite));
+    this->_sprites.push_back(new Player(sprite));
   } else {
     // create pSprite
-    this->_sprites.push_back(pSprite(sprite));
+    this->_sprites.push_back(new pSprite(sprite));
   }
-  pSprite& object = *this->_sprites.end();
+  pSprite* object = this->_sprites.back();
   const int x = properties.at("x").asInt();
   const int y = properties.at("y").asInt();
-  object.setPosition(Point(x, y));
-  object.setProperties(&properties);
-  object.addBodyToWorld(this->_world);
-  object.createRectangularFixture();
-  return &object;
+  object->setPosition(Point(x, y));
+  object->setProperties(&properties);
+  object->addBodyToWorld(this->_world);
+  object->createRectangularFixture();
+  return object;
 }
 
 Point Level::positionForTileCoord(const Point& coordinate) {
@@ -157,4 +172,10 @@ void Level::update(float dt) {
     World::step(this->_world);
     frameTime -= TimeStep;
   }
+
+  for (pSprite* p : this->_sprites) {
+    //Update sprites
+    //CCLOG("sprite x: %f y: %f", p->getBodyPositionX(), p->getBodyPositionY());
+  }
+
 }
