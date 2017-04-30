@@ -21,7 +21,9 @@ class pSprite : public cocos2d::Node {
     _yposition = p.y;
   }
   inline int getPositionX() { return this->_xposition; }
+  inline float getBodyPositionX() { return this->_body->GetPosition().x; }
   inline int getPositionY() { return this->_yposition; }
+  inline float getBodyPositionY() { return this->_body->GetPosition().y; }
   inline void setProperties(const cocos2d::ValueMap* properties) {
     _properties = properties;
     // TODO: set Sprite properties

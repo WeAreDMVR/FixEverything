@@ -9,9 +9,9 @@
 
 #include "cocos2d.h"
 
-class Rhyno : public KeyboardPoller {
+class Rhyno : public cocos2d::Scene {
  public:
-  static Level* createScene();
+  static Scene* createScene();
 
   virtual bool init() override;
 
@@ -22,12 +22,6 @@ class Rhyno : public KeyboardPoller {
   CREATE_FUNC(Rhyno);
 
   void update(float) override;
-
- private:
-  // For fixed step physics
-  float _currentTime;
-  float _lastTime;
-  cocos2d::Sprite* _sprite;
 };
 
 #endif  // _RHYNO_H_
