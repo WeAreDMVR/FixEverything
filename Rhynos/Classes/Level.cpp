@@ -5,17 +5,13 @@
 
 #include <string>
 
-using cocos2d::Event;
-using cocos2d::EventKeyboard;
-using cocos2d::EventListenerKeyboard;
-using cocos2d::Point;
-using cocos2d::Size;
-using cocos2d::Sprite;
-using cocos2d::TMXLayer;
-using cocos2d::TMXTiledMap;
-using cocos2d::ValueMap;
+using namespace cocos2d;
+
 using std::string;
 using std::to_string;
+
+static const Size tileSize(75.0, 75.0);
+static const Size mapSize(40.0, 12.0);
 
 Level::Level() {}
 
@@ -136,8 +132,6 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
 }
 
 Point Level::positionForTileCoord(const Point& coordinate) {
-  const Size& tileSize = _map->getTileSize();
-  const Size& mapSize = _map->getMapSize();
   const int x = coordinate.x * tileSize.width;
   const int y =
       (mapSize.height * tileSize.height) - (coordinate.y * tileSize.height);
@@ -145,8 +139,6 @@ Point Level::positionForTileCoord(const Point& coordinate) {
 }
 
 Point Level::tileCoordForPosition(const Point& position) {
-  const Size& tileSize = _map->getTileSize();
-  const Size& mapSize = _map->getMapSize();
   const int x = position.x / tileSize.width;
   const int y = mapSize.height - (position.y / tileSize.height);
   return Point(x, y);
@@ -199,12 +191,12 @@ void Level::handleInput() {
   }
   if (this->keyPoll->isKeyPressed(
           cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-    CCLOG("right");
+    CCLOG("left");
     this->_players["localhost"]->applyMoveLeft();
   }
   if (this->keyPoll->isKeyPressed(
           cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW)) {
-    CCLOG("right");
+    CCLOG("up");
     this->_players["localhost"]->applyJump();
   }
 }
