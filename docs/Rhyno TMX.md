@@ -87,7 +87,7 @@ The Player sprite also must have the following properties:
 |--------------|------|-------------|
 |Acceleration  | float |the acceleration of the player|
 |Deceleration  | float |the deceleration of the player|
-| Health       | int  |the health of the player|
+| Health       | int  |the max health of the player|
 |JumpAcceleration| float | the jump acceleration  of the player|
 |MaxSpeed| float |the x speed cap of the player|
 |MaxJumpTime| float |the max time the jump button can be held before the player descends|
