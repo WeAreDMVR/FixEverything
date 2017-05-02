@@ -195,7 +195,7 @@ void Level::update(float dt) {
   for (pSprite* p : this->_sprites) {
     // Not positive that all of these things actually have
     // sprites/bodies.
-    //p->updateSprite();
+    p->updateSprite();
   }
 
   // Update Players
@@ -210,11 +210,11 @@ void Level::handleInput() {
     this->_players["localhost"]->applyMoveRight();
   }
   if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-    CCLOG("right");
+    CCLOG("left");
     this->_players["localhost"]->applyMoveLeft();
   }
-  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW)) {
-    CCLOG("right");
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
+    CCLOG("up");
     this->_players["localhost"]->applyJump();
   }
 }
