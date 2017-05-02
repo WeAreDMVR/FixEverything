@@ -4,7 +4,7 @@
 #include <Box2D/Box2D.h>
 
 constexpr float TimeStep = 1 / 60.0;
-constexpr float PixelsPerMeter = 75.0;
+constexpr float PixelsPerMeter = 35.0;
 constexpr float Gravity = -5.2;
 constexpr float Friction = 0.46875;
 constexpr float Density = 1.0;

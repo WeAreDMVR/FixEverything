@@ -45,7 +45,7 @@ void Level::loadLayers() {
       break;
     }
     // hide layer
-    layer->setVisible(false);
+    layer->setVisible(true);
     // add meta tiles to world
     this->createFixtures(layer);
   }
