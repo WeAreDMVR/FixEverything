@@ -6,8 +6,7 @@ Player::Player(Sprite* sprite) : pSprite(sprite) {}
 
 inline void Player::setProperties(ValueMap* properties) {
   super::setProperties(properties);
-  this->_health = properties->at("Health").asInt() this->_maxHealth =
-      this->_health;
+  this->_maxHealth = this->_health;
   this->_acc = properties->at("Acceleration").asFloat();
   this->_dec = properties->at("Deceleration").asFloat();
   this->_jmp = properties->at("JumpAcceleration").asFloat();
