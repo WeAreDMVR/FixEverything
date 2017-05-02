@@ -46,8 +46,8 @@ bool Rhyno::init() {
         auto spritecache = cocos2d::SpriteFrameCache::getInstance();
         spritecache->addSpriteFramesWithFile("images/textures.plist");
         Level* level1 = Level::createWithMap("images/long.tmx");
-        level1->loadObjects();
         level1->loadLayers();
+        level1->loadObjects();
 
         Director::getInstance()->pushScene(level1);
       }

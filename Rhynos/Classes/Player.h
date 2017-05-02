@@ -8,7 +8,7 @@ enum class PlayerStatus { normal, invincible };
 class Player : public pSprite {
  public:
   Player(cocos2d::Sprite* sprite);
-  inline void setProperties(cocos2d::ValueMap* properties);
+  void setProperties(const cocos2d::ValueMap* properties);
   inline int getHealth();
   inline int getMaxHealth();
   inline int getDamage();

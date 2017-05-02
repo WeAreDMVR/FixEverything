@@ -38,6 +38,8 @@ class pSprite : public cocos2d::Node {
   // Level must do that
   void removeBodyFromWorld(b2World* world);
 
+  void updateSprite();
+
  private:
   typedef Node super;
 

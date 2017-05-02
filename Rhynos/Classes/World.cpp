@@ -68,8 +68,7 @@ b2World* World::init() {
   b2World* world = new b2World(gravity);
   world->SetAllowSleeping(true);
   world->SetContinuousPhysics(true);
-  MyContactListener* listener;
-  world->SetContactListener(listener);
+  world->SetContactListener(new MyContactListener());
   return world;
 }
 
