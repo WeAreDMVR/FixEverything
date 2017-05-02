@@ -38,7 +38,7 @@ void Level::loadLayers() {
   // Physics Layers handling
   // isolate the "metax" layers from the map
   const string& meta = "meta";
-  for (int i = 1;; i++) {
+  for (int i = 1;i<2;i++) {
     auto layer = this->_map->getLayer(meta + to_string(i));
     if (layer == nullptr) {
       // We've found all of the meta layers in the map
