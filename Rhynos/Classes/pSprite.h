@@ -39,8 +39,10 @@ class pSprite : public cocos2d::Node {
 
   void addBodyToWorld(b2World* world);
   void addBodyToWorldAtPosition(b2World* world, cocos2d::Point p);
+  // this one is for tiles
   void createRectangularFixture(cocos2d::TMXLayer* layer,
                                 const cocos2d::Size tileSize, int x, int y);
+  // this one is for sprites
   void createRectangularFixture();
   // NOTE: Does NOT remove sprite from Level
   // Level must do that
