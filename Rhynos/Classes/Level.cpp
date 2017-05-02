@@ -1,5 +1,5 @@
-#include "Level.h"
 #include "KeyboardPoller.h"
+#include "Level.h"
 
 #include "cocos2d.h"
 
@@ -36,22 +36,22 @@ Level* Level::createWithMap(const string& tmxFile) {
   } else {
     return nullptr;
   }
-
-
 }
 
 void Level::loadLayers() {
   // Physics Layers handling
   // isolate the "metax" layers from the map
   const string& meta = "meta";
-  for (int i = 1; i <= 3; i++) {
+  for (int i = 1;; i++) {
     auto layer = this->_map->getLayer(meta + to_string(i));
-    if (layer != nullptr) {
-      // hide layer
-      layer->setVisible(false);
-      // add meta tiles to world
-      this->createFixtures(layer);
+    if (layer == nullptr) {
+      // We've found all of the meta layers in the map
+      break;
     }
+    // hide layer
+    layer->setVisible(false);
+    // add meta tiles to world
+    this->createFixtures(layer);
   }
 
   // Graphics Layers handling
@@ -103,12 +103,17 @@ void Level::createFixtures(TMXLayer* layer) {
 
 // TODO
 void Level::loadObjects() {
-  // get objectGroups of map
-  const auto& objectGroups = _map->getObjectGroups();
-  for (const auto& objectGroup : objectGroups) {
+  // isolate the "objx" layers from the map
+  const string& obj = "obj";
+  for (int i = 1;; i++) {
+    const auto objectGroup = this->_map->getObjectGroup(obj + to_string(i));
+    if (objectGroup == nullptr) {
+      // We've found all of the object layers in the map
+      break;
+    }
     // get objects from each objectGroup
-    const auto& objects = objectGroup->getObjects();
-    for (const auto& object : objects) {
+    const auto objects = objectGroup->getObjects();
+    for (const auto object : objects) {
       auto properties = object.asValueMap();
       const auto& type = properties.at("type");
       if (!type.isNull()) {
@@ -195,17 +200,17 @@ void Level::update(float dt) {
   for (pSprite* p : this->_sprites) {
     // Not positive that all of these things actually have
     // sprites/bodies.
-    p->updateSprite();
+    // p->updateSprite();
   }
 
   // Update Players
   this->_players["localhost"]->updateSprite();
-
 }
 
 void Level::handleInput() {
   // Arrows
-  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
+  if (this->keyPoll->isKeyPressed(
+          cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
     CCLOG("right");
     this->_players["localhost"]->applyMoveRight();
   }
