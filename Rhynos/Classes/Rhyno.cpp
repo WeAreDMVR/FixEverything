@@ -45,7 +45,7 @@ bool Rhyno::init() {
         // Check to switch to the level
         auto spritecache = cocos2d::SpriteFrameCache::getInstance();
         spritecache->addSpriteFramesWithFile("images/textures.plist");
-        Level* level1 = Level::createWithMap("images/long.tmx");
+        Level* level1 = Level::createWithMap("images/track-2.tmx");
         level1->loadLayers();
         level1->loadObjects();
 
