@@ -1,7 +1,8 @@
 #ifndef _LEVEL_H_
 #define _LEVEL_H_
 
-#include "pSprite.h"
+#include "Player.h"
+#include "KeyboardPoller.h"
 
 #include "cocos2d.h"
 
@@ -26,12 +27,15 @@ class Level : public cocos2d::Scene {
   pSprite* addObject(const std::string& className,
                      const cocos2d::ValueMap& properties);
   double getCurrentTime();
+  void handleInput();
 
  protected:
   b2World* _world;
   const cocos2d::TMXTiledMap* _map;
   std::vector<pSprite*> _sprites;
+  std::unordered_map<std::string, Player*> _players;
   double _lastTime;
+  KeyboardPoller* keyPoll;
 };
 
 #endif  // _LEVEL_H_

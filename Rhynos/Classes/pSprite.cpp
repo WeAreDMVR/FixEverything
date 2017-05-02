@@ -98,3 +98,9 @@ void pSprite::removeBodyFromWorld(b2World* world) {
   world->DestroyBody(this->_body);
   this->_body = nullptr;
 }
+
+void pSprite::updateSprite() {
+  float x = PixelsPerMeter * this->getBodyPositionX();
+  float y = PixelsPerMeter * this->getBodyPositionY();
+  this->setPosition(Point(x, y));
+}
