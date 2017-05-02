@@ -23,9 +23,7 @@ using cocos2d::TMXTiledMap;
 using cocos2d::TMXLayer;
 using cocos2d::TMXObjectGroup;
 
-Scene* Rhyno::createScene() {
-    return Rhyno::create();
-}
+Scene* Rhyno::createScene() { return Rhyno::create(); }
 
 // on "init" you need to initialize your instance
 bool Rhyno::init() {
@@ -39,9 +37,9 @@ bool Rhyno::init() {
 
   // Set up the keyboard listener
   auto keyListener = cocos2d::EventListenerKeyboard::create();
-  keyListener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event){
-    switch(keyCode){
-      case EventKeyboard::KeyCode::KEY_ENTER:
+  keyListener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
+    switch (keyCode) {
+      case EventKeyboard::KeyCode::KEY_ENTER: {
         // Check to switch to the level
         auto spritecache = cocos2d::SpriteFrameCache::getInstance();
         spritecache->addSpriteFramesWithFile("images/textures.plist");
@@ -50,10 +48,15 @@ bool Rhyno::init() {
         level1->loadObjects();
 
         Director::getInstance()->pushScene(level1);
+        break;
       }
+      default:
+        break;
+    }
   };
 
-  this->_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener,this);
+  this->_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener,
+                                                                 this);
 
   /////////////////////////////
   // 2. Some old stuff
@@ -61,7 +64,8 @@ bool Rhyno::init() {
   // add a label shows "Rhyno"
   // create and initialize a label
 
-  auto label = Label::createWithTTF("Press Enter to Play", "fonts/Marker Felt.ttf", 24);
+  auto label =
+      Label::createWithTTF("Press Enter to Play", "fonts/Marker Felt.ttf", 24);
 
   // position the label on the center of the screen
   label->setPosition(
@@ -88,9 +92,7 @@ bool Rhyno::init() {
   return true;
 }
 
-void Rhyno::update(float delta) {
-
-}
+void Rhyno::update(float delta) {}
 
 void Rhyno::menuCloseCallback(Ref* pSender) {
   // Close the cocos2d-x game scene and quit the application
