@@ -21,7 +21,7 @@ Level::Level() {}
 
 Level* Level::createWithMap(const string& tmxFile) {
   Level* ret = new (std::nothrow) Level();
-  const TMXTiledMap* map = TMXTiledMap::create(tmxFile);
+  TMXTiledMap* map = TMXTiledMap::create(tmxFile);
   b2World* world = World::init();
   if (ret && map && ret->init()) {
     ret->_map = map;
@@ -31,6 +31,7 @@ Level* Level::createWithMap(const string& tmxFile) {
     KeyboardPoller* layer = KeyboardPoller::create();
     ret->keyPoll = layer;
     ret->addChild(layer);
+    ret->addChild(map);
     return ret;
   } else {
     return nullptr;
@@ -52,8 +53,24 @@ void Level::loadLayers() {
       this->createFixtures(layer);
     }
   }
-  // TODO
+
   // Graphics Layers handling
+  // isolate "fgx" and "bgx" layers from the map
+  const string& fg = "fg";
+  const string& bg = "bg";
+  for (int i = 1; i <= 3; i++) {
+    auto FGLayer = this->_map->getLayer(fg + to_string(i));
+    auto BGLayer = this->_map->getLayer(bg + to_string(i));
+
+    if (FGLayer != nullptr && BGLayer != nullptr) {
+      // make the layers visible
+      FGLayer->setVisible(true);
+      BGLayer->setVisible(true);
+      // add fg tiles in front and bg layers behind all fg layers
+      FGLayer->setPositionZ(10-i);
+      BGLayer->setPositionZ(5-i);
+    }
+  }
 }
 
 void Level::createFixtures(TMXLayer* layer) {
