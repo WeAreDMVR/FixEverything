@@ -5,17 +5,13 @@
 
 #include <string>
 
-using cocos2d::Event;
-using cocos2d::EventKeyboard;
-using cocos2d::EventListenerKeyboard;
-using cocos2d::Point;
-using cocos2d::Size;
-using cocos2d::Sprite;
-using cocos2d::TMXLayer;
-using cocos2d::TMXTiledMap;
-using cocos2d::ValueMap;
+using namespace cocos2d;
+
 using std::string;
 using std::to_string;
+
+static const Size tileSize(75.0, 75.0);
+static const Size mapSize(40.0, 12.0);
 
 Level::Level() {}
 
@@ -75,9 +71,10 @@ void Level::loadLayers() {
 
 void Level::createFixtures(TMXLayer* layer) {
   // create a rectangular fixture for each tile
-  const Size& layerSize = layer->getLayerSize();
-  for (int y = 0; y < layerSize.height; y++) {
-    for (int x = 0; x < layerSize.width; x++) {
+  //const Size& layerSize = layer->getLayerSize();
+  //CCLOG("Layer Size: %f %f", layerSize.width, layerSize.height);
+  for (int y = 0; y < mapSize.height; y++) {
+    for (int x = 0; x < mapSize.width; x++) {
       // generate fixture if a sprite in this position
       Sprite* tileSprite = layer->getTileAt(Point(x, y));
       if (tileSprite) {
@@ -155,8 +152,6 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
 }
 
 Point Level::positionForTileCoord(const Point& coordinate) {
-  const Size& tileSize = _map->getTileSize();
-  const Size& mapSize = _map->getMapSize();
   const int x = coordinate.x * tileSize.width;
   const int y =
       (mapSize.height * tileSize.height) - (coordinate.y * tileSize.height);
@@ -164,8 +159,6 @@ Point Level::positionForTileCoord(const Point& coordinate) {
 }
 
 Point Level::tileCoordForPosition(const Point& position) {
-  const Size& tileSize = _map->getTileSize();
-  const Size& mapSize = _map->getMapSize();
   const int x = position.x / tileSize.width;
   const int y = mapSize.height - (position.y / tileSize.height);
   return Point(x, y);
