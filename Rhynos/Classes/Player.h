@@ -11,7 +11,6 @@ class Player : public pSprite {
   void setProperties(const cocos2d::ValueMap* properties);
   inline int getHealth();
   inline int getMaxHealth();
-  inline int getDamage();
   inline void setStatus(PlayerStatus status);
   inline PlayerStatus getStatus();
   inline void setAcceleration(float acc);
@@ -20,9 +19,6 @@ class Player : public pSprite {
   inline void setDeccelerationToDefault();
   inline void setJumpAcceleration(float jmp);
   inline void setJumpAccelerationToDefault();
-
-  bool isFloating();
-  bool isDestructable();
 
   int hurtBy(int damage);
   int healBy(int health);
@@ -49,15 +45,9 @@ class Player : public pSprite {
   int _health;
   // maximum health of player
   int _maxHealth;
-  // damage player deals to other objects on contact
-  int _damage;
-  // whether or not the player is floating
-  bool _floating;
-  // whether or not the player can be destoryed (die)
-  bool _destructable;
   // the player's default acceleration
   float _acc;
-  // the player's default decceleration
+  // the player's default deceleration
   float _dec;
   // the player's jump (vertical) acceleration
   float _jmp;
