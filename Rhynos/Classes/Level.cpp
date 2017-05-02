@@ -141,7 +141,9 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
     this->_sprites.push_back(object);
   }
   const int x = properties.at("x").asInt();
+  CCLOG("%d", x);
   const int y = properties.at("y").asInt();
+  CCLOG("%d", y);
   object->setPosition(positionForTileCoord(Point(x, y)));
   object->addBodyToWorld(this->_world);
   object->createRectangularFixture();
