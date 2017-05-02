@@ -26,13 +26,11 @@ class pSprite : public cocos2d::Node {
   inline float getBodyPositionY() { return this->_body->GetPosition().y; }
   inline void setProperties(const cocos2d::ValueMap* properties) {
     _properties = properties;
-    _health = properties->at("Health").asInt();
     _damage = properties->at("Damage").asInt();
     _destructable = properties->at("Destructable").asBool();
     _floating = properties->at("Floating").asBool();
   }
   inline const cocos2d::ValueMap* getProperties() { return _properties; }
-  inline int getHealth() { return this->_health; }
   inline int getDamage() { return this->_damage; }
   inline bool isFloating() { return this->_floating; }
   inline bool isDestructable() { return this->_destructable; }
@@ -60,8 +58,6 @@ class pSprite : public cocos2d::Node {
 
   // damage object deals to other objects on contact
   int _damage;
-  // current health of player
-  int _health;
   // whether or not the object can be destoryed (die)
   bool _destructable;
   // whether or not the player is floating
