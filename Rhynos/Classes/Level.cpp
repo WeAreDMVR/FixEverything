@@ -35,18 +35,6 @@ Level* Level::createWithMap(const string& tmxFile) {
   } else {
     return nullptr;
   }
-
-  // Set up the keyboard listener
-  auto keyListener = cocos2d::EventListenerKeyboard::create();
-  keyListener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
-    switch (keyCode) {
-      default:
-        break;
-    }
-  };
-
-  ret->_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener,
-                                                                ret);
 }
 
 void Level::loadLayers() {
