@@ -206,13 +206,11 @@ void Level::handleInput() {
     CCLOG("right");
     this->_players["localhost"]->applyMoveRight();
   }
-  if (this->keyPoll->isKeyPressed(
-          cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
     CCLOG("left");
     this->_players["localhost"]->applyMoveLeft();
   }
-  if (this->keyPoll->isKeyPressed(
-          cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW)) {
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
     CCLOG("up");
     this->_players["localhost"]->applyJump();
   }
