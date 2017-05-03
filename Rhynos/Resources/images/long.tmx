@@ -21,13 +21,13 @@
  <objectgroup name="obj1">
   <object id="1" x="69" y="131" width="24" height="48">
    <properties>
-    <property name="Acceleration" type="float" value="10"/>
+    <property name="Acceleration" type="float" value="100"/>
     <property name="BodyType" type="int" value="2"/>
     <property name="CategoryBits" type="int" value="1"/>
     <property name="Damage" type="int" value="0"/>
-    <property name="Deceleration" type="float" value="0.2"/>
+    <property name="Deceleration" type="float" value="60"/>
     <property name="Health" type="int" value="3"/>
-    <property name="JumpAcceleration" type="float" value="50"/>
+    <property name="JumpAcceleration" type="float" value="500"/>
     <property name="MaxJumpTime" type="float" value="1.5"/>
     <property name="MaxSpeed" type="float" value="2"/>
     <property name="name" value="Rhyno.png"/>

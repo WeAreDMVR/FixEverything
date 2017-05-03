@@ -39,6 +39,7 @@ void Level::loadLayers() {
   // isolate the "metax" layers from the map
   const string& meta = "meta";
   for (int i = 1;; i++) {
+
     auto layer = this->_map->getLayer(meta + to_string(i));
     if (layer == nullptr) {
       // We've found all of the meta layers in the map
@@ -148,13 +149,13 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
 Point Level::positionForTileCoord(const Point& coordinate) {
   const int x = coordinate.x * tileSize.width;
   const int y =
-      (mapSize.height * tileSize.height) - (coordinate.y * tileSize.height);
+      (mapSize.height * tileSize.height) - ((coordinate.y + 1) * tileSize.height);
   return Point(x, y);
 }
 
 Point Level::tileCoordForPosition(const Point& position) {
   const int x = position.x / tileSize.width;
-  const int y = mapSize.height - (position.y / tileSize.height);
+  const int y = mapSize.height - (position.y / tileSize.height) - 1;
   return Point(x, y);
 }
 

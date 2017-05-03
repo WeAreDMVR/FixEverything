@@ -16,7 +16,6 @@ class pSprite : public cocos2d::Node {
   inline cocos2d::Sprite* getSprite();
   inline void setSprite(cocos2d::Sprite* sprite);
   inline void setPosition(cocos2d::Point p) {
-    CCLOG("(%f, %f)", p.x, p.y);
     this->_sprite->setPosition(p);
     _xposition = p.x;
     _yposition = p.y;
