@@ -59,9 +59,9 @@ void pSprite::createRectangularFixture() {
   fixtureDef.density = Density;
   fixtureDef.friction = Friction;
   fixtureDef.restitution = Restitution;
-  fixtureDef.filter.categoryBits =
-      this->getProperties()->at("CategoryBits").asByte();
-  fixtureDef.filter.maskBits = 0xffff;
+  unsigned char bits = this->getProperties()->at("CategoryBits").asByte();
+  fixtureDef.filter.categoryBits = bits;
+  fixtureDef.filter.maskBits = bits;
 
   this->_body->CreateFixture(&fixtureDef);
 }
@@ -104,3 +104,38 @@ void pSprite::updateSprite() {
   float y = PixelsPerMeter * this->getBodyPositionY();
   this->setPosition(Point(x, y));
 }
+
+void pSprite::setLayer(int layerNum, bool solid) {
+  this->_layernum = layerNum;
+  b2Filter filter;
+  int layerBits;
+  switch (layerNum) {
+    case 1: 
+      layerBits = Layer1Bits;
+      break;
+    case 2:
+      layerBits = Layer2Bits;
+      break;
+    case 3:
+      layerBits = Layer3Bits;
+  }
+  int solidBits;
+  if (solid) {
+    solidBits = SolidBits;
+  } else {
+    solidBits = NotSolidBits;
+  }
+  // iterate over all fixtures
+  for (b2Fixture* fixture = this->_body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+    filiter = fixture->GetFilterData();
+    // set category bits
+    filter.categoryBits = layerBits | solidBits;
+    // set mask bits
+    filter.maskBits = layerBits | solidBits;
+    fixture->SetFilterData(filter);
+  }
+}
+
+int pSprite::getLayerNum() {
+    return this->_layernum;
+  }

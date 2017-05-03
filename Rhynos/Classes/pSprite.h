@@ -5,6 +5,14 @@
 
 #include "cocos2d.h"
 
+constexpr int Layer1Bits =   0x000001;
+constexpr int Layer2Bits =   0x000010;
+constexpr int Layer3Bits =   0x000100;
+constexpr int SolidBits =    0x001000;
+constexpr int NotSolidBits = 0x000000;
+constexpr int Player1Bits =  0x010000;
+constexpr int Player2Bits =  0x100000;
+
 class pSprite : public cocos2d::Node {
   friend cocos2d::Sprite;
 
@@ -39,6 +47,8 @@ class pSprite : public cocos2d::Node {
   void removeBodyFromWorld(b2World* world);
 
   void updateSprite();
+  void setLayer(int layerNum, bool solid);
+  int getLayerNum();
 
  private:
   typedef Node super;
@@ -49,15 +59,7 @@ class pSprite : public cocos2d::Node {
   const cocos2d::ValueMap* _properties;
   int _xposition;
   int _yposition;
-};
-
-enum class FilterCategory {
-  SolidTrack1 = 0x01,
-  NonSolidTrack1 = 0x02,
-  SolidTrack2 = 0x03,
-  NonSolidTrack2 = 0x04,
-  SolidTrack3 = 0x05,
-  NonSolidTrack3 = 0x06
+  int _layernum;
 };
 
 #endif  // _PSPRITE_H_

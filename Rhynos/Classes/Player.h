@@ -9,6 +9,7 @@ class Player : public pSprite {
  public:
   Player(cocos2d::Sprite* sprite);
   void setProperties(const cocos2d::ValueMap* properties);
+  void createRectangularFixture();
   inline int getHealth();
   inline int getMaxHealth();
   inline int getDamage();
@@ -20,6 +21,8 @@ class Player : public pSprite {
   inline void setDeccelerationToDefault();
   inline void setJumpAcceleration(float jmp);
   inline void setJumpAccelerationToDefault();
+  inline void setPlayerNum(int num);
+  inline int getPlayerNum();
 
   bool isFloating();
   bool isDestructable();
@@ -38,6 +41,8 @@ class Player : public pSprite {
   void applyMoveLeft();
   void applyJump();
   void resetJumpTime();
+
+  void setLayer(int layerNum, bool solid);
 
  private:
   typedef pSprite super;
@@ -69,6 +74,8 @@ class Player : public pSprite {
   float _maxJumpTime;
   // the player's status
   PlayerStatus _status;
+  // the player's number
+  int _playerNum;
 };
 
 #endif  // _PLAYER_H_

@@ -17,6 +17,17 @@ void Player::setProperties(const ValueMap* properties) {
   this->_status = PlayerStatus::normal;
 }
 
+void Player::createRectangularFixture() {
+  // call pSprite's function
+  super::createRectangularFixture();
+  // add group index
+  for (b2Fixture* fixture; fixture; fixture = fixture->GetNext()) {
+    b2Filter filter = fixture->getFilterData();
+    filter.groupIndex = -1;
+    fixture->SetFilterData(filter); 
+  }
+}
+
 inline int Player::getHealth() { return this->_health; }
 
 inline int Player::getMaxHealth() { return this->_maxHealth; }
@@ -46,6 +57,12 @@ inline void Player::setDeccelerationToDefault() {
 inline void Player::setJumpAcceleration(float jmp) { this->_jmp = jmp; }
 inline void Player::setJumpAccelerationToDefault() {
   this->_jmp = this->getProperties()->at("JumpAcceleration").asFloat();
+}
+
+inline void Player::setPlayerNum(int num) { this->_playerNum = num; }
+
+inline int Player::getPlayerNum() {
+  return this->_playerNum;
 }
 
 bool Player::isFloating() { return this->_floating; }
