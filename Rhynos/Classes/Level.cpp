@@ -180,7 +180,6 @@ void Level::update(float dt) {
   }
 
   double frameTime = currentTime - this->_lastTime;
-  this->_lastTime = currentTime;
 
   while (frameTime > TimeStep) {
     // Check inputs
@@ -188,6 +187,7 @@ void Level::update(float dt) {
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;
+    this->_lastTime += TimeStep;
   }
 
   // Update non-player sprites
