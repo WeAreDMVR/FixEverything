@@ -212,7 +212,7 @@
     <property name="Deceleration" type="float" value="80"/>
     <property name="Health" type="int" value="3"/>
     <property name="JumpAcceleration" type="float" value="100"/>
-    <property name="MaxJumpTime" type="float" value="0.25"/>
+    <property name="MaxJumpTime" type="float" value="100"/>
     <property name="MaxSpeed" type="float" value="5"/>
     <property name="name" value="rhyno-75x75.png"/>
     <property name="type" value="Player"/>
