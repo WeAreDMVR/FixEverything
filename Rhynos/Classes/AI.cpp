@@ -1,11 +1,3 @@
-//
-//  AI.cpp
-//  Rhynos
-//
-//  Created by Long Pham on 5/3/17.
-//
-//
-
 #include "AI.hpp"
 #include "Player.h"
 #include <cstdlib>
@@ -15,6 +7,7 @@ using namespace cocos2d;
 AI::AI(Sprite* sprite) : Player(sprite) {
     this->target = Point(800, 20);
     this->failProb = 0.1;
+    this->type = "AI";
 }
 
 

@@ -12,7 +12,7 @@ class pSprite : public cocos2d::Node {
   pSprite();
   pSprite(cocos2d::Sprite* sprite);
   pSprite(const pSprite& obj);
-
+  std::string type;
   inline cocos2d::Sprite* getSprite() { return this->_sprite; }
 
   inline void setSprite(cocos2d::Sprite* sprite);
@@ -56,9 +56,9 @@ class pSprite : public cocos2d::Node {
  protected:
   cocos2d::Sprite* _sprite;
   const cocos2d::ValueMap* _properties;
+    
   int _xposition;
   int _yposition;
-
   // damage object deals to other objects on contact
   int _damage;
   // whether or not the object can be destoryed (die)

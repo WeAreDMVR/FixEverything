@@ -1,11 +1,3 @@
-//
-//  AI.hpp
-//  Rhynos
-//
-//  Created by Long Pham on 5/3/17.
-//
-//
-
 #ifndef AI_hpp
 #define AI_hpp
 
@@ -23,11 +15,5 @@ class AI : public Player {
         int atTarget();
         int moveOther(Player::Player* play);
         int move();
-
 };
-
-
-
-
-
 #endif /* AI_hpp */
