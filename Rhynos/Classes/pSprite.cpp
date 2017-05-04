@@ -11,9 +11,7 @@ pSprite::pSprite() { _sprite = Sprite::create(); }
 
 pSprite::pSprite(Sprite* sprite) { _sprite = sprite; }
 
-pSprite::pSprite(const pSprite& object) {
-    _sprite = object._sprite;
-}
+pSprite::pSprite(const pSprite& object) { _sprite = object._sprite; }
 
 inline Sprite* pSprite::getSprite() { return this->_sprite; }
 
@@ -23,7 +21,6 @@ void pSprite::createRectangularFixture(TMXLayer* layer, const Size tileSize,
                                        int x, int y) {
   // get position and size
   auto position = layer->getPositionAt(Point(x, y));
-  // auto tileSize = this->_map->getTileSize();
 
   // create shape
   b2PolygonShape shape;

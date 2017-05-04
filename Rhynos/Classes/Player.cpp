@@ -8,7 +8,6 @@ void Player::setProperties(const ValueMap* properties) {
   this->_properties = properties;
   this->_health = properties->at("Health").asInt();
   this->_maxHealth = this->_health;
-  this->_damage = properties->at("Damage").asInt();
   this->_acc = properties->at("Acceleration").asFloat();
   this->_dec = properties->at("Deceleration").asFloat();
   this->_jmp = properties->at("JumpAcceleration").asFloat();
@@ -32,8 +31,6 @@ inline int Player::getHealth() { return this->_health; }
 
 inline int Player::getMaxHealth() { return this->_maxHealth; }
 
-inline int Player::getDamage() { return this->_damage; }
-
 inline void Player::setStatus(PlayerStatus status) {
   this->_status = status;
   switch (status) {
@@ -52,7 +49,7 @@ inline void Player::setAccelerationToDefault() {
 }
 inline void Player::setDecceleration(float dec) { this->_dec = dec; }
 inline void Player::setDeccelerationToDefault() {
-  this->_dec = this->getProperties()->at("Decceleration").asFloat();
+  this->_dec = this->getProperties()->at("Deceleration").asFloat();
 }
 inline void Player::setJumpAcceleration(float jmp) { this->_jmp = jmp; }
 inline void Player::setJumpAccelerationToDefault() {
