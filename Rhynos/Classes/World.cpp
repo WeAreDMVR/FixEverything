@@ -3,6 +3,7 @@
 
 #include <Box2D/Box2D.h>
 #include <iostream>
+#include <Level.h>
 
 // Physics collision callbacks
 class MyContactListener : public b2ContactListener
@@ -23,9 +24,16 @@ class MyContactListener : public b2ContactListener
         if (fixtureDataA) {
             std::string *tA = static_cast<std::string*>(fixtureDataA);
             std::string typeA = *tA;
+            CCLOG("%s", typeA.c_str());
             if (typeA == "Player") {
+                CCLOG("detected A");
                 Player* p = static_cast<Player*>(contact->GetFixtureA()->GetBody()->GetUserData());
                 playerInvolved = true;
+                p->moveAI();
+                
+                
+                
+                
             } else if (typeA == "Obstacle") {
                 // Read user data as an obstacle, or do further processing
             } else {
@@ -38,9 +46,12 @@ class MyContactListener : public b2ContactListener
         if (fixtureDataB) {
             std::string *tB = static_cast<std::string*>(fixtureDataB);
             std::string typeB = *tB;
+            CCLOG("%s", typeB.c_str());
             if (typeB == "Player") {
+                CCLOG("Detected B");
                 Player* p = static_cast<Player*>(contact->GetFixtureA()->GetBody()->GetUserData());
                 playerInvolved = true;
+                p->moveAI();
             } else if (typeB == "Obstacle") {
                 // Read user data as an obstacle etc.
             } else {

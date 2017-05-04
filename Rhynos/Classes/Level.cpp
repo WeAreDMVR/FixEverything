@@ -181,6 +181,7 @@ void Level::update(float dt) {
   while (frameTime > TimeStep) {
     // Check inputs
     this->handleInput();
+    this->_players["localhost"]->moveAI();
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;
@@ -196,6 +197,8 @@ void Level::update(float dt) {
   // Update Players
   this->_players["localhost"]->updateSprite();
 }
+
+
 
 void Level::handleInput() {
   // Arrows

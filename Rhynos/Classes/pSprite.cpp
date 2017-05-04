@@ -13,7 +13,7 @@ pSprite::pSprite(Sprite* sprite) { _sprite = sprite; }
 
 pSprite::pSprite(const pSprite& object) { _sprite = object._sprite; }
 
-inline Sprite* pSprite::getSprite() { return this->_sprite; }
+//inline cocos2d::Sprite* pSprite::getSprite() { return this->_sprite; }
 
 inline void pSprite::setSprite(Sprite* sprite) { this->_sprite = sprite; }
 

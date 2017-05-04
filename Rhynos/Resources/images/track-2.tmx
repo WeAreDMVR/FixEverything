@@ -211,7 +211,7 @@
     <property name="Damage" type="int" value="0"/>
     <property name="Deceleration" type="float" value="80"/>
     <property name="Health" type="int" value="3"/>
-    <property name="JumpAcceleration" type="float" value="500"/>
+    <property name="JumpAcceleration" type="float" value="200"/>
     <property name="MaxJumpTime" type="float" value="4"/>
     <property name="MaxSpeed" type="float" value="5"/>
     <property name="name" value="Rhyno.png"/>
