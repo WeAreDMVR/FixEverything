@@ -17,7 +17,7 @@ Level::Level() {}
 
 Level* Level::createWithMap(const string& tmxFile) {
   Level* ret = new (std::nothrow) Level();
-  const TMXTiledMap* map = TMXTiledMap::create(tmxFile);
+  TMXTiledMap* map = TMXTiledMap::create(tmxFile);
   b2World* world = World::init();
   if (ret && map && ret->init()) {
     ret->_map = map;
@@ -27,6 +27,7 @@ Level* Level::createWithMap(const string& tmxFile) {
     KeyboardPoller* layer = KeyboardPoller::create();
     ret->keyPoll = layer;
     ret->addChild(layer);
+    ret->addChild(map);
     return ret;
   } else {
     return nullptr;
@@ -38,25 +39,40 @@ void Level::loadLayers() {
   // isolate the "metax" layers from the map
   const string& meta = "meta";
   for (int i = 1;; i++) {
+
     auto layer = this->_map->getLayer(meta + to_string(i));
     if (layer == nullptr) {
       // We've found all of the meta layers in the map
       break;
     }
     // hide layer
-    layer->setVisible(false);
+    layer->setVisible(true);
     // add meta tiles to world
     this->createFixtures(layer);
   }
-  // TODO
+
   // Graphics Layers handling
+  // isolate "fgx" and "bgx" layers from the map
+  const string& fg = "fg";
+  const string& bg = "bg";
+  for (int i = 1;; i++) {
+    auto FGLayer = this->_map->getLayer(fg + to_string(i));
+    auto BGLayer = this->_map->getLayer(bg + to_string(i));
+
+    if (FGLayer == nullptr || BGLayer == nullptr) {
+      break;
+    }
+
+    // add fg tiles in front and bg layers behind all fg layers
+    FGLayer->setPositionZ(10 - i);
+    BGLayer->setPositionZ(5 - i);
+  }
 }
 
 void Level::createFixtures(TMXLayer* layer) {
   // create a rectangular fixture for each tile
-  const Size& layerSize = layer->getLayerSize();
-  for (int y = 0; y < layerSize.height; y++) {
-    for (int x = 0; x < layerSize.width; x++) {
+  for (int y = 0; y < mapSize.height; y++) {
+    for (int x = 0; x < mapSize.width; x++) {
       // generate fixture if a sprite in this position
       Sprite* tileSprite = layer->getTileAt(Point(x, y));
       if (tileSprite) {
@@ -73,7 +89,6 @@ void Level::createFixtures(TMXLayer* layer) {
         psprite->setProperties(&properties);
         // load pSprite
         psprite->addBodyToWorld(this->_world);
-        const auto& tileSize = this->_map->getTileSize();
         psprite->createRectangularFixture(layer, tileSize, x, y);
       }
     }
@@ -134,13 +149,13 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
 Point Level::positionForTileCoord(const Point& coordinate) {
   const int x = coordinate.x * tileSize.width;
   const int y =
-      (mapSize.height * tileSize.height) - (coordinate.y * tileSize.height);
+      (mapSize.height * tileSize.height) - ((coordinate.y + 1) * tileSize.height);
   return Point(x, y);
 }
 
 Point Level::tileCoordForPosition(const Point& position) {
   const int x = position.x / tileSize.width;
-  const int y = mapSize.height - (position.y / tileSize.height);
+  const int y = mapSize.height - (position.y / tileSize.height) - 1;
   return Point(x, y);
 }
 
@@ -194,8 +209,7 @@ void Level::handleInput() {
     CCLOG("left");
     this->_players["localhost"]->applyMoveLeft();
   }
-  if (this->keyPoll->isKeyPressed(
-          cocos2d::EventKeyboard::KeyCode::KEY_UP_ARROW)) {
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
     CCLOG("up");
     this->_players["localhost"]->applyJump();
   }
