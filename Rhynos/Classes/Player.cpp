@@ -21,7 +21,7 @@ void Player::createRectangularFixture() {
   super::createRectangularFixture();
   // add group index
   for (b2Fixture* fixture; fixture; fixture = fixture->GetNext()) {
-    b2Filter filter = fixture->getFilterData();
+    b2Filter filter = fixture->GetFilterData();
     filter.groupIndex = -1;
     fixture->SetFilterData(filter); 
   }

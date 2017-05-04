@@ -67,6 +67,9 @@ class pSprite : public cocos2d::Node {
   const cocos2d::ValueMap* _properties;
   int _xposition;
   int _yposition;
+  bool _floating;
+  bool _destructable;
+  int _damage;
   int _layernum;
 };
 

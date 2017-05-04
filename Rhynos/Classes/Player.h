@@ -22,6 +22,8 @@ class Player : public pSprite {
   inline void setJumpAccelerationToDefault();
   inline void setPlayerNum(int num);
   inline int getPlayerNum();
+  bool isFloating();
+  bool isDestructable();
 
   int hurtBy(int damage);
   int healBy(int health);
@@ -37,8 +39,6 @@ class Player : public pSprite {
   void applyMoveLeft();
   void applyJump();
   void resetJumpTime();
-
-  void setLayer(int layerNum, bool solid);
 
  private:
   typedef pSprite super;

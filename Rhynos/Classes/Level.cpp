@@ -213,4 +213,16 @@ void Level::handleInput() {
     CCLOG("up");
     this->_players["localhost"]->applyJump();
   }
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_1)) {
+    CCLOG("1");
+    this->_players["localhost"]->setLayer(1, true);
+  }
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_2)) {
+    CCLOG("2");
+    this->_players["localhost"]->setLayer(2, true);
+  }
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_3)) {
+    CCLOG("3");
+    this->_players["localhost"]->setLayer(3, true);
+  }
 }

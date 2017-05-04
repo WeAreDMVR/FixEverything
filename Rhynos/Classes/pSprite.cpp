@@ -124,7 +124,7 @@ void pSprite::setLayer(int layerNum, bool solid) {
   }
   // iterate over all fixtures
   for (b2Fixture* fixture = this->_body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
-    filiter = fixture->GetFilterData();
+    filter = fixture->GetFilterData();
     // set category bits
     filter.categoryBits = layerBits | solidBits;
     // set mask bits
