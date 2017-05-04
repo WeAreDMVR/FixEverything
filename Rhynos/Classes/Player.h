@@ -35,8 +35,8 @@ class Player : public pSprite {
   void applyJump();
   void resetJumpTime();
     
-    int moveAI();
-    int atTarget();
+  int moveAI();
+  int atTarget();
 
  private:
   typedef pSprite super;

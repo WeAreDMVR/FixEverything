@@ -163,7 +163,6 @@ int Player::moveAI() {
     }
     
     /* Deal with obstacles */
-    CCLOG("%d", this->getPositionY());
     if (prob < .5 && this->getPositionY() < 400) {
         this->applyJump();
         this->applyMoveRight();
@@ -179,7 +178,6 @@ int Player::atTarget() {
     int finish = this->getPositionX();
     
     if (finish >= 600) {
-        CCLOG("we made it");
         return 1;
     }
     return 0;

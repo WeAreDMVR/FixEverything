@@ -132,6 +132,12 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
     this->_players["localhost"] = player;
     object = player;
 
+  } else if (className == "AI") {
+    // Create an AI
+    AI* ai = new AI(sprite);
+    ai->setProperties(&properties);
+    this->_players["ai"] = ai;
+    object = ai;
   } else {
     // create pSprite
     object = new pSprite(sprite);
@@ -181,7 +187,7 @@ void Level::update(float dt) {
   while (frameTime > TimeStep) {
     // Check inputs
     this->handleInput();
-    this->_players["localhost"]->moveAI();
+    this->_players["ai"]->moveAI();
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;
@@ -196,6 +202,7 @@ void Level::update(float dt) {
 
   // Update Players
   this->_players["localhost"]->updateSprite();
+  this->_players["ai"]->updateSprite();
 }
 
 
