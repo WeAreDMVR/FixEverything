@@ -29,7 +29,7 @@ class MyContactListener : public b2ContactListener
                 CCLOG("detected A");
                 Player* p = static_cast<Player*>(contact->GetFixtureA()->GetBody()->GetUserData());
                 playerInvolved = true;
-                p->moveAI();
+                //p->moveAI();
                 
                 
                 
@@ -51,7 +51,7 @@ class MyContactListener : public b2ContactListener
                 CCLOG("Detected B");
                 Player* p = static_cast<Player*>(contact->GetFixtureA()->GetBody()->GetUserData());
                 playerInvolved = true;
-                p->moveAI();
+                //p->moveAI();
             } else if (typeB == "Obstacle") {
                 // Read user data as an obstacle etc.
             } else {

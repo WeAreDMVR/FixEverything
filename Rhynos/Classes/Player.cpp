@@ -147,22 +147,23 @@ bool Player::canJump() {
   }
 }
 
-/* Temporary use for AI... just another player */
+/*
+ Temporary use for AI... just another player
 int Player::moveAI() {
     int val = std::rand();
     float prob = val / (float) RAND_MAX;
     
-    /* Check if we made it boys */
+     Check if we made it boys
     if (this->atTarget()) {
         return 1;
     }
     
-    /* Check if we going to mess up */
+     Check if we going to mess up
     if (prob < .1) {
         return 0;
     }
     
-    /* Deal with obstacles */
+     Deal with obstacles
     if (prob < .5 && this->getPositionY() < 400) {
         this->applyJump();
         this->applyMoveRight();
@@ -172,7 +173,7 @@ int Player::moveAI() {
 }
 
 
-/* Using player as AI for now */
+ Using player as AI for now
 int Player::atTarget() {
     // Only check x-coordinate for checkpoint for now
     int finish = this->getPositionX();
@@ -182,7 +183,7 @@ int Player::atTarget() {
     }
     return 0;
 }
-
+*/
 
 
 

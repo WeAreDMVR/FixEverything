@@ -187,7 +187,9 @@ void Level::update(float dt) {
   while (frameTime > TimeStep) {
     // Check inputs
     this->handleInput();
-    this->_players["ai"]->moveAI();
+    
+    // Have to cast AI to player cuz its in a list of players
+    (static_cast<AI*> (this->_players["ai"]))->move();
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;

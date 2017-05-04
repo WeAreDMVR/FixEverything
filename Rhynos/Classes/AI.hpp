@@ -22,7 +22,7 @@ class AI : public Player {
 
         int atTarget();
         int moveOther(Player::Player* play);
-        int moveSelf();
+        int move();
 
 };
 

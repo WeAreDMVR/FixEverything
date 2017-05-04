@@ -13,7 +13,7 @@ using namespace cocos2d;
 
 
 AI::AI(Sprite* sprite) : Player(sprite) {
-    this->target = Point(2000, 20);
+    this->target = Point(800, 20);
     this->failProb = 0.1;
 }
 
@@ -29,23 +29,25 @@ int AI::atTarget() {
     return 0;
 }
 
-int AI::moveOther(Player::Player* play) {
+int AI::move() {
     int val = std::rand();
     float prob = val / (float) RAND_MAX;
     
-    /* Check if we made it boys */
+    // Check if we made it boys
     if (this->atTarget()) {
         return 1;
     }
     
-    /* Check if we going to mess up */
-    if (prob < this->failProb) {
+    // Check if we going to mess up
+    if (prob < .1) {
         return 0;
     }
     
-    /* Deal with obstacles */
-    play->applyMoveRight();
-    play->applyJump();
+    // Deal with obstacles
+    if (prob < .5 && this->getPositionY() < 400) {
+        this->applyJump();
+        this->applyMoveRight();
+    }
     
     return 1;
     
