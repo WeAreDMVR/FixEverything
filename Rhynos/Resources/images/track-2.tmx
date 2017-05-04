@@ -203,7 +203,7 @@
 </data>
  </layer>
  <objectgroup name="obj1">
-  <object id="1" name="user" x="75" y="375" width="75" height="75">
+  <object id="1" name="user" x="75" y="375" width="37.5" height="37.5">
    <properties>
     <property name="Acceleration" type="float" value="100"/>
     <property name="BodyType" type="int" value="2"/>
