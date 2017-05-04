@@ -3,15 +3,20 @@
 
 #include "cocos2d.h"
 
+#include <algorithm>
 #include <string>
 
 using namespace cocos2d;
 
+using std::max;
+using std::min;
 using std::string;
 using std::to_string;
 
 static const Size tileSize(75.0, 75.0);
 static const Size mapSize(40.0, 12.0);
+static const Size worldSize(tileSize.width* mapSize.width,
+                            tileSize.height* mapSize.height);
 
 Level::Level() {}
 
@@ -39,7 +44,6 @@ void Level::loadLayers() {
   // isolate the "metax" layers from the map
   const string& meta = "meta";
   for (int i = 1;; i++) {
-
     auto layer = this->_map->getLayer(meta + to_string(i));
     if (layer == nullptr) {
       // We've found all of the meta layers in the map
@@ -148,8 +152,8 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
 
 Point Level::positionForTileCoord(const Point& coordinate) {
   const int x = coordinate.x * tileSize.width;
-  const int y =
-      (mapSize.height * tileSize.height) - ((coordinate.y + 1) * tileSize.height);
+  const int y = (mapSize.height * tileSize.height) -
+                ((coordinate.y + 1) * tileSize.height);
   return Point(x, y);
 }
 
@@ -195,6 +199,14 @@ void Level::update(float dt) {
 
   // Update Players
   this->_players["localhost"]->updateSprite();
+
+  const Vec2& rhynoPos = this->_players["localhost"]->getCurrentPosition();
+  const Size& winSize = Director::getInstance()->getWinSizeInPixels();
+  float camera_x = min(worldSize.width - (winSize.width / 2), rhynoPos.x);
+  camera_x = max(camera_x, winSize.width / 2);
+  float camera_y = min(worldSize.height - (winSize.height / 2), rhynoPos.y);
+  camera_y = max(camera_y, winSize.height / 2);
+  Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
 }
 
 void Level::handleInput() {

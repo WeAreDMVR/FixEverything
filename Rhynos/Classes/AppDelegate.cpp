@@ -2,8 +2,7 @@
 
 #include "Rhyno.h"
 
-using cocos2d::Director;
-using cocos2d::GLViewImpl;
+using namespace cocos2d;
 
 AppDelegate::AppDelegate() {}
 
@@ -15,11 +14,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
   if (!glview) {
     glview = GLViewImpl::create("Rhyno");
     glview->setFrameSize(1500, 900);
+    glview->setDesignResolutionSize(1500, 900, ResolutionPolicy::EXACT_FIT);
     director->setOpenGLView(glview);
   }
 
   auto scene = Rhyno::createScene();
   director->runWithScene(scene);
+  CCLOG("(%f, %f)", director->getWinSizeInPixels().width,
+        director->getWinSizeInPixels().height);
 
   return true;
 }
