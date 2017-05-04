@@ -15,14 +15,6 @@ using std::chrono::high_resolution_clock;
 using std::chrono::milliseconds;
 using std::map;
 
-Scene* KeyboardPoller::createScene() {
-  Scene* scene = Scene::create();
-
-  KeyboardPoller* layer = KeyboardPoller::create();
-  scene->addChild(layer);
-  return scene;
-}
-
 bool KeyboardPoller::init() {
   if (!Layer::init()) {
     return false;
@@ -30,51 +22,35 @@ bool KeyboardPoller::init() {
 
   EventListenerKeyboard* eventListener = EventListenerKeyboard::create();
 
-  Director::getInstance()->getOpenGLView()->setIMEKeyboardState(true);
+  // Key press event handler
   eventListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode,
                                     Event* event) {
-    // If a key already exists, do nothing as it will already have a time stamp
-    // Otherwise, set's the timestamp to now
+    // Set key to pressed
     if (keys.find(keyCode) == keys.end()) {
-      keys[keyCode] = high_resolution_clock::now();
+      keys[keyCode] = true;
     }
   };
-  eventListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode,
-                                     Event* event) {
+
+  // Key release event handler
+  eventListener->onKeyReleased = [=](EventKeyboard::KeyCode keyCode, Event* event) {
     // remove the key.  std::map.erase() doesn't care if the key doesnt exist
     keys.erase(keyCode);
   };
 
-  this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener,
-                                                                 this);
+  this->_eventDispatcher->addEventListenerWithSceneGraphPriority(eventListener,this);
 
   return true;
 }
 
 bool KeyboardPoller::isKeyPressed(const EventKeyboard::KeyCode& code) {
-  // Check if the key is currently pressed by seeing it it's in the std::map
-  // keys
-  // In retrospect, keys is a terrible name for a key/value paried datatype
-  // isnt it?
+  // Check if the key is currently pressed by seeing if it's
+  // in the keys map
   if (keys.find(code) != keys.end()) {
     return true;
   }
   return false;
 }
 
-double KeyboardPoller::keyPressedDuration(const EventKeyboard::KeyCode& code) {
-  if (!isKeyPressed(code)) {
-    // Not pressed, so no duration obviously
-    return 0;
-  }
-
-  // Return the amount of time that has elapsed between now and when the user
-  // first started holding down the key in milliseconds
-  // Obviously the start time is the value we hold in our std::map keys
-  return duration_cast<milliseconds>(high_resolution_clock::now() - keys[code])
-      .count();
-}
 // Because cocos2d-x requres createScene to be static, we need to make other
 // non-pointer members static
-map<EventKeyboard::KeyCode, high_resolution_clock::time_point>
-    KeyboardPoller::keys;
+map<EventKeyboard::KeyCode, bool> KeyboardPoller::keys;
