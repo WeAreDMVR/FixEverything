@@ -92,7 +92,7 @@ void Player::applyMoveRight() {
   const b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
   if ((std::abs(linearVelocity.x) < this->_maxSpeed && accelerating) ||
       !accelerating) {
-    this->_body->ApplyForceToCenter(force, false);
+    this->_body->ApplyForceToCenter(force, true);
   }
 }
 
@@ -112,7 +112,7 @@ void Player::applyMoveLeft() {
   const b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
   if ((std::abs(linearVelocity.x) < this->_maxSpeed && accelerating) ||
       !accelerating) {
-    this->_body->ApplyForceToCenter(force, false);
+    this->_body->ApplyForceToCenter(force, true);
   }
 }
 
@@ -121,16 +121,16 @@ void Player::applyJump() {
   const b2Vec2& worldCenter = this->_body->GetWorldCenter();
   if (this->canJump()) {
     if (this->_jumpTime < 0) {
-      this->_body->ApplyLinearImpulse(b2Vec2(0, this->_jmp), worldCenter, false);
+      this->_body->ApplyLinearImpulse(b2Vec2(0, this->_jmp), worldCenter, true);
     } else {
-      this->_body->ApplyForceToCenter(b2Vec2(0, this->_jmp), false);
+      this->_body->ApplyForceToCenter(b2Vec2(0, this->_jmp), true);
     }
     this->_jumpTime += TimeStep;
   }
   // apply drag force if horizontal velocity exceeds Air and in air
   const b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
   if (linearVelocity.x >= Air && linearVelocity.y != 0) {
-    this->_body->ApplyForceToCenter(b2Vec2(0, Drag), false);
+    this->_body->ApplyForceToCenter(b2Vec2(0, Drag), true);
   }
 }
 
