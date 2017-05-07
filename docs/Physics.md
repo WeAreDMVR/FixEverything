@@ -33,16 +33,21 @@ layers, all we need to do is adjust the player's mask.
 This is implemented as a simple bit operation. So let's set up some constants
 
 layer1Bits = 0x0001; (0001 in binary)
+
 layer2Bits = 0x0002; (0010 in binary)
+
 layer3Bits = 0x0004; (0100 in binary)
+
 playerBits = 0x0008; (1000 in binary)
 
 Now, to tell if two things collide, we just do a bit comparison:
 
 layer1Block.categoryBits = layer1Bits;
+
 layer1Block.maskBits = layer1Bits | playerBits;
 
 player.categoryBits = playerBits;
+
 player.maskBits = layer1Bits;
 
 if (layer1Block.categoryBits & player.maskBits
