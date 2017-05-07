@@ -16,17 +16,6 @@ void Player::setProperties(const ValueMap* properties) {
   this->_status = PlayerStatus::normal;
 }
 
-void Player::createRectangularFixture() {
-  // call pSprite's function
-  super::createRectangularFixture();
-  // add group index
-  for (b2Fixture* fixture; fixture; fixture = fixture->GetNext()) {
-    b2Filter filter = fixture->GetFilterData();
-    filter.groupIndex = -1;
-    fixture->SetFilterData(filter); 
-  }
-}
-
 inline int Player::getHealth() { return this->_health; }
 
 inline int Player::getMaxHealth() { return this->_maxHealth; }
@@ -166,4 +155,30 @@ bool Player::canJump() {
   } else {
     return false;
   }
+}
+
+void Player::setLayer(int layerNum) {
+  this->_layernum = layerNum;
+  b2Filter filter;
+  int layerBits;
+  switch (layerNum) {
+    case 1:
+      layerBits = Layer1Bits;
+      break;
+    case 2:
+      layerBits = Layer2Bits;
+      break;
+    case 3:
+      layerBits = Layer3Bits;
+  }
+  // iterate over all fixtures
+  for (b2Fixture* fixture = this->_body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+    filter = fixture->GetFilterData();
+    // set category bits
+    filter.categoryBits = PlayerBits;
+    // set mask bits
+    filter.maskBits = layerBits;
+    fixture->SetFilterData(filter);
+  }
+
 }

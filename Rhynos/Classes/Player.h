@@ -9,7 +9,6 @@ class Player : public pSprite {
  public:
   Player(cocos2d::Sprite* sprite);
   void setProperties(const cocos2d::ValueMap* properties);
-  void createRectangularFixture();
   inline int getHealth();
   inline int getMaxHealth();
   inline void setStatus(PlayerStatus status);
@@ -39,6 +38,8 @@ class Player : public pSprite {
   void applyMoveLeft();
   void applyJump();
   void resetJumpTime();
+
+  void setLayer(int layerNum);
 
  private:
   typedef pSprite super;

@@ -5,13 +5,10 @@
 
 #include "cocos2d.h"
 
-constexpr int Layer1Bits =   0x000001;
-constexpr int Layer2Bits =   0x000010;
-constexpr int Layer3Bits =   0x000100;
-constexpr int SolidBits =    0x001000;
-constexpr int NotSolidBits = 0x000000;
-constexpr int Player1Bits =  0x010000;
-constexpr int Player2Bits =  0x100000;
+constexpr int Layer1Bits =   0x0001;
+constexpr int Layer2Bits =   0x0002;
+constexpr int Layer3Bits =   0x0004;
+constexpr int PlayerBits =   0x0008;
 
 class pSprite : public cocos2d::Node {
   friend cocos2d::Sprite;
@@ -55,7 +52,7 @@ class pSprite : public cocos2d::Node {
   void removeBodyFromWorld(b2World* world);
 
   void updateSprite();
-  void setLayer(int layerNum, bool solid);
+  void setLayer(int layerNum);
   int getLayerNum();
 
  private:
