@@ -136,6 +136,12 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
     this->_players["localhost"] = player;
     object = player;
 
+  } else if (className == "AI") {
+    // Create an AI
+    AI* ai = new AI(sprite);
+    ai->setProperties(&properties);
+    this->_players["ai"] = ai;
+    object = ai;
   } else {
     // create pSprite
     object = new pSprite(sprite);
@@ -184,6 +190,9 @@ void Level::update(float dt) {
   while (frameTime > TimeStep) {
     // Check inputs
     this->handleInput();
+    
+    // Have to cast AI to player cuz its in a list of players
+    (static_cast<AI*> (this->_players["ai"]))->move();
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;
@@ -199,6 +208,7 @@ void Level::update(float dt) {
 
   // Update Players
   this->_players["localhost"]->updateSprite();
+  this->_players["ai"]->updateSprite();
 
   const Vec2& rhynoPos = this->_players["localhost"]->getCurrentPosition();
   const Size& winSize = Director::getInstance()->getWinSizeInPixels();
@@ -208,6 +218,8 @@ void Level::update(float dt) {
   camera_y = max(camera_y, winSize.height / 2);
   Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
 }
+
+
 
 void Level::handleInput() {
   // Arrows

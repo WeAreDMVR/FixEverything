@@ -38,6 +38,9 @@ class Player : public pSprite {
   void applyMoveLeft();
   void applyJump();
   void resetJumpTime();
+    
+  int moveAI();
+  int atTarget();
 
   void setLayer(int layerNum);
 

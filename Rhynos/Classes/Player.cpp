@@ -2,7 +2,7 @@
 
 using namespace cocos2d;
 
-Player::Player(Sprite* sprite) : pSprite(sprite) {}
+Player::Player(Sprite* sprite) : pSprite(sprite) {this->type = "Player";}
 
 void Player::setProperties(const ValueMap* properties) {
   this->_properties = properties;

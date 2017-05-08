@@ -17,8 +17,9 @@ class pSprite : public cocos2d::Node {
   pSprite();
   pSprite(cocos2d::Sprite* sprite);
   pSprite(const pSprite& obj);
+  std::string type;
+  inline cocos2d::Sprite* getSprite() { return this->_sprite; }
 
-  inline cocos2d::Sprite* getSprite();
   inline void setSprite(cocos2d::Sprite* sprite);
   inline void setPosition(cocos2d::Point p) {
     this->_sprite->setPosition(p);
@@ -59,9 +60,9 @@ class pSprite : public cocos2d::Node {
   typedef Node super;
 
  protected:
-  b2Body* _body;
   cocos2d::Sprite* _sprite;
   const cocos2d::ValueMap* _properties;
+    
   int _xposition;
   int _yposition;
   bool _floating;
