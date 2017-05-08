@@ -60,6 +60,7 @@ class pSprite : public cocos2d::Node {
   typedef Node super;
 
  protected:
+  b2Body* _body;
   cocos2d::Sprite* _sprite;
   const cocos2d::ValueMap* _properties;
     
