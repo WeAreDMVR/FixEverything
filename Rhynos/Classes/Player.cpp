@@ -130,7 +130,7 @@ void Player::applyJump() {
   // apply jump impluse / force
   const b2Vec2& worldCenter = this->_body->GetWorldCenter();
   if (this->canJump()) {
-    if (this->_jumpTime < 0) {
+    if (this->_jumpTime <= 0) {
       this->_body->ApplyLinearImpulse(b2Vec2(0, this->_jmp), worldCenter, true);
     } else {
       this->_body->ApplyForceToCenter(b2Vec2(0, this->_jmp), true);
@@ -140,7 +140,7 @@ void Player::applyJump() {
   // apply drag force if horizontal velocity exceeds Air and in air
   const b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
   if (linearVelocity.x >= Air && linearVelocity.y != 0) {
-    this->_body->ApplyForceToCenter(b2Vec2(0, Drag), true);
+    this->_body->ApplyForceToCenter(b2Vec2(Drag, 0), true);
   }
 }
 
