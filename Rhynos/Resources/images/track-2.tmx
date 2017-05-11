@@ -141,7 +141,7 @@
 0,1882,1883,1884,1885,1886,1887,1888,1889,1890,1891,1892,1893,1894,1895,1896,1897,1898,1899,1900,1901,1902,1903,1904,1905,1906,1907,1908,1909,1910,1911,1912,1913,1914,1915,1916,1917,1918,1919,1920
 </data>
  </layer>
- <layer name="meta3" width="40" height="12" opacity="0.59" offsetx="30.3" offsety="0">
+ <layer name="meta3" width="40" height="12" opacity="0.59">
   <properties>
    <property name="CategoryBits" type="int" value="4"/>
   </properties>
@@ -160,7 +160,7 @@
 0,0,0,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,0,0,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,0,0,2807,2807,2807,2807,2807,0
 </data>
  </layer>
- <layer name="meta2" width="40" height="12" opacity="0.7" offsetx="30.3" offsety="0">
+ <layer name="meta2" width="40" height="12" opacity="0.7">
   <properties>
    <property name="CategoryBits" type="int" value="2"/>
   </properties>
@@ -179,7 +179,7 @@
 0,0,0,0,0,2327,2327,2327,2327,0,0,2327,2327,2327,0,0,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="meta1" width="40" height="12" opacity="0.41" offsetx="30.303" offsety="0">
+ <layer name="meta1" width="40" height="12" opacity="0.41">
   <properties>
    <property name="BodyType" type="int" value="0"/>
    <property name="CategoryBits" type="int" value="1"/>
@@ -199,11 +199,11 @@
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
-1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884
+0,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884,1884
 </data>
  </layer>
  <objectgroup name="obj1">
-  <object id="1" name="user" x="75" y="0" width="37.5" height="37.5">
+  <object id="1" name="user" x="75" y="0" width="75" height="75">
    <properties>
     <property name="Acceleration" type="float" value="100"/>
     <property name="BodyType" type="int" value="2"/>
@@ -220,7 +220,7 @@
     <property name="y" type="int" value="0"/>
    </properties>
   </object>
-  <object id="2" name="AI" x="75" y="300" width="37.5" height="37.5">
+  <object id="2" name="AI" x="75" y="300" width="75" height="75">
    <properties>
     <property name="Acceleration" type="float" value="100"/>
     <property name="BodyType" type="int" value="2"/>

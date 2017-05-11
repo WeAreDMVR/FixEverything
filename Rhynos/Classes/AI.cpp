@@ -16,7 +16,6 @@ int AI::atTarget() {
     int finish = this->getPositionX();
     
     if (finish >= this->target.x) {
-        CCLOG("we made it");
         return 1;
     }
     return 0;

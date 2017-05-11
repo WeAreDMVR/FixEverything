@@ -7,26 +7,35 @@ using cocos2d::Size;
 using cocos2d::Sprite;
 using cocos2d::TMXLayer;
 
-pSprite::pSprite() { _sprite = Sprite::create(); }
+pSprite::pSprite() {
+  _sprite = Sprite::create();
+  this->setAnchorPoint(cocos2d::Point(0.5,0.5));
+}
 
-pSprite::pSprite(Sprite* sprite) { _sprite = sprite; }
+pSprite::pSprite(Sprite* sprite) {
+  _sprite = sprite;
+  this->setAnchorPoint(cocos2d::Point(0.5,0.5));
+}
 
-pSprite::pSprite(const pSprite& object) { _sprite = object._sprite; }
+pSprite::pSprite(const pSprite& object) {
+  _sprite = object._sprite;
+  this->setAnchorPoint(cocos2d::Point(0.5,0.5));
 
-//inline cocos2d::Sprite* pSprite::getSprite() { return this->_sprite; }
+}
 
-inline void pSprite::setSprite(Sprite* sprite) { this->_sprite = sprite; }
+inline void pSprite::setSprite(Sprite* sprite) {
+  this->_sprite = sprite;
+}
 
 void pSprite::createRectangularFixture(TMXLayer* layer, const Size tileSize,
                                        int x, int y) {
   // Create a fixture for a standard tile
-  // get position and size
-  auto position = layer->getPositionAt(Point(x, y));
 
   // create shape
   b2PolygonShape shape;
-  shape.SetAsBox((tileSize.width / PixelsPerMeter),
-                 (tileSize.height / PixelsPerMeter));
+  // Takes half-width and half-height
+  shape.SetAsBox((tileSize.width / PixelsPerMeter) / 2.0,
+                 (tileSize.height / PixelsPerMeter) / 2.0);
 
   // create fixture
   b2FixtureDef fixtureDef;
@@ -44,11 +53,14 @@ void pSprite::createRectangularFixture(TMXLayer* layer, const Size tileSize,
 
 void pSprite::createRectangularFixture() {
   // get position and size
-  int width = this->getProperties()->at("width").asInt();
-  int height = this->getProperties()->at("height").asInt();
+  float width = this->getProperties()->at("width").asFloat();
+  float
+  height = this->getProperties()->at("height").asFloat();
   // create shape
   b2PolygonShape shape;
-  shape.SetAsBox(width / PixelsPerMeter, height / PixelsPerMeter);
+  // Create a box from half width/height
+  shape.SetAsBox(width / (PixelsPerMeter * 2.0),
+                 height / (PixelsPerMeter * 2.0));
   // create fixture
   b2FixtureDef fixtureDef;
   fixtureDef.shape = &shape;
@@ -134,4 +146,4 @@ void pSprite::setLayer(int layerNum) {
 
 int pSprite::getLayerNum() {
     return this->_layernum;
-  }
+}

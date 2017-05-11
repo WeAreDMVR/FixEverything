@@ -110,7 +110,6 @@ void Player::applyMoveLeft() {
   // check if player was moving backward
   b2Vec2 force;
   bool accelerating;
-  CCLOG("mass: %f", this->_body->GetMass());
   if (this->_body->GetLinearVelocity().x > 0) {
     force = b2Vec2(-this->_dec, 0);
     accelerating = false;

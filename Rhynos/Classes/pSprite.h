@@ -26,9 +26,9 @@ class pSprite : public cocos2d::Node {
     _xposition = p.x;
     _yposition = p.y;
   }
-  inline int getPositionX() { return this->_xposition; }
+  inline float getPositionX() { return this->_xposition; }
   inline float getBodyPositionX() { return this->_body->GetPosition().x; }
-  inline int getPositionY() { return this->_yposition; }
+  inline float getPositionY() { return this->_yposition; }
   inline float getBodyPositionY() { return this->_body->GetPosition().y; }
   inline void setProperties(const cocos2d::ValueMap* properties) {
     _properties = properties;
@@ -63,9 +63,10 @@ class pSprite : public cocos2d::Node {
   b2Body* _body;
   cocos2d::Sprite* _sprite;
   const cocos2d::ValueMap* _properties;
-    
-  int _xposition;
-  int _yposition;
+
+  // Positions track center of physics body!
+  float _xposition;
+  float _yposition;
   bool _floating;
   bool _destructable;
   int _damage;
