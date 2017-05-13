@@ -39,6 +39,7 @@ bool Rhyno::init() {
   auto keyListener = cocos2d::EventListenerKeyboard::create();
   keyListener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
     switch (keyCode) {
+      // Checks which key is pressed; if it is enter, start the game.
       case EventKeyboard::KeyCode::KEY_ENTER: {
         // Check to switch to the level
         auto spritecache = cocos2d::SpriteFrameCache::getInstance();

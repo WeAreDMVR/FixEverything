@@ -58,6 +58,8 @@
 		521A8EA919F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		521A8EAA19F11F5000D177D7 /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 521A8EA819F11F5000D177D7 /* fonts */; };
 		52B47A471A53D09C004E4C60 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 52B47A461A53D09B004E4C60 /* Security.framework */; };
+		632526371EBA9D68009FB4B5 /* AI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 632526351EBA9D68009FB4B5 /* AI.cpp */; };
+		632526381EBA9D68009FB4B5 /* AI.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 632526351EBA9D68009FB4B5 /* AI.cpp */; };
 		8262943E1AAF051F00CB7CF7 /* Security.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8262943D1AAF051F00CB7CF7 /* Security.framework */; };
 		BF171245129291EC00B8313A /* OpenGLES.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB012928DE900B8313A /* OpenGLES.framework */; };
 		BF1712471292920000B8313A /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = BF170DB412928DE900B8313A /* libz.dylib */; };
@@ -171,6 +173,8 @@
 		521A8E6319F0C34300D177D7 /* Default-736h@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-736h@3x.png"; sourceTree = "<group>"; };
 		521A8EA819F11F5000D177D7 /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; path = fonts; sourceTree = "<group>"; };
 		52B47A461A53D09B004E4C60 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS8.1.sdk/System/Library/Frameworks/Security.framework; sourceTree = DEVELOPER_DIR; };
+		632526351EBA9D68009FB4B5 /* AI.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AI.cpp; sourceTree = "<group>"; };
+		632526361EBA9D68009FB4B5 /* AI.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = AI.hpp; sourceTree = "<group>"; };
 		8262943D1AAF051F00CB7CF7 /* Security.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Security.framework; path = System/Library/Frameworks/Security.framework; sourceTree = SDKROOT; };
 		BF170DB012928DE900B8313A /* OpenGLES.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGLES.framework; path = System/Library/Frameworks/OpenGLES.framework; sourceTree = SDKROOT; };
 		BF170DB412928DE900B8313A /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
@@ -332,6 +336,8 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				632526351EBA9D68009FB4B5 /* AI.cpp */,
+				632526361EBA9D68009FB4B5 /* AI.hpp */,
 				CDFBA3ED1EAFBBB80082DC3D /* KeyboardPoller.cpp */,
 				CDFBA3F01EAFC1650082DC3D /* KeyboardPoller.h */,
 				46880B8419C43A87006E1F66 /* AppDelegate.cpp */,
@@ -553,6 +559,7 @@
 				CD0F1F121EABCC9000B6B63D /* Rhyno.cpp in Sources */,
 				CD7A0CA11EABD74D0062C56B /* World.cpp in Sources */,
 				CD7A0C9F1EABD74D0062C56B /* Player.cpp in Sources */,
+				632526371EBA9D68009FB4B5 /* AI.cpp in Sources */,
 				503AE10017EB989F00D1A890 /* AppController.mm in Sources */,
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				CD7A0CA01EABD74D0062C56B /* pSprite.cpp in Sources */,
@@ -572,6 +579,7 @@
 				CD0F1F131EABCC9800B6B63D /* Rhyno.cpp in Sources */,
 				46880B8919C43A87006E1F66 /* AppDelegate.cpp in Sources */,
 				503AE10517EB98FF00D1A890 /* main.cpp in Sources */,
+				632526381EBA9D68009FB4B5 /* AI.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

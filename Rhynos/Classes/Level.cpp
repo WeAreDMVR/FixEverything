@@ -3,15 +3,20 @@
 
 #include "cocos2d.h"
 
+#include <algorithm>
 #include <string>
 
 using namespace cocos2d;
 
+using std::max;
+using std::min;
 using std::string;
 using std::to_string;
 
 static const Size tileSize(75.0, 75.0);
 static const Size mapSize(40.0, 12.0);
+static const Size worldSize(tileSize.width* mapSize.width,
+                            tileSize.height* mapSize.height);
 
 Level::Level() {}
 
@@ -39,7 +44,6 @@ void Level::loadLayers() {
   // isolate the "metax" layers from the map
   const string& meta = "meta";
   for (int i = 1;; i++) {
-
     auto layer = this->_map->getLayer(meta + to_string(i));
     if (layer == nullptr) {
       // We've found all of the meta layers in the map
@@ -76,6 +80,8 @@ void Level::createFixtures(TMXLayer* layer) {
       // generate fixture if a sprite in this position
       Sprite* tileSprite = layer->getTileAt(Point(x, y));
       if (tileSprite) {
+        // We work with the centers of all the objects
+        tileSprite->setAnchorPoint(Point(0.5,0.5));
         // get properties of the tile
         const int tileGID = layer->getTileGIDAt(Point(x, y));
 
@@ -84,6 +90,7 @@ void Level::createFixtures(TMXLayer* layer) {
         // create pSprite
         this->_sprites.emplace_back(new pSprite(tileSprite));
         pSprite* psprite = this->_sprites.back();
+        // We set position based upon center of tiles
         const Point& position = positionForTileCoord(Point(x, y));
         psprite->setPosition(position);
         psprite->setProperties(&properties);
@@ -95,7 +102,6 @@ void Level::createFixtures(TMXLayer* layer) {
   }
 }
 
-// TODO
 void Level::loadObjects() {
   // isolate the "objx" layers from the map
   const string& obj = "obj";
@@ -132,6 +138,12 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
     this->_players["localhost"] = player;
     object = player;
 
+  } else if (className == "AI") {
+    // Create an AI
+    AI* ai = new AI(sprite);
+    ai->setProperties(&properties);
+    this->_players["ai"] = ai;
+    object = ai;
   } else {
     // create pSprite
     object = new pSprite(sprite);
@@ -146,13 +158,16 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
   return object;
 }
 
+// Return center of Tile!
 Point Level::positionForTileCoord(const Point& coordinate) {
-  const int x = coordinate.x * tileSize.width;
-  const int y =
-      (mapSize.height * tileSize.height) - ((coordinate.y + 1) * tileSize.height);
+  // We return the center of each tile
+  const float x = coordinate.x * tileSize.width + (PixelsPerMeter / 2.0);
+  const float y = (mapSize.height * tileSize.height) -
+  ((coordinate.y + 1) * tileSize.height) + (PixelsPerMeter / 2.0);
   return Point(x, y);
 }
 
+// Don't know if this function is used, if so might need to adjust for phys pos
 Point Level::tileCoordForPosition(const Point& position) {
   const int x = position.x / tileSize.width;
   const int y = mapSize.height - (position.y / tileSize.height) - 1;
@@ -176,14 +191,17 @@ void Level::update(float dt) {
   }
 
   double frameTime = currentTime - this->_lastTime;
-  this->_lastTime = currentTime;
 
   while (frameTime > TimeStep) {
     // Check inputs
     this->handleInput();
+    
+    // Have to cast AI to player cuz its in a list of players
+    (static_cast<AI*> (this->_players["ai"]))->move();
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;
+    this->_lastTime += TimeStep;
   }
 
   // Update non-player sprites
@@ -195,7 +213,18 @@ void Level::update(float dt) {
 
   // Update Players
   this->_players["localhost"]->updateSprite();
+  this->_players["ai"]->updateSprite();
+
+  const Vec2& rhynoPos = this->_players["localhost"]->getCurrentPosition();
+  const Size& winSize = Director::getInstance()->getWinSizeInPixels();
+  float camera_x = min(worldSize.width - (winSize.width / 2), rhynoPos.x);
+  camera_x = max(camera_x, winSize.width / 2);
+  float camera_y = min(worldSize.height - (winSize.height / 2), rhynoPos.y);
+  camera_y = max(camera_y, winSize.height / 2);
+  Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
 }
+
+
 
 void Level::handleInput() {
   // Arrows
@@ -212,5 +241,17 @@ void Level::handleInput() {
   if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
     CCLOG("up");
     this->_players["localhost"]->applyJump();
+  }
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_1)) {
+    CCLOG("1");
+    this->_players["localhost"]->setLayer(1);
+  }
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_2)) {
+    CCLOG("2");
+    this->_players["localhost"]->setLayer(2);
+  }
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_3)) {
+    CCLOG("3");
+    this->_players["localhost"]->setLayer(3);
   }
 }

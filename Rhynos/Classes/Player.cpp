@@ -2,7 +2,7 @@
 
 using namespace cocos2d;
 
-Player::Player(Sprite* sprite) : pSprite(sprite) {}
+Player::Player(Sprite* sprite) : pSprite(sprite) {this->type = "Player";}
 
 void Player::setProperties(const ValueMap* properties) {
   this->_properties = properties;
@@ -44,6 +44,16 @@ inline void Player::setJumpAcceleration(float jmp) { this->_jmp = jmp; }
 inline void Player::setJumpAccelerationToDefault() {
   this->_jmp = this->getProperties()->at("JumpAcceleration").asFloat();
 }
+
+inline void Player::setPlayerNum(int num) { this->_playerNum = num; }
+
+inline int Player::getPlayerNum() {
+  return this->_playerNum;
+}
+
+bool Player::isFloating() { return this->_floating; }
+
+bool Player::isDestructable() { return this->_destructable; }
 
 int Player::hurtBy(int damage) {
   if (this->_destructable) {
@@ -92,7 +102,7 @@ void Player::applyMoveRight() {
   const b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
   if ((std::abs(linearVelocity.x) < this->_maxSpeed && accelerating) ||
       !accelerating) {
-    this->_body->ApplyForceToCenter(force, false);
+    this->_body->ApplyForceToCenter(force, true);
   }
 }
 
@@ -100,7 +110,6 @@ void Player::applyMoveLeft() {
   // check if player was moving backward
   b2Vec2 force;
   bool accelerating;
-  CCLOG("mass: %f", this->_body->GetMass());
   if (this->_body->GetLinearVelocity().x > 0) {
     force = b2Vec2(-this->_dec, 0);
     accelerating = false;
@@ -112,7 +121,7 @@ void Player::applyMoveLeft() {
   const b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
   if ((std::abs(linearVelocity.x) < this->_maxSpeed && accelerating) ||
       !accelerating) {
-    this->_body->ApplyForceToCenter(force, false);
+    this->_body->ApplyForceToCenter(force, true);
   }
 }
 
@@ -120,17 +129,17 @@ void Player::applyJump() {
   // apply jump impluse / force
   const b2Vec2& worldCenter = this->_body->GetWorldCenter();
   if (this->canJump()) {
-    if (this->_jumpTime < 0) {
-      this->_body->ApplyLinearImpulse(b2Vec2(0, this->_jmp), worldCenter, false);
+    if (this->_jumpTime <= 0) {
+      this->_body->ApplyLinearImpulse(b2Vec2(0, this->_jmp), worldCenter, true);
     } else {
-      this->_body->ApplyForceToCenter(b2Vec2(0, this->_jmp), false);
+      this->_body->ApplyForceToCenter(b2Vec2(0, this->_jmp), true);
     }
     this->_jumpTime += TimeStep;
   }
   // apply drag force if horizontal velocity exceeds Air and in air
   const b2Vec2& linearVelocity = this->_body->GetLinearVelocity();
   if (linearVelocity.x >= Air && linearVelocity.y != 0) {
-    this->_body->ApplyForceToCenter(b2Vec2(0, Drag), false);
+    this->_body->ApplyForceToCenter(b2Vec2(Drag, 0), true);
   }
 }
 
@@ -145,4 +154,30 @@ bool Player::canJump() {
   } else {
     return false;
   }
+}
+
+void Player::setLayer(int layerNum) {
+  this->_layernum = layerNum;
+  b2Filter filter;
+  int layerBits;
+  switch (layerNum) {
+    case 1:
+      layerBits = Layer1Bits;
+      break;
+    case 2:
+      layerBits = Layer2Bits;
+      break;
+    case 3:
+      layerBits = Layer3Bits;
+  }
+  // iterate over all fixtures
+  for (b2Fixture* fixture = this->_body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+    filter = fixture->GetFilterData();
+    // set category bits
+    filter.categoryBits = PlayerBits;
+    // set mask bits
+    filter.maskBits = layerBits;
+    fixture->SetFilterData(filter);
+  }
+
 }

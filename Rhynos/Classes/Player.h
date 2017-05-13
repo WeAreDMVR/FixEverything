@@ -19,6 +19,10 @@ class Player : public pSprite {
   inline void setDeccelerationToDefault();
   inline void setJumpAcceleration(float jmp);
   inline void setJumpAccelerationToDefault();
+  inline void setPlayerNum(int num);
+  inline int getPlayerNum();
+  bool isFloating();
+  bool isDestructable();
 
   int hurtBy(int damage);
   int healBy(int health);
@@ -34,6 +38,11 @@ class Player : public pSprite {
   void applyMoveLeft();
   void applyJump();
   void resetJumpTime();
+    
+  int moveAI();
+  int atTarget();
+
+  void setLayer(int layerNum);
 
  private:
   typedef pSprite super;
@@ -59,6 +68,8 @@ class Player : public pSprite {
   float _maxJumpTime;
   // the player's status
   PlayerStatus _status;
+  // the player's number
+  int _playerNum;
 };
 
 #endif  // _PLAYER_H_

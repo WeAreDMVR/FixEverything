@@ -7,25 +7,35 @@ using cocos2d::Size;
 using cocos2d::Sprite;
 using cocos2d::TMXLayer;
 
-pSprite::pSprite() { _sprite = Sprite::create(); }
+pSprite::pSprite() {
+  _sprite = Sprite::create();
+  this->setAnchorPoint(cocos2d::Point(0.5,0.5));
+}
 
-pSprite::pSprite(Sprite* sprite) { _sprite = sprite; }
+pSprite::pSprite(Sprite* sprite) {
+  _sprite = sprite;
+  this->setAnchorPoint(cocos2d::Point(0.5,0.5));
+}
 
-pSprite::pSprite(const pSprite& object) { _sprite = object._sprite; }
+pSprite::pSprite(const pSprite& object) {
+  _sprite = object._sprite;
+  this->setAnchorPoint(cocos2d::Point(0.5,0.5));
 
-inline Sprite* pSprite::getSprite() { return this->_sprite; }
+}
 
-inline void pSprite::setSprite(Sprite* sprite) { this->_sprite = sprite; }
+inline void pSprite::setSprite(Sprite* sprite) {
+  this->_sprite = sprite;
+}
 
 void pSprite::createRectangularFixture(TMXLayer* layer, const Size tileSize,
                                        int x, int y) {
-  // get position and size
-  auto position = layer->getPositionAt(Point(x, y));
+  // Create a fixture for a standard tile
 
   // create shape
   b2PolygonShape shape;
-  shape.SetAsBox((tileSize.width / PixelsPerMeter),
-                 (tileSize.height / PixelsPerMeter));
+  // Takes half-width and half-height
+  shape.SetAsBox((tileSize.width / PixelsPerMeter) / 2.0,
+                 (tileSize.height / PixelsPerMeter) / 2.0);
 
   // create fixture
   b2FixtureDef fixtureDef;
@@ -33,32 +43,39 @@ void pSprite::createRectangularFixture(TMXLayer* layer, const Size tileSize,
   fixtureDef.density = Density;
   fixtureDef.friction = Friction;
   fixtureDef.restitution = Restitution;
-  // NOTE: tile sprite must have a CategoryBits property
-  // fixtureDef.filter.categoryBits =
-  // this->getProperties()->valueForKey("CategoryBits");
-  fixtureDef.filter.categoryBits =
-      this->getProperties()->at("CategoryBits").asByte();
-  fixtureDef.filter.maskBits = 0xffff;
+  unsigned char bits = this->getProperties()->at("CategoryBits").asByte();
+  fixtureDef.filter.categoryBits = bits;
+  // I collide withmy own layer and the player
+  fixtureDef.filter.maskBits = bits | PlayerBits;
 
   this->_body->CreateFixture(&fixtureDef);
 }
 
 void pSprite::createRectangularFixture() {
   // get position and size
-  int width = this->getProperties()->at("width").asInt();
-  int height = this->getProperties()->at("height").asInt();
+  float width = this->getProperties()->at("width").asFloat();
+  float
+  height = this->getProperties()->at("height").asFloat();
   // create shape
   b2PolygonShape shape;
-  shape.SetAsBox(width / PixelsPerMeter, height / PixelsPerMeter);
+  // Create a box from half width/height
+  shape.SetAsBox(width / (PixelsPerMeter * 2.0),
+                 height / (PixelsPerMeter * 2.0));
   // create fixture
   b2FixtureDef fixtureDef;
   fixtureDef.shape = &shape;
   fixtureDef.density = Density;
   fixtureDef.friction = Friction;
   fixtureDef.restitution = Restitution;
-  fixtureDef.filter.categoryBits =
-      this->getProperties()->at("CategoryBits").asByte();
-  fixtureDef.filter.maskBits = 0xffff;
+  unsigned char bits = this->getProperties()->at("CategoryBits").asByte();
+  fixtureDef.filter.categoryBits = bits;
+  if (bits == PlayerBits) {
+    // If I am a player, I start on layer 1
+    fixtureDef.filter.maskBits = Layer1Bits;
+  } else {
+    // If I am a non-player, I collide with my own layer and the player
+    fixtureDef.filter.maskBits = bits | PlayerBits;
+  }
 
   this->_body->CreateFixture(&fixtureDef);
 }
@@ -100,4 +117,33 @@ void pSprite::updateSprite() {
   float x = PixelsPerMeter * this->getBodyPositionX();
   float y = PixelsPerMeter * this->getBodyPositionY();
   this->setPosition(Point(x, y));
+}
+
+void pSprite::setLayer(int layerNum) {
+  this->_layernum = layerNum;
+  b2Filter filter;
+  int layerBits;
+  switch (layerNum) {
+    case 1: 
+      layerBits = Layer1Bits;
+      break;
+    case 2:
+      layerBits = Layer2Bits;
+      break;
+    case 3:
+      layerBits = Layer3Bits;
+  }
+  // iterate over all fixtures
+  for (b2Fixture* fixture = this->_body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+    filter = fixture->GetFilterData();
+    // set category bits
+    filter.categoryBits = layerBits;
+    // set mask bits
+    filter.maskBits = layerBits | PlayerBits;
+    fixture->SetFilterData(filter);
+  }
+}
+
+int pSprite::getLayerNum() {
+    return this->_layernum;
 }

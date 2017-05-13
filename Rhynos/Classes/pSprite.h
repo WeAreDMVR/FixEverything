@@ -5,6 +5,11 @@
 
 #include "cocos2d.h"
 
+constexpr int Layer1Bits =   0x0001;
+constexpr int Layer2Bits =   0x0002;
+constexpr int Layer3Bits =   0x0004;
+constexpr int PlayerBits =   0x0008;
+
 class pSprite : public cocos2d::Node {
   friend cocos2d::Sprite;
 
@@ -12,17 +17,18 @@ class pSprite : public cocos2d::Node {
   pSprite();
   pSprite(cocos2d::Sprite* sprite);
   pSprite(const pSprite& obj);
+  std::string type;
+  inline cocos2d::Sprite* getSprite() { return this->_sprite; }
 
-  inline cocos2d::Sprite* getSprite();
   inline void setSprite(cocos2d::Sprite* sprite);
   inline void setPosition(cocos2d::Point p) {
     this->_sprite->setPosition(p);
     _xposition = p.x;
     _yposition = p.y;
   }
-  inline int getPositionX() { return this->_xposition; }
+  inline float getPositionX() { return this->_xposition; }
   inline float getBodyPositionX() { return this->_body->GetPosition().x; }
-  inline int getPositionY() { return this->_yposition; }
+  inline float getPositionY() { return this->_yposition; }
   inline float getBodyPositionY() { return this->_body->GetPosition().y; }
   inline void setProperties(const cocos2d::ValueMap* properties) {
     _properties = properties;
@@ -47,6 +53,8 @@ class pSprite : public cocos2d::Node {
   void removeBodyFromWorld(b2World* world);
 
   void updateSprite();
+  void setLayer(int layerNum);
+  int getLayerNum();
 
  private:
   typedef Node super;
@@ -55,24 +63,14 @@ class pSprite : public cocos2d::Node {
   b2Body* _body;
   cocos2d::Sprite* _sprite;
   const cocos2d::ValueMap* _properties;
-  int _xposition;
-  int _yposition;
 
-  // damage object deals to other objects on contact
-  int _damage;
-  // whether or not the object can be destoryed (die)
-  bool _destructable;
-  // whether or not the player is floating
+  // Positions track center of physics body!
+  float _xposition;
+  float _yposition;
   bool _floating;
-};
-
-enum class FilterCategory {
-  SolidTrack1 = 0x01,
-  NonSolidTrack1 = 0x02,
-  SolidTrack2 = 0x03,
-  NonSolidTrack2 = 0x04,
-  SolidTrack3 = 0x05,
-  NonSolidTrack3 = 0x06
+  bool _destructable;
+  int _damage;
+  int _layernum;
 };
 
 #endif  // _PSPRITE_H_

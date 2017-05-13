@@ -3,6 +3,7 @@
 
 #include <Box2D/Box2D.h>
 #include <iostream>
+#include <Level.h>
 
 // Physics collision callbacks
 class MyContactListener : public b2ContactListener
@@ -12,20 +13,24 @@ class MyContactListener : public b2ContactListener
         CCLOG("BeginContact");
 
         // Was a player involved?
-        bool playerInvolved = false;
+        Player* p = NULL;
 
         // Determine if either fixture belongs to a player
-        void* fixtureDataA = contact->GetFixtureA()->GetUserData();
-        void* fixtureDataB = contact->GetFixtureB()->GetUserData();
+        void* fixtureDataA = contact->GetFixtureA()->GetBody()->GetUserData();
+        void* fixtureDataB = contact->GetFixtureB()->GetBody()->GetUserData();
 
         // If fixture user data exists, read it as a string which
         // identifies the type of its owner
         if (fixtureDataA) {
-            std::string *tA = static_cast<std::string*>(fixtureDataA);
-            std::string typeA = *tA;
+            pSprite* tA = static_cast<pSprite*>(fixtureDataA);
+            std::string typeA = tA->type;
+            CCLOG("%s", typeA.c_str());
             if (typeA == "Player") {
-                Player* p = static_cast<Player*>(contact->GetFixtureA()->GetBody()->GetUserData());
-                playerInvolved = true;
+                CCLOG("detected A");
+                p = static_cast<Player*>(tA);
+            } else if (typeA == "AI") {
+                AI* p = static_cast<AI*>(tA);
+                CCLOG("AI SHOULD MOVE A");
             } else if (typeA == "Obstacle") {
                 // Read user data as an obstacle, or do further processing
             } else {
@@ -36,11 +41,16 @@ class MyContactListener : public b2ContactListener
 
         // Same for the other fixture
         if (fixtureDataB) {
-            std::string *tB = static_cast<std::string*>(fixtureDataB);
-            std::string typeB = *tB;
+            pSprite* tB = static_cast<pSprite*>(fixtureDataB);
+            std::string typeB = tB->type;
+            CCLOG("%s", typeB.c_str());
             if (typeB == "Player") {
-                Player* p = static_cast<Player*>(contact->GetFixtureA()->GetBody()->GetUserData());
-                playerInvolved = true;
+                CCLOG("Detected B");
+                p = static_cast<Player*>(tB);
+                //p->moveAI();
+            } else if (typeB == "AI") {
+                p = static_cast<AI*>(tB);
+                CCLOG("AI SHOULD MOVE B");
             } else if (typeB == "Obstacle") {
                 // Read user data as an obstacle etc.
             } else {
@@ -50,9 +60,12 @@ class MyContactListener : public b2ContactListener
         }
 
         // Now that we know what was involved in the collision, handle it
-        if (playerInvolved) {
-            // Perhaps call a player function, like
-            // player->hurtBy(obstacle->dmg);
+        if (p) {
+          // Perhaps call a player function
+          
+          // Reset Jump time because we collided with something
+          // Could be more specific
+          p->resetJumpTime();
         }
 
     }
