@@ -22,7 +22,7 @@ void Session::do_read() {
       [this, self](error_code ec, size_t length) {
         if (!ec) {
           CCLOG(data_);
-          do_write(length);
+          do_read();
         }
       });
 }

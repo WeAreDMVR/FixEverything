@@ -1,9 +1,10 @@
 #include "Client.h"
 
+#include <cocos2d.h>
 #include <ui/UITextField.h>
-#include "asio.hpp"
-#include "cocos2d.h"
+#include <asio.hpp>
 
+#include "Level.h"
 #include "NetworkingConstants.h"
 
 #include <cstring>
@@ -12,25 +13,14 @@
 using namespace asio;
 using namespace cocos2d;
 
-using std::string;
 using cocos2d::ui::TextField;
+using std::string;
+using std::to_string;
 
-void Client::write(char* request) {
-  asio::write(socket_,
-              buffer(request, NetworkingConstants::network_buffer_length));
-}
-
-size_t Client::read(char* reply) {
-  return asio::read(socket_,
-                    buffer(reply, NetworkingConstants::network_buffer_length));
-}
-
-bool Client::is_open() const { return socket_.is_open(); }
+bool Client::is_open() const { return iostream.rdbuf()->is_open(); }
 
 void Client::connect(const string& host) {
-  asio::connect(
-      socket_,
-      resolver_.resolve({host, std::to_string(NetworkingConstants::PORT)}));
+  iostream.connect(host, to_string(NetworkingConstants::PORT));
 }
 
 bool ClientScene::init() {
@@ -56,16 +46,14 @@ bool ClientScene::init() {
                                   Event* event) {
     switch (keyCode) {
       case EventKeyboard::KeyCode::KEY_ENTER: {
-        if (client_.is_open()) {
-          char buffer[NetworkingConstants::network_buffer_length];
-          strcpy(buffer, host_field->getString().c_str());
-          client_.write(buffer);
-          client_.read(buffer);
-          CCLOG(buffer);
-        } else {
-          client_.connect(host_field->getString());
-        }
+        auto spritecache = cocos2d::SpriteFrameCache::getInstance();
+        spritecache->addSpriteFramesWithFile("images/textures.plist");
+        Level* level1 = Level::createNetworkedWithMap("images/track-2.tmx",
+                                                      host_field->getString());
+        level1->loadLayers();
+        level1->loadObjects();
 
+        Director::getInstance()->pushScene(level1);
         break;
       }
       default:

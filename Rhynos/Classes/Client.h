@@ -4,6 +4,9 @@
 #include "asio.hpp"
 #include "cocos2d.h"
 
+#include "cereal/archives/portable_binary.hpp"
+#include "cereal/types/vector.hpp"
+
 #include <cstdlib>
 #include <string>
 
@@ -11,20 +14,27 @@ using asio::ip::tcp;
 
 class Client {
  public:
-  Client() : io_service_(), socket_(io_service_), resolver_(io_service_) {}
+  Client() {}
 
-  Client(const std::string &host) : Client() { connect(host); }
-
-  void write(char *request);
-  size_t read(char *reply);
+  Client(const std::string &host) { connect(host); }
 
   bool is_open() const;
   void connect(const std::string &host);
 
+  template <typename T>
+  void write(const T &request) {
+    cereal::PortableBinaryOutputArchive oarchive(iostream);
+    oarchive(request);
+  }
+
+  template <typename T>
+  void read(T *reply) {
+    cereal::PortableBinaryInputArchive iarchive(iostream);
+    iarchive(*reply);
+  }
+
  private:
-  asio::io_service io_service_;
-  tcp::socket socket_;
-  tcp::resolver resolver_;
+  tcp::iostream iostream;
 };
 
 class ClientScene : public cocos2d::Scene {
@@ -37,8 +47,6 @@ class ClientScene : public cocos2d::Scene {
 
  private:
   ClientScene() {}
-
-  Client client_;
 };
 
 #endif  // _CLIENT_H_

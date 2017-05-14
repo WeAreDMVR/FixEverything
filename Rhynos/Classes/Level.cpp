@@ -5,6 +5,7 @@
 
 #include <algorithm>
 #include <string>
+#include <vector>
 
 using namespace cocos2d;
 
@@ -12,6 +13,7 @@ using std::max;
 using std::min;
 using std::string;
 using std::to_string;
+using std::vector;
 
 static const Size tileSize(75.0, 75.0);
 static const Size mapSize(40.0, 12.0);
@@ -37,6 +39,13 @@ Level* Level::createWithMap(const string& tmxFile) {
   } else {
     return nullptr;
   }
+}
+
+Level* Level::createNetworkedWithMap(const string& tmxFile,
+                                     const string& host) {
+  Level* ret = createWithMap(tmxFile);
+  ret->_client.connect(host);
+  return ret;
 }
 
 void Level::loadLayers() {
@@ -81,7 +90,7 @@ void Level::createFixtures(TMXLayer* layer) {
       Sprite* tileSprite = layer->getTileAt(Point(x, y));
       if (tileSprite) {
         // We work with the centers of all the objects
-        tileSprite->setAnchorPoint(Point(0.5,0.5));
+        tileSprite->setAnchorPoint(Point(0.5, 0.5));
         // get properties of the tile
         const int tileGID = layer->getTileGIDAt(Point(x, y));
 
@@ -163,7 +172,8 @@ Point Level::positionForTileCoord(const Point& coordinate) {
   // We return the center of each tile
   const float x = coordinate.x * tileSize.width + (PixelsPerMeter / 2.0);
   const float y = (mapSize.height * tileSize.height) -
-  ((coordinate.y + 1) * tileSize.height) + (PixelsPerMeter / 2.0);
+                  ((coordinate.y + 1) * tileSize.height) +
+                  (PixelsPerMeter / 2.0);
   return Point(x, y);
 }
 
@@ -195,9 +205,9 @@ void Level::update(float dt) {
   while (frameTime > TimeStep) {
     // Check inputs
     this->handleInput();
-    
+
     // Have to cast AI to player cuz its in a list of players
-    (static_cast<AI*> (this->_players["ai"]))->move();
+    (static_cast<AI*>(this->_players["ai"]))->move();
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;
@@ -224,34 +234,65 @@ void Level::update(float dt) {
   Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
 }
 
-
-
 void Level::handleInput() {
+  vector<EventKeyboard::KeyCode> keys_pressed;
   // Arrows
-  if (this->keyPoll->isKeyPressed(
-          cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
+  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
     CCLOG("right");
-    this->_players["localhost"]->applyMoveRight();
+
+    if (isNetworked()) {
+      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_RIGHT_ARROW);
+    } else {
+      this->_players["localhost"]->applyMoveRight();
+    }
   }
-  if (this->keyPoll->isKeyPressed(
-          cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
+  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
     CCLOG("left");
-    this->_players["localhost"]->applyMoveLeft();
+
+    if (isNetworked()) {
+      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_LEFT_ARROW);
+    } else {
+      this->_players["localhost"]->applyMoveLeft();
+    }
   }
-  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
+  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
     CCLOG("up");
-    this->_players["localhost"]->applyJump();
+
+    if (isNetworked()) {
+      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_SPACE);
+    } else {
+      this->_players["localhost"]->applyJump();
+    }
   }
-  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_1)) {
+  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_1)) {
     CCLOG("1");
-    this->_players["localhost"]->setLayer(1);
+
+    if (isNetworked()) {
+      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_1);
+    } else {
+      this->_players["localhost"]->setLayer(1);
+    }
   }
-  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_2)) {
+  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_2)) {
     CCLOG("2");
-    this->_players["localhost"]->setLayer(2);
+
+    if (isNetworked()) {
+      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_2);
+    } else {
+      this->_players["localhost"]->setLayer(2);
+    }
   }
-  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_3)) {
+  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_3)) {
     CCLOG("3");
-    this->_players["localhost"]->setLayer(3);
+
+    if (isNetworked()) {
+      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_3);
+    } else {
+      this->_players["localhost"]->setLayer(3);
+    }
+  }
+
+  if (isNetworked() && !keys_pressed.empty()) {
+    _client.write(keys_pressed);
   }
 }
