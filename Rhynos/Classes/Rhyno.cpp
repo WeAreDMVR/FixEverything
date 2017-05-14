@@ -1,5 +1,6 @@
 #include <typeinfo>
 
+#include "Client.h"
 #include "Level.h"
 #include "Rhyno.h"
 #include "Server.h"
@@ -58,6 +59,7 @@ bool Rhyno::init() {
         break;
       }
       case EventKeyboard::KeyCode::KEY_C: {
+        Director::getInstance()->pushScene(ClientScene::create());
         break;
       }
       default:

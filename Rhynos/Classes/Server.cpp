@@ -17,17 +17,20 @@ using std::move;
 
 void Session::do_read() {
   auto self(shared_from_this());
-  socket_.async_read_some(asio::buffer(data_, max_length),
-                          [this, self](error_code ec, size_t length) {
-                            if (!ec) {
-                              do_write(length);
-                            }
-                          });
+  socket_.async_read_some(
+      buffer(data_, NetworkingConstants::network_buffer_length),
+      [this, self](error_code ec, size_t length) {
+        if (!ec) {
+          CCLOG(data_);
+          do_write(length);
+        }
+      });
 }
 
 void Session::do_write(size_t length) {
   auto self(shared_from_this());
-  async_write(socket_, buffer(data_, length),
+  async_write(socket_,
+              buffer(data_, NetworkingConstants::network_buffer_length),
               [this, self](error_code ec, size_t /*length*/) {
                 if (!ec) {
                   do_read();
@@ -45,10 +48,10 @@ void Server::do_accept() {
   });
 }
 
-ServerScene::ServerScene() : io_service_(), server_(io_service_, port) {}
+ServerScene::ServerScene()
+    : io_service_(), server_(io_service_, NetworkingConstants::PORT) {}
 
 bool ServerScene::init() {
-  //////////////////////////////
   // 1. super init first
   if (!Scene::init()) {
     return false;

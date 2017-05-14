@@ -4,9 +4,9 @@
 #include "asio.hpp"
 #include "cocos2d.h"
 
-using asio::ip::tcp;
+#include "NetworkingConstants.h"
 
-static constexpr int port = 1337;
+using asio::ip::tcp;
 
 class Session : public std::enable_shared_from_this<Session> {
  public:
@@ -20,8 +20,7 @@ class Session : public std::enable_shared_from_this<Session> {
   void do_write(size_t length);
 
   tcp::socket socket_;
-  enum { max_length = 1024 };
-  char data_[max_length];
+  char data_[NetworkingConstants::network_buffer_length];
 };
 
 class Server {
@@ -41,8 +40,6 @@ class Server {
 
 class ServerScene : public cocos2d::Scene {
  public:
-  ServerScene();
-
   virtual bool init() override;
 
   CREATE_FUNC(ServerScene);
@@ -50,6 +47,8 @@ class ServerScene : public cocos2d::Scene {
   void update(float delta);
 
  private:
+  ServerScene();
+
   asio::io_service io_service_;
   Server server_;
 };
