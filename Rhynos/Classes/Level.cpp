@@ -84,16 +84,17 @@ void Level::createFixtures(TMXLayer* layer) {
         tileSprite->setAnchorPoint(Point(0.5,0.5));
         // get properties of the tile
         const int tileGID = layer->getTileGIDAt(Point(x, y));
-
+        
         const cocos2d::ValueMap properties =
             this->_map->getPropertiesForGID(tileGID).asValueMap();
+        cocos2d::ValueMap* ptr_properties = new ValueMap(properties);
         // create pSprite
         this->_sprites.emplace_back(new pSprite(tileSprite));
         pSprite* psprite = this->_sprites.back();
         // We set position based upon center of tiles
         const Point& position = positionForTileCoord(Point(x, y));
         psprite->setPosition(position);
-        psprite->setProperties(&properties);
+        psprite->setProperties(ptr_properties);
         // load pSprite
         psprite->addBodyToWorld(this->_world);
         psprite->createRectangularFixture(layer, tileSize, x, y);
@@ -194,6 +195,14 @@ void Level::update(float dt) {
 
   while (frameTime > TimeStep) {
     // Check inputs
+    if (this->_players["localhost"]->isOffMap()) {
+        cocos2d::Point original = this->_players["localhost"]->getDefaultPosition();
+        CCLOG("Got default position");
+        this->_players["localhost"]->setBodyPosition(positionForTileCoord(original));
+        CCLOG("Set curr pos to def pos");
+    }
+      
+      
     this->handleInput();
     
     // Have to cast AI to player cuz its in a list of players

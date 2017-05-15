@@ -23,10 +23,14 @@ class Player : public pSprite {
   inline int getPlayerNum();
   bool isFloating();
   bool isDestructable();
-
+  bool isDead();
+  bool isOffMap();
+    
   int hurtBy(int damage);
   int healBy(int health);
 
+    
+  cocos2d::Point defaultPosition;
   cocos2d::Point getDefaultPosition();
   cocos2d::Point getCurrentPosition();
   // NOTE: do not remove or add sprite to Level

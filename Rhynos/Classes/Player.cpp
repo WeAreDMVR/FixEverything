@@ -14,6 +14,11 @@ void Player::setProperties(const ValueMap* properties) {
   this->_maxSpeed = properties->at("MaxSpeed").asFloat();
   this->_maxJumpTime = properties->at("MaxJumpTime").asFloat();
   this->_status = PlayerStatus::normal;
+    
+  int x = properties->at("x").asInt();
+  int y = properties->at("y").asInt();
+  this->defaultPosition = Point(x, y);
+    
 }
 
 inline int Player::getHealth() { return this->_health; }
@@ -52,6 +57,9 @@ inline int Player::getPlayerNum() {
 }
 
 bool Player::isFloating() { return this->_floating; }
+bool Player::isDead() { return this->_health == 0; }
+bool Player::isOffMap() { return this->getPositionY() < 0.0; }
+
 
 bool Player::isDestructable() { return this->_destructable; }
 
@@ -68,9 +76,7 @@ int Player::healBy(int health) {
 }
 
 Point Player::getDefaultPosition() {
-  int x = this->getProperties()->at("x").asInt();
-  int y = this->getProperties()->at("y").asInt();
-  return Point(x, y);
+    return this->defaultPosition;
 }
 
 Point Player::getCurrentPosition() {
