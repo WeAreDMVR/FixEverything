@@ -4,6 +4,7 @@
 #include "cocos2d.h"
 
 #include <algorithm>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -11,6 +12,7 @@ using namespace cocos2d;
 
 using std::max;
 using std::min;
+using std::runtime_error;
 using std::string;
 using std::to_string;
 using std::vector;
@@ -44,7 +46,9 @@ Level* Level::createWithMap(const string& tmxFile) {
 Level* Level::createNetworkedWithMap(const string& tmxFile,
                                      const string& host) {
   Level* ret = createWithMap(tmxFile);
-  ret->_client.connect(host);
+  if (!ret->_client.connect(host)) {
+    throw runtime_error("Could not connect to " + host);
+  }
   return ret;
 }
 
@@ -292,7 +296,7 @@ void Level::handleInput() {
     }
   }
 
-  if (isNetworked() && !keys_pressed.empty()) {
+  if (isNetworked()) {
     _client.write(keys_pressed);
   }
 }

@@ -6,11 +6,14 @@
 
 #include "NetworkingConstants.h"
 
+#include <memory>
+#include <vector>
+
 using asio::ip::tcp;
 
 class Session : public std::enable_shared_from_this<Session> {
  public:
-  Session(tcp::socket socket) : socket_(std::move(socket)) {}
+  Session(std::shared_ptr<tcp::iostream> iostream) : iostream_(iostream) {}
 
   void start() { do_read(); }
 
@@ -19,15 +22,14 @@ class Session : public std::enable_shared_from_this<Session> {
 
   void do_write(size_t length);
 
-  tcp::socket socket_;
+  std::shared_ptr<tcp::iostream> iostream_;
   char data_[NetworkingConstants::network_buffer_length];
 };
 
 class Server {
  public:
   Server(asio::io_service& io_service, short port)
-      : acceptor_(io_service, tcp::endpoint(tcp::v4(), port)),
-        socket_(io_service) {
+      : acceptor_(io_service, tcp::endpoint(tcp::v4(), port)) {
     do_accept();
   }
 
@@ -35,7 +37,7 @@ class Server {
   void do_accept();
 
   tcp::acceptor acceptor_;
-  tcp::socket socket_;
+  std::vector<std::shared_ptr<tcp::iostream>> connections_;
 };
 
 class ServerScene : public cocos2d::Scene {

@@ -2,10 +2,9 @@
 #define _CLIENT_H_
 
 #include "asio.hpp"
-#include "cocos2d.h"
-
 #include "cereal/archives/portable_binary.hpp"
 #include "cereal/types/vector.hpp"
+#include "cocos2d.h"
 
 #include <cstdlib>
 #include <string>
@@ -19,22 +18,22 @@ class Client {
   Client(const std::string &host) { connect(host); }
 
   bool is_open() const;
-  void connect(const std::string &host);
+  bool connect(const std::string &host);
 
   template <typename T>
   void write(const T &request) {
-    cereal::PortableBinaryOutputArchive oarchive(iostream);
+    cereal::PortableBinaryOutputArchive oarchive(iostream_);
     oarchive(request);
   }
 
   template <typename T>
   void read(T *reply) {
-    cereal::PortableBinaryInputArchive iarchive(iostream);
+    cereal::PortableBinaryInputArchive iarchive(iostream_);
     iarchive(*reply);
   }
 
  private:
-  tcp::iostream iostream;
+  tcp::iostream iostream_;
 };
 
 class ClientScene : public cocos2d::Scene {

@@ -17,10 +17,11 @@ using cocos2d::ui::TextField;
 using std::string;
 using std::to_string;
 
-bool Client::is_open() const { return iostream.rdbuf()->is_open(); }
+bool Client::is_open() const { return iostream_.rdbuf()->is_open(); }
 
-void Client::connect(const string& host) {
-  iostream.connect(host, to_string(NetworkingConstants::PORT));
+bool Client::connect(const string& host) {
+  iostream_.connect(host, to_string(NetworkingConstants::PORT));
+  return static_cast<bool>(iostream_);
 }
 
 bool ClientScene::init() {
