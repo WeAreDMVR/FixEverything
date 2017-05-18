@@ -4,6 +4,7 @@
 #include <ui/UITextField.h>
 #include <asio.hpp>
 
+#include "ClientLevel.h"
 #include "Level.h"
 #include "NetworkingConstants.h"
 
@@ -49,8 +50,8 @@ bool ClientScene::init() {
       case EventKeyboard::KeyCode::KEY_ENTER: {
         auto spritecache = cocos2d::SpriteFrameCache::getInstance();
         spritecache->addSpriteFramesWithFile("images/textures.plist");
-        Level* level1 = Level::createNetworkedWithMap("images/track-2.tmx",
-                                                      host_field->getString());
+        Level* level1 = ClientLevel::createNetworkedWithMap(
+            "images/track-2.tmx", host_field->getString());
         level1->loadLayers();
         level1->loadObjects();
 
