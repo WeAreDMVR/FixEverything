@@ -40,19 +40,4 @@ class Server {
   std::vector<std::shared_ptr<tcp::iostream>> connections_;
 };
 
-class ServerScene : public cocos2d::Scene {
- public:
-  virtual bool init() override;
-
-  CREATE_FUNC(ServerScene);
-
-  void update(float delta);
-
- private:
-  ServerScene();
-
-  asio::io_service io_service_;
-  Server server_;
-};
-
 #endif  // _SERVER_H_

@@ -10,7 +10,7 @@ using namespace cocos2d;
 using std::string;
 
 AILevel* AILevel::createWithMap(const string& tmxFile) {
-  return new AILevel(tmxFile);
+  return new AILevel(tmxFile, true /* displayObjects */);
 }
 
 void AILevel::handleInput() {

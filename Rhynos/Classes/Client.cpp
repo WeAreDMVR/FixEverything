@@ -51,7 +51,7 @@ bool ClientScene::init() {
         auto spritecache = cocos2d::SpriteFrameCache::getInstance();
         spritecache->addSpriteFramesWithFile("images/textures.plist");
         Level* level1 = ClientLevel::createNetworkedWithMap(
-            "images/track-2.tmx", host_field->getString());
+            "images/track-2-noai.tmx", host_field->getString());
         level1->loadLayers();
         level1->loadObjects();
 
@@ -69,9 +69,5 @@ bool ClientScene::init() {
   // add the label as a child to this layer
   this->addChild(host_field, 1);
 
-  this->scheduleUpdate();
-
   return true;
 }
-
-void ClientScene::update(float delta) {}

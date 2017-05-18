@@ -23,7 +23,8 @@ static const Size mapSize(40.0, 12.0);
 static const Size worldSize(tileSize.width* mapSize.width,
                             tileSize.height* mapSize.height);
 
-Level::Level(const string& tmxFile) {
+Level::Level(const string& tmxFile, const bool displayObjects)
+    : _displayObjects(displayObjects) {
   TMXTiledMap* map = TMXTiledMap::create(tmxFile);
   b2World* world = World::init();
   init();
@@ -33,8 +34,10 @@ Level::Level(const string& tmxFile) {
   scheduleUpdate();
   KeyboardPoller* layer = KeyboardPoller::create();
   keyPoll = layer;
-  addChild(layer);
-  addChild(map);
+  if (_displayObjects) {
+    addChild(layer);
+    addChild(map);
+  }
 }
 
 void Level::loadLayers() {
@@ -127,7 +130,9 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
   // create sprite (Assumes a Spritesheet has been loaded)
   // <name> property should have the name of the .png image for the sprite
   cocos2d::Sprite* sprite = Sprite::createWithSpriteFrameName(name);
-  this->addChild(sprite);
+  if (_displayObjects) {
+    this->addChild(sprite);
+  }
   pSprite* object;
   if (className == "Player") {
     // create Player
@@ -195,8 +200,10 @@ void Level::update(float dt) {
     // Check inputs
     this->handleInput();
 
-    // Have to cast AI to player cuz its in a list of players
-    (static_cast<AI*>(this->_players["ai"]))->move();
+    if (this->_players.count("ai") > 0) {
+      // Have to cast AI to player cuz its in a list of players
+      (static_cast<AI*>(this->_players["ai"]))->move();
+    }
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;
@@ -212,7 +219,9 @@ void Level::update(float dt) {
 
   // Update Players
   this->_players["localhost"]->updateSprite();
-  this->_players["ai"]->updateSprite();
+  if (this->_players.count("ai") > 0) {
+    this->_players["ai"]->updateSprite();
+  }
 
   const Vec2& rhynoPos = this->_players["localhost"]->getCurrentPosition();
   const Size& winSize = Director::getInstance()->getWinSizeInPixels();

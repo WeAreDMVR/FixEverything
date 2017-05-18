@@ -66,33 +66,3 @@ void Server::do_accept() {
     do_accept();
   });
 }
-
-ServerScene::ServerScene()
-    : io_service_(), server_(io_service_, NetworkingConstants::PORT) {}
-
-bool ServerScene::init() {
-  // 1. super init first
-  if (!Scene::init()) {
-    return false;
-  }
-  const auto& visibleSize = Director::getInstance()->getVisibleSize();
-  const Vec2& origin = Director::getInstance()->getVisibleOrigin();
-
-  // create and initialize a label
-  auto label =
-      Label::createWithTTF("Server is running", "fonts/Marker Felt.ttf", 24);
-
-  // position the label on the center of the screen
-  label->setPosition(
-      Vec2(origin.x + visibleSize.width / 2,
-           origin.y + visibleSize.height - label->getContentSize().height));
-
-  // add the label as a child to this layer
-  this->addChild(label, 1);
-
-  this->scheduleUpdate();
-
-  return true;
-}
-
-void ServerScene::update(float delta) { io_service_.run_one(); }

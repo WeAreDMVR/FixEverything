@@ -14,7 +14,7 @@ using std::vector;
 
 ClientLevel* ClientLevel::createNetworkedWithMap(const string& tmxFile,
                                                  const string& host) {
-  ClientLevel* ret = new ClientLevel(tmxFile);
+  ClientLevel* ret = new ClientLevel(tmxFile, true /* displayObjects */);
   if (!ret->_client.connect(host)) {
     throw runtime_error("Could not connect to " + host);
   }

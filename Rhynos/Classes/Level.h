@@ -17,7 +17,7 @@ class Level : public cocos2d::Scene {
  public:
   void loadLayers();
   void loadObjects();
-  void update(float dt) override;
+  virtual void update(float dt) override;
 
   cocos2d::Point positionForTileCoord(const cocos2d::Point& coordinate);
   cocos2d::Point tileCoordForPosition(const cocos2d::Point& position);
@@ -29,17 +29,17 @@ class Level : public cocos2d::Scene {
   double getCurrentTime();
 
  protected:
-  Level(const std::string& tmxFile);
+  Level(const std::string& tmxFile, const bool displayObjects);
 
   virtual void handleInput() = 0;
 
+  bool _displayObjects;
   b2World* _world;
   const cocos2d::TMXTiledMap* _map;
   std::vector<pSprite*> _sprites;
   std::unordered_map<std::string, Player*> _players;
   double _lastTime;
   KeyboardPoller* keyPoll;
-  Client _client;
 };
 
 #endif  // _LEVEL_H_

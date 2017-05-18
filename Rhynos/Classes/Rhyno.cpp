@@ -4,7 +4,7 @@
 #include "Client.h"
 #include "Level.h"
 #include "Rhyno.h"
-#include "Server.h"
+#include "ServerLevel.h"
 #include "World.h"
 
 #include <Box2D/Box2D.h>
@@ -56,7 +56,14 @@ bool Rhyno::init() {
         break;
       }
       case EventKeyboard::KeyCode::KEY_S: {
-        Director::getInstance()->pushScene(ServerScene::create());
+        // Check to switch to the level
+        auto spritecache = cocos2d::SpriteFrameCache::getInstance();
+        spritecache->addSpriteFramesWithFile("images/textures.plist");
+        Level* level1 = ServerLevel::createWithMap("images/track-2-noai.tmx");
+        level1->loadLayers();
+        level1->loadObjects();
+
+        Director::getInstance()->pushScene(level1);
         break;
       }
       case EventKeyboard::KeyCode::KEY_C: {

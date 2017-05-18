@@ -42,8 +42,6 @@ class ClientScene : public cocos2d::Scene {
 
   CREATE_FUNC(ClientScene);
 
-  void update(float delta);
-
  private:
   ClientScene() {}
 };
