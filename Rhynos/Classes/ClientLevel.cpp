@@ -4,13 +4,13 @@
 
 #include <stdexcept>
 #include <string>
-#include <vector>
+#include <unordered_set>
 
 using namespace cocos2d;
 
 using std::runtime_error;
 using std::string;
-using std::vector;
+using std::unordered_set;
 
 ClientLevel* ClientLevel::createNetworkedWithMap(const string& tmxFile,
                                                  const string& host) {
@@ -22,31 +22,31 @@ ClientLevel* ClientLevel::createNetworkedWithMap(const string& tmxFile,
 }
 
 void ClientLevel::handleInput() {
-  vector<EventKeyboard::KeyCode> keys_pressed;
+  unordered_set<EventKeyboard::KeyCode> keys_pressed;
   // Arrows
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
     CCLOG("right");
-    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_RIGHT_ARROW);
+    keys_pressed.insert(EventKeyboard::KeyCode::KEY_RIGHT_ARROW);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
     CCLOG("left");
-    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_LEFT_ARROW);
+    keys_pressed.insert(EventKeyboard::KeyCode::KEY_LEFT_ARROW);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
     CCLOG("up");
-    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_SPACE);
+    keys_pressed.insert(EventKeyboard::KeyCode::KEY_SPACE);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_1)) {
     CCLOG("1");
-    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_1);
+    keys_pressed.insert(EventKeyboard::KeyCode::KEY_1);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_2)) {
     CCLOG("2");
-    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_2);
+    keys_pressed.insert(EventKeyboard::KeyCode::KEY_2);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_3)) {
     CCLOG("3");
-    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_3);
+    keys_pressed.insert(EventKeyboard::KeyCode::KEY_3);
   }
 
   _client.write(keys_pressed);

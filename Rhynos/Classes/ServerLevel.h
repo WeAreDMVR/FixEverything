@@ -6,8 +6,10 @@
 #include "Server.h"
 
 #include "asio.hpp"
+#include "cocos2d.h"
 
 #include <string>
+#include <unordered_set>
 
 class ServerLevel : public Level {
  public:
@@ -16,7 +18,7 @@ class ServerLevel : public Level {
   ServerLevel(const std::string& tmxFile)
       : Level(tmxFile, false /* displayObjects */),
         io_service_(),
-        server_(io_service_, NetworkingConstants::PORT) {}
+        server_(io_service_, NetworkingConstants::PORT, this) {}
 
   virtual bool init() override;
 
@@ -28,6 +30,7 @@ class ServerLevel : public Level {
  private:
   asio::io_service io_service_;
   Server server_;
+  std::unordered_set<cocos2d::EventKeyboard::KeyCode> keys_pressed_;
 };
 
 #endif  // _SERVER_LEVEL_H_

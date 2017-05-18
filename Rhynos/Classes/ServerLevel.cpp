@@ -5,10 +5,12 @@
 #include "cocos2d.h"
 
 #include <string>
+#include <unordered_set>
 
 using namespace cocos2d;
 
 using std::string;
+using std::unordered_set;
 
 ServerLevel* ServerLevel::createWithMap(const string& tmxFile) {
   auto ret = new ServerLevel(tmxFile);
