@@ -2,7 +2,7 @@
 
 using namespace cocos2d;
 
-Player::Player(Sprite* sprite) : pSprite(sprite) {this->type = "Player";}
+Player::Player(Sprite* sprite) : pSprite(sprite) { this->type = "Player"; }
 
 void Player::setProperties(const ValueMap* properties) {
   this->_properties = properties;
@@ -47,9 +47,7 @@ inline void Player::setJumpAccelerationToDefault() {
 
 inline void Player::setPlayerNum(int num) { this->_playerNum = num; }
 
-inline int Player::getPlayerNum() {
-  return this->_playerNum;
-}
+inline int Player::getPlayerNum() { return this->_playerNum; }
 
 bool Player::isFloating() { return this->_floating; }
 
@@ -171,7 +169,8 @@ void Player::setLayer(int layerNum) {
       layerBits = Layer3Bits;
   }
   // iterate over all fixtures
-  for (b2Fixture* fixture = this->_body->GetFixtureList(); fixture; fixture = fixture->GetNext()) {
+  for (b2Fixture* fixture = this->_body->GetFixtureList(); fixture;
+       fixture = fixture->GetNext()) {
     filter = fixture->GetFilterData();
     // set category bits
     filter.categoryBits = PlayerBits;
@@ -179,5 +178,29 @@ void Player::setLayer(int layerNum) {
     filter.maskBits = layerBits;
     fixture->SetFilterData(filter);
   }
+}
 
+void Player::applyInput(const cocos2d::EventKeyboard::KeyCode key) {
+  switch (key) {
+    case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
+      applyMoveRight();
+      break;
+    case EventKeyboard::KeyCode::KEY_LEFT_ARROW:
+      applyMoveLeft();
+      break;
+    case EventKeyboard::KeyCode::KEY_SPACE:
+      applyJump();
+      break;
+    case EventKeyboard::KeyCode::KEY_1:
+      setLayer(1);
+      break;
+    case EventKeyboard::KeyCode::KEY_2:
+      setLayer(2);
+      break;
+    case EventKeyboard::KeyCode::KEY_3:
+      setLayer(3);
+      break;
+    default:
+      break;
+  }
 }

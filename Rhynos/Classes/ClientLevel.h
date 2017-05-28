@@ -17,6 +17,7 @@ class ClientLevel : public Level {
  protected:
   void handleInput() override;
   void addPlayer(const std::string& className, Player* player) override;
+  void extraUpdates() override;
 
  private:
   Client _client;

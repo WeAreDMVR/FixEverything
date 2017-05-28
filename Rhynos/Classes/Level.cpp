@@ -194,6 +194,7 @@ void Level::update(float dt) {
   while (frameTime > TimeStep) {
     // Check inputs
     this->handleInput();
+    this->extraUpdates();
 
     if (this->_players.count("ai") > 0) {
       // Have to cast AI to player cuz its in a list of players

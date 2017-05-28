@@ -5,6 +5,7 @@
 #include <stdexcept>
 #include <string>
 #include <unordered_set>
+#include <vector>
 
 using namespace cocos2d;
 
@@ -12,6 +13,7 @@ using std::runtime_error;
 using std::string;
 using std::to_string;
 using std::unordered_set;
+using std::vector;
 
 ClientLevel* ClientLevel::createNetworkedWithMap(const string& tmxFile,
                                                  const string& host) {
@@ -73,5 +75,17 @@ void ClientLevel::addPlayer(const std::string& className, Player* player) {
     this->_localPlayer = player;
   } else {
     this->_players[to_string(_otherPlayerId)] = player;
+  }
+}
+
+void ClientLevel::extraUpdates() {
+  vector<GameAction> game_actions;
+  _client.read(&game_actions);
+  for (const GameAction& action : game_actions) {
+    if (action.type == GameAction::Type::KEY_PRESSED) {
+      for (const EventKeyboard::KeyCode key : action.keys_pressed) {
+        _players[to_string(action.player_id)]->applyInput(key);
+      }
+    }
   }
 }

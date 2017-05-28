@@ -3,7 +3,9 @@
 #include <cocos2d.h>
 #include <ui/UITextField.h>
 #include <asio.hpp>
+#include "cereal/archives/json.hpp"
 #include "cereal/archives/portable_binary.hpp"
+#include "cereal/types/vector.hpp"
 
 #include "ClientLevel.h"
 #include "GameAction.h"
@@ -11,16 +13,20 @@
 #include "NetworkingConstants.h"
 
 #include <cstring>
+#include <sstream>
 #include <string>
 #include <unordered_set>
+#include <vector>
 
 using namespace asio;
 using namespace cocos2d;
 
 using cocos2d::ui::TextField;
+using std::ostringstream;
 using std::string;
 using std::to_string;
 using std::unordered_set;
+using std::vector;
 
 bool Client::is_open() const { return iostream_.rdbuf()->is_open(); }
 
@@ -35,8 +41,18 @@ void Client::write(const unordered_set<EventKeyboard::KeyCode> keys_pressed) {
 }
 
 void Client::read(GameAction* game_action) {
+  CCLOG("Waiting for input from the server");
   cereal::PortableBinaryInputArchive iarchive(iostream_);
   iarchive(*game_action);
+  ostringstream oss;
+  cereal::JSONOutputArchive oarchive(oss);
+  oarchive(*game_action);
+  CCLOG(oss.str().c_str());
+}
+
+void Client::read(vector<GameAction>* game_actions) {
+  cereal::PortableBinaryInputArchive iarchive(iostream_);
+  iarchive(*game_actions);
 }
 
 bool ClientScene::init() {

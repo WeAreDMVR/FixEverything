@@ -33,6 +33,7 @@ class Level : public cocos2d::Scene {
 
   virtual void handleInput() = 0;
   virtual void addPlayer(const std::string& className, Player* player) = 0;
+  virtual void extraUpdates() {}
 
   Player* _localPlayer;
   b2World* _world;

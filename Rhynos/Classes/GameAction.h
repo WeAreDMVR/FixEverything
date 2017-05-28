@@ -19,8 +19,9 @@ struct GameAction {
   }
 
   static GameAction keyPressedAction(
-      const std::unordered_set<cocos2d::EventKeyboard::KeyCode> &keys_pressed) {
-    return GameAction(Type::KEY_PRESSED, keys_pressed);
+      const std::unordered_set<cocos2d::EventKeyboard::KeyCode> &keys_pressed,
+      const int player_id) {
+    return GameAction(Type::KEY_PRESSED, keys_pressed, player_id);
   }
 
   GameAction() {}
@@ -39,8 +40,9 @@ struct GameAction {
   GameAction(const Type type) : type(type) {}
   GameAction(
       const Type type,
-      const std::unordered_set<cocos2d::EventKeyboard::KeyCode> &keys_pressed)
-      : type(type), keys_pressed(keys_pressed) {}
+      const std::unordered_set<cocos2d::EventKeyboard::KeyCode> &keys_pressed,
+      const int player_id)
+      : type(type), keys_pressed(keys_pressed), player_id(player_id) {}
   GameAction(const Type type, const int player_id,
              const int other_player_id = -1)
       : type(type), player_id(player_id), other_player_id(other_player_id) {}

@@ -4,6 +4,7 @@
 
 #include "asio.hpp"
 #include "cereal/archives/portable_binary.hpp"
+#include "cereal/types/vector.hpp"
 #include "cocos2d.h"
 
 #include <cstdlib>
@@ -11,6 +12,7 @@
 #include <memory>
 #include <unordered_set>
 #include <utility>
+#include <vector>
 
 using namespace asio;
 using namespace cereal;
@@ -22,12 +24,15 @@ using std::make_shared;
 using std::move;
 using std::shared_ptr;
 using std::unordered_set;
+using std::vector;
 
 static int next_session_id = 1;
 
 void Session::start() {
+  CCLOG("Sending identification to client %d", id_);
   PortableBinaryOutputArchive oarchive(*iostream_);
   oarchive(GameAction::connectionEstablishedAction(id_));
+  CCLOG("Finished sending identification to client %d", id_);
   do_read();
 }
 
@@ -60,12 +65,12 @@ void Session::do_read() {
           break;
       }
     }
-
-    do_write();
+    server_->mut_.lock();
+    server_->game_actions_.push_back(
+        GameAction::keyPressedAction(keys_pressed, id_));
+    server_->mut_.unlock();
   }
 }
-
-void Session::do_write() {}
 
 void Server::do_accept() {
   shared_ptr<tcp::iostream> iostream = make_shared<tcp::iostream>();
@@ -74,7 +79,7 @@ void Server::do_accept() {
   acceptor_.async_accept(
       *iostream->rdbuf(), [this, iostream, session_id](error_code ec) {
         if (!ec) {
-          make_shared<Session>(iostream, session_id)->start();
+          make_shared<Session>(iostream, this, session_id)->start();
         }
 
         if (connections_.size() < 2) {
@@ -91,7 +96,18 @@ void Server::do_accept() {
       });
 }
 
-void Server::do_game_loop() {}
+void Server::do_game_loop() {
+  while (true) {
+    vector<GameAction> actions;
+    mut_.lock();
+    actions.swap(game_actions_);
+    mut_.unlock();
+    for (auto& connection : connections_) {
+      PortableBinaryOutputArchive oarchive(*connection.first);
+      oarchive(actions);
+    }
+  }
+}
 
 bool ServerScene::init() {
   // 1. super init first

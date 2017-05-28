@@ -9,6 +9,7 @@
 #include <cstdlib>
 #include <string>
 #include <unordered_set>
+#include <vector>
 
 using asio::ip::tcp;
 
@@ -25,6 +26,7 @@ class Client {
       const std::unordered_set<cocos2d::EventKeyboard::KeyCode> keys_pressed);
 
   void read(GameAction *game_action);
+  void read(std::vector<GameAction> *game_actions);
 
  private:
   tcp::iostream iostream_;
