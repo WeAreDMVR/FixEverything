@@ -10,14 +10,29 @@ using namespace cocos2d;
 
 using std::runtime_error;
 using std::string;
+using std::to_string;
 using std::unordered_set;
 
 ClientLevel* ClientLevel::createNetworkedWithMap(const string& tmxFile,
                                                  const string& host) {
-  ClientLevel* ret = new ClientLevel(tmxFile, true /* displayObjects */);
+  ClientLevel* ret = new ClientLevel(tmxFile);
+  GameAction game_action;
   if (!ret->_client.connect(host)) {
     throw runtime_error("Could not connect to " + host);
   }
+  do {
+    ret->_client.read(&game_action);
+  } while (game_action.type != GameAction::Type::CONNECTION_ESTABLISHED);
+  CCLOG("Connected as player %d", game_action.player_id);
+  ret->_localPlayerId = game_action.player_id;
+  CCLOG("Waiting for another player");
+  do {
+    ret->_client.read(&game_action);
+  } while (game_action.type != GameAction::Type::GAME_START);
+  ret->_otherPlayerId = game_action.player_id == ret->_localPlayerId
+                            ? game_action.other_player_id
+                            : game_action.player_id;
+  CCLOG("Two players have connected");
   return ret;
 }
 
@@ -50,4 +65,13 @@ void ClientLevel::handleInput() {
   }
 
   _client.write(keys_pressed);
+}
+
+void ClientLevel::addPlayer(const std::string& className, Player* player) {
+  if (this->_localPlayer == nullptr) {
+    this->_players[to_string(_localPlayerId)] = player;
+    this->_localPlayer = player;
+  } else {
+    this->_players[to_string(_otherPlayerId)] = player;
+  }
 }

@@ -10,7 +10,7 @@ using namespace cocos2d;
 using std::string;
 
 AILevel* AILevel::createWithMap(const string& tmxFile) {
-  return new AILevel(tmxFile, true /* displayObjects */);
+  return new AILevel(tmxFile);
 }
 
 void AILevel::handleInput() {
@@ -38,5 +38,14 @@ void AILevel::handleInput() {
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_3)) {
     CCLOG("3");
     this->_players["localhost"]->setLayer(3);
+  }
+}
+
+void AILevel::addPlayer(const std::string& className, Player* player) {
+  if (className == "Player") {
+    this->_players["localhost"] = player;
+    this->_localPlayer = player;
+  } else if (className == "AI") {
+    this->_players["ai"] = player;
   }
 }

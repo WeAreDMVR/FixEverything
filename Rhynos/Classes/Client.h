@@ -2,12 +2,13 @@
 #define _CLIENT_H_
 
 #include "asio.hpp"
-#include "cereal/archives/portable_binary.hpp"
-#include "cereal/types/unordered_set.hpp"
 #include "cocos2d.h"
+
+#include "GameAction.h"
 
 #include <cstdlib>
 #include <string>
+#include <unordered_set>
 
 using asio::ip::tcp;
 
@@ -20,17 +21,10 @@ class Client {
   bool is_open() const;
   bool connect(const std::string &host);
 
-  template <typename T>
-  void write(const T &request) {
-    cereal::PortableBinaryOutputArchive oarchive(iostream_);
-    oarchive(request);
-  }
+  void write(
+      const std::unordered_set<cocos2d::EventKeyboard::KeyCode> keys_pressed);
 
-  template <typename T>
-  void read(T *reply) {
-    cereal::PortableBinaryInputArchive iarchive(iostream_);
-    iarchive(*reply);
-  }
+  void read(GameAction *game_action);
 
  private:
   tcp::iostream iostream_;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="12" tilewidth="75" tileheight="75" nextobjectid="3">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="12" tilewidth="75" tileheight="75" nextobjectid="4">
  <tileset firstgid="1" name="track-2_blocks_tiled_1" tilewidth="75" tileheight="75" tilecount="480" columns="40">
   <image source="track-2_blocks_tiled_1.png" width="3000" height="900"/>
  </tileset>
@@ -203,7 +203,24 @@
 </data>
  </layer>
  <objectgroup name="obj1">
-  <object id="1" name="user" x="75" y="0" width="75" height="75">
+  <object id="1" name="user1" x="75" y="0" width="75" height="75">
+   <properties>
+    <property name="Acceleration" type="float" value="100"/>
+    <property name="BodyType" type="int" value="2"/>
+    <property name="CategoryBits" type="int" value="8"/>
+    <property name="Damage" type="int" value="0"/>
+    <property name="Deceleration" type="float" value="80"/>
+    <property name="Health" type="int" value="3"/>
+    <property name="JumpAcceleration" type="float" value="5.25"/>
+    <property name="MaxJumpTime" type="float" value="10.2"/>
+    <property name="MaxSpeed" type="float" value="3"/>
+    <property name="name" value="rhyno-75x75.png"/>
+    <property name="type" value="Player"/>
+    <property name="x" type="int" value="1"/>
+    <property name="y" type="int" value="0"/>
+   </properties>
+  </object>
+  <object id="3" name="user2" x="75" y="0" width="75" height="75">
    <properties>
     <property name="Acceleration" type="float" value="100"/>
     <property name="BodyType" type="int" value="2"/>

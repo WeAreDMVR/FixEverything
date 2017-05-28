@@ -3,6 +3,7 @@
 
 #include "Client.h"
 #include "Level.h"
+#include "Player.h"
 
 #include <string>
 
@@ -15,9 +16,12 @@ class ClientLevel : public Level {
 
  protected:
   void handleInput() override;
+  void addPlayer(const std::string& className, Player* player) override;
 
  private:
   Client _client;
+  int _localPlayerId;
+  int _otherPlayerId;
 };
 
 #endif  // _CLIENT_LEVEL_H_

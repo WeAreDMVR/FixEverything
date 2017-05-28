@@ -29,11 +29,12 @@ class Level : public cocos2d::Scene {
   double getCurrentTime();
 
  protected:
-  Level(const std::string& tmxFile, const bool displayObjects);
+  Level(const std::string& tmxFile);
 
   virtual void handleInput() = 0;
+  virtual void addPlayer(const std::string& className, Player* player) = 0;
 
-  bool _displayObjects;
+  Player* _localPlayer;
   b2World* _world;
   const cocos2d::TMXTiledMap* _map;
   std::vector<pSprite*> _sprites;

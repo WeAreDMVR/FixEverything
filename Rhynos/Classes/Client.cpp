@@ -3,13 +3,16 @@
 #include <cocos2d.h>
 #include <ui/UITextField.h>
 #include <asio.hpp>
+#include "cereal/archives/portable_binary.hpp"
 
 #include "ClientLevel.h"
+#include "GameAction.h"
 #include "Level.h"
 #include "NetworkingConstants.h"
 
 #include <cstring>
 #include <string>
+#include <unordered_set>
 
 using namespace asio;
 using namespace cocos2d;
@@ -17,12 +20,23 @@ using namespace cocos2d;
 using cocos2d::ui::TextField;
 using std::string;
 using std::to_string;
+using std::unordered_set;
 
 bool Client::is_open() const { return iostream_.rdbuf()->is_open(); }
 
 bool Client::connect(const string& host) {
   iostream_.connect(host, to_string(NetworkingConstants::PORT));
   return static_cast<bool>(iostream_);
+}
+
+void Client::write(const unordered_set<EventKeyboard::KeyCode> keys_pressed) {
+  cereal::PortableBinaryOutputArchive oarchive(iostream_);
+  oarchive(keys_pressed);
+}
+
+void Client::read(GameAction* game_action) {
+  cereal::PortableBinaryInputArchive iarchive(iostream_);
+  iarchive(*game_action);
 }
 
 bool ClientScene::init() {
