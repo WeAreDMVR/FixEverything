@@ -32,6 +32,7 @@ void Session::start() {
   CCLOG("Sending identification to client %d", id_);
   PortableBinaryOutputArchive oarchive(*iostream_);
   oarchive(GameAction::connectionEstablishedAction(id_));
+  iostream_->flush();
   CCLOG("Finished sending identification to client %d", id_);
   do_read();
 }
@@ -90,6 +91,7 @@ void Server::do_accept() {
           for (auto& connection : connections_) {
             PortableBinaryOutputArchive oarchive(*connection.first);
             oarchive(GameAction::gameStartAction(player1_id, player2_id));
+            connection.first->flush();
           }
           do_game_loop();
         }
@@ -105,6 +107,7 @@ void Server::do_game_loop() {
     for (auto& connection : connections_) {
       PortableBinaryOutputArchive oarchive(*connection.first);
       oarchive(actions);
+      connection.first->flush();
     }
   }
 }

@@ -38,6 +38,7 @@ bool Client::connect(const string& host) {
 void Client::write(const unordered_set<EventKeyboard::KeyCode> keys_pressed) {
   cereal::PortableBinaryOutputArchive oarchive(iostream_);
   oarchive(keys_pressed);
+  iostream_.flush();
 }
 
 void Client::read(GameAction* game_action) {

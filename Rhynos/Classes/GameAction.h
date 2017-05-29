@@ -28,7 +28,7 @@ struct GameAction {
 
   template <class Archive>
   void serialize(Archive &ar) {
-    ar(type, keys_pressed);
+    ar(type, keys_pressed, player_id, other_player_id);
   }
 
   Type type;
