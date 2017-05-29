@@ -14,56 +14,39 @@
 
 using asio::ip::tcp;
 
-class Server;
+struct Server;
 
-class Session : public std::enable_shared_from_this<Session> {
- public:
-  Session(std::shared_ptr<tcp::iostream> iostream, Server* server, const int id)
-      : iostream_(iostream), server_(server), id_(id) {}
+void session(tcp::iostream* iostream, Server* server, const int id);
 
-  void start();
-
- private:
-  void do_read();
-
-  std::shared_ptr<tcp::iostream> iostream_;
-  Server* server_;
-  const int id_;
-};
-
-class Server {
-  friend class Session;
-
- public:
+struct Server {
   Server(asio::io_service& io_service, short port)
-      : acceptor_(io_service, tcp::endpoint(tcp::v4(), port)) {
-    do_accept();
-  }
+    : acceptor(io_service, tcp::endpoint(tcp::v4(), port)) {
+      do_accept();
+    }
 
- private:
   void do_accept();
   void do_game_loop();
 
-  tcp::acceptor acceptor_;
-  std::vector<std::pair<std::shared_ptr<tcp::iostream>, int>> connections_;
-  std::vector<GameAction> game_actions_;
-  std::mutex mut_;
+  tcp::acceptor acceptor;
+  std::vector<std::pair<tcp::iostream*, int>> connections;
+  std::vector<GameAction> game_actions;
+  std::mutex mut;
 };
 
 class ServerScene : public cocos2d::Scene {
- public:
-  virtual bool init() override;
+  public:
+    virtual bool init() override;
 
-  void update(float dt) override;
+    void update(float dt) override;
 
-  CREATE_FUNC(ServerScene);
+    CREATE_FUNC(ServerScene);
 
- private:
-  ServerScene()
+  private:
+    ServerScene()
       : io_service_(), server_(io_service_, NetworkingConstants::PORT) {}
 
-  asio::io_service io_service_;
-  Server server_;
+    asio::io_service io_service_;
+    Server server_;
 };
 
 #endif  // _SERVER_H_

@@ -12,6 +12,7 @@
 #include <memory>
 #include <utility>
 #include <vector>
+#include <thread>
 
 using namespace asio;
 using namespace cereal;
@@ -26,19 +27,16 @@ using std::vector;
 
 static int next_session_id = 1;
 
-void Session::start() {
-  CCLOG("Sending identification to client %d", id_);
-  PortableBinaryOutputArchive oarchive(*iostream_);
-  oarchive(GameAction::connectionEstablishedAction(id_));
-  iostream_->flush();
-  CCLOG("Finished sending identification to client %d", id_);
-  do_read();
-}
+void session(tcp::iostream* iostream, Server* server, const int id) {
+  CCLOG("Sending identification to client %d", id);
+  PortableBinaryOutputArchive oarchive(*iostream);
+  oarchive(GameAction::connectionEstablishedAction(id));
+  iostream->flush();
+  CCLOG("Finished sending identification to client %d", id);
 
-void Session::do_read() {
   while (true) {
     vector<EventKeyboard::KeyCode> keys_pressed;
-    PortableBinaryInputArchive iarchive(*iostream_);
+    PortableBinaryInputArchive iarchive(*iostream);
     iarchive(keys_pressed);
     for (const EventKeyboard::KeyCode code : keys_pressed) {
       switch (code) {
@@ -64,29 +62,30 @@ void Session::do_read() {
           break;
       }
     }
-    server_->mut_.lock();
-    server_->game_actions_.push_back(
-        GameAction::keyPressedAction(keys_pressed, id_));
-    server_->mut_.unlock();
+    server->mut.lock();
+    server->game_actions.push_back(
+        GameAction::keyPressedAction(keys_pressed, id));
+    server->mut.unlock();
   }
 }
 
 void Server::do_accept() {
-  shared_ptr<tcp::iostream> iostream = make_shared<tcp::iostream>();
+  tcp::iostream* iostream = new tcp::iostream();
   int session_id = next_session_id++;
-  connections_.push_back(make_pair(iostream, session_id));
-  acceptor_.async_accept(
+  connections.push_back(make_pair(iostream, session_id));
+  acceptor.async_accept(
       *iostream->rdbuf(), [this, iostream, session_id](error_code ec) {
       if (!ec) {
-      make_shared<Session>(iostream, this, session_id)->start();
+      std::thread(session, iostream, this, session_id);
       }
+      CCLOG("%lu", connections.size());
 
-      if (connections_.size() < 2) {
+      if (connections.size() < 2) {
       do_accept();
       } else {
-      int player1_id = connections_[0].second;
-      int player2_id = connections_[1].second;
-      for (auto& connection : connections_) {
+      int player1_id = connections[0].second;
+      int player2_id = connections[1].second;
+      for (auto& connection : connections) {
       PortableBinaryOutputArchive oarchive(*connection.first);
       oarchive(GameAction::gameStartAction(player1_id, player2_id));
       connection.first->flush();
@@ -99,10 +98,10 @@ void Server::do_accept() {
 void Server::do_game_loop() {
   while (true) {
     vector<GameAction> actions;
-    mut_.lock();
-    actions.swap(game_actions_);
-    mut_.unlock();
-    for (auto& connection : connections_) {
+    mut.lock();
+    actions.swap(game_actions);
+    mut.unlock();
+    for (auto& connection : connections) {
       PortableBinaryOutputArchive oarchive(*connection.first);
       oarchive(actions);
       connection.first->flush();
