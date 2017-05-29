@@ -1,5 +1,6 @@
 #include <typeinfo>
 
+#include "AILevel.h"
 #include "Client.h"
 #include "Level.h"
 #include "Rhyno.h"
@@ -47,7 +48,7 @@ bool Rhyno::init() {
         // Check to switch to the level
         auto spritecache = cocos2d::SpriteFrameCache::getInstance();
         spritecache->addSpriteFramesWithFile("images/textures.plist");
-        Level* level1 = Level::createWithMap("images/track-2.tmx");
+        Level* level1 = AILevel::createWithMap("images/track-2.tmx");
         level1->loadLayers();
         level1->loadObjects();
 

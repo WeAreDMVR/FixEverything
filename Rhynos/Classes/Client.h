@@ -4,49 +4,41 @@
 #include "asio.hpp"
 #include "cocos2d.h"
 
-#include "cereal/archives/portable_binary.hpp"
-#include "cereal/types/vector.hpp"
+#include "GameAction.h"
 
 #include <cstdlib>
 #include <string>
+#include <vector>
 
 using asio::ip::tcp;
 
 class Client {
- public:
-  Client() {}
+  public:
+    Client() {}
 
-  Client(const std::string &host) { connect(host); }
+    Client(const std::string &host) { connect(host); }
 
-  bool is_open() const;
-  void connect(const std::string &host);
+    bool is_open() const;
+    bool connect(const std::string &host);
 
-  template <typename T>
-  void write(const T &request) {
-    cereal::PortableBinaryOutputArchive oarchive(iostream);
-    oarchive(request);
-  }
+    void write(
+        const std::vector<cocos2d::EventKeyboard::KeyCode> keys_pressed);
 
-  template <typename T>
-  void read(T *reply) {
-    cereal::PortableBinaryInputArchive iarchive(iostream);
-    iarchive(*reply);
-  }
+    void read(GameAction *game_action);
+    void read(std::vector<GameAction> *game_actions);
 
- private:
-  tcp::iostream iostream;
+  private:
+    tcp::iostream iostream_;
 };
 
 class ClientScene : public cocos2d::Scene {
- public:
-  virtual bool init() override;
+  public:
+    virtual bool init() override;
 
-  CREATE_FUNC(ClientScene);
+    CREATE_FUNC(ClientScene);
 
-  void update(float delta) override;
-
- private:
-  ClientScene() {}
+  private:
+    ClientScene() {}
 };
 
 #endif  // _CLIENT_H_

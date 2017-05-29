@@ -1,5 +1,7 @@
-#include "KeyboardPoller.h"
 #include "Level.h"
+
+#include "KeyboardPoller.h"
+#include "World.h"
 
 #include "cocos2d.h"
 
@@ -11,6 +13,7 @@ using namespace cocos2d;
 
 using std::max;
 using std::min;
+using std::runtime_error;
 using std::string;
 using std::to_string;
 using std::vector;
@@ -20,32 +23,18 @@ static const Size mapSize(40.0, 12.0);
 static const Size worldSize(tileSize.width* mapSize.width,
                             tileSize.height* mapSize.height);
 
-Level::Level() {}
-
-Level* Level::createWithMap(const string& tmxFile) {
-  Level* ret = new (std::nothrow) Level();
+Level::Level(const string& tmxFile) {
   TMXTiledMap* map = TMXTiledMap::create(tmxFile);
   b2World* world = World::init();
-  if (ret && map && ret->init()) {
-    ret->_map = map;
-    ret->_world = world;
-    ret->autorelease();
-    ret->scheduleUpdate();
-    KeyboardPoller* layer = KeyboardPoller::create();
-    ret->keyPoll = layer;
-    ret->addChild(layer);
-    ret->addChild(map);
-    return ret;
-  } else {
-    return nullptr;
-  }
-}
-
-Level* Level::createNetworkedWithMap(const string& tmxFile,
-                                     const string& host) {
-  Level* ret = createWithMap(tmxFile);
-  ret->_client.connect(host);
-  return ret;
+  init();
+  _map = map;
+  _world = world;
+  autorelease();
+  scheduleUpdate();
+  KeyboardPoller* layer = KeyboardPoller::create();
+  keyPoll = layer;
+  addChild(layer);
+  addChild(map);
 }
 
 void Level::loadLayers() {
@@ -144,14 +133,14 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
     // create Player
     Player* player = new Player(sprite);
     player->setProperties(&properties);
-    this->_players["localhost"] = player;
+    addPlayer(className, player);
     object = player;
 
   } else if (className == "AI") {
     // Create an AI
     AI* ai = new AI(sprite);
     ai->setProperties(&properties);
-    this->_players["ai"] = ai;
+    addPlayer(className, ai);
     object = ai;
   } else {
     // create pSprite
@@ -205,9 +194,12 @@ void Level::update(float dt) {
   while (frameTime > TimeStep) {
     // Check inputs
     this->handleInput();
+    this->extraUpdates();
 
-    // Have to cast AI to player cuz its in a list of players
-    (static_cast<AI*>(this->_players["ai"]))->move();
+    if (this->_players.count("ai") > 0) {
+      // Have to cast AI to player cuz its in a list of players
+      (static_cast<AI*>(this->_players["ai"]))->move();
+    }
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;
@@ -222,77 +214,15 @@ void Level::update(float dt) {
   }
 
   // Update Players
-  this->_players["localhost"]->updateSprite();
-  this->_players["ai"]->updateSprite();
+  for (auto player : this->_players) {
+    player.second->updateSprite();
+  }
 
-  const Vec2& rhynoPos = this->_players["localhost"]->getCurrentPosition();
+  const Vec2& rhynoPos = this->_localPlayer->getCurrentPosition();
   const Size& winSize = Director::getInstance()->getWinSizeInPixels();
   float camera_x = min(worldSize.width - (winSize.width / 2), rhynoPos.x);
   camera_x = max(camera_x, winSize.width / 2);
   float camera_y = min(worldSize.height - (winSize.height / 2), rhynoPos.y);
   camera_y = max(camera_y, winSize.height / 2);
   Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
-}
-
-void Level::handleInput() {
-  vector<EventKeyboard::KeyCode> keys_pressed;
-  // Arrows
-  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
-    CCLOG("right");
-
-    if (isNetworked()) {
-      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_RIGHT_ARROW);
-    } else {
-      this->_players["localhost"]->applyMoveRight();
-    }
-  }
-  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-    CCLOG("left");
-
-    if (isNetworked()) {
-      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_LEFT_ARROW);
-    } else {
-      this->_players["localhost"]->applyMoveLeft();
-    }
-  }
-  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
-    CCLOG("up");
-
-    if (isNetworked()) {
-      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_SPACE);
-    } else {
-      this->_players["localhost"]->applyJump();
-    }
-  }
-  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_1)) {
-    CCLOG("1");
-
-    if (isNetworked()) {
-      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_1);
-    } else {
-      this->_players["localhost"]->setLayer(1);
-    }
-  }
-  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_2)) {
-    CCLOG("2");
-
-    if (isNetworked()) {
-      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_2);
-    } else {
-      this->_players["localhost"]->setLayer(2);
-    }
-  }
-  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_3)) {
-    CCLOG("3");
-
-    if (isNetworked()) {
-      keys_pressed.push_back(EventKeyboard::KeyCode::KEY_3);
-    } else {
-      this->_players["localhost"]->setLayer(3);
-    }
-  }
-
-  if (isNetworked() && !keys_pressed.empty()) {
-    _client.write(keys_pressed);
-  }
 }
