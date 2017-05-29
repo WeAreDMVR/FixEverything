@@ -10,7 +10,6 @@
 #include <cstdlib>
 #include <iostream>
 #include <memory>
-#include <unordered_set>
 #include <utility>
 #include <vector>
 
@@ -23,7 +22,6 @@ using std::make_pair;
 using std::make_shared;
 using std::move;
 using std::shared_ptr;
-using std::unordered_set;
 using std::vector;
 
 static int next_session_id = 1;
@@ -39,7 +37,7 @@ void Session::start() {
 
 void Session::do_read() {
   while (true) {
-    unordered_set<EventKeyboard::KeyCode> keys_pressed;
+    vector<EventKeyboard::KeyCode> keys_pressed;
     PortableBinaryInputArchive iarchive(*iostream_);
     iarchive(keys_pressed);
     for (const EventKeyboard::KeyCode code : keys_pressed) {
@@ -79,22 +77,22 @@ void Server::do_accept() {
   connections_.push_back(make_pair(iostream, session_id));
   acceptor_.async_accept(
       *iostream->rdbuf(), [this, iostream, session_id](error_code ec) {
-        if (!ec) {
-          make_shared<Session>(iostream, this, session_id)->start();
-        }
+      if (!ec) {
+      make_shared<Session>(iostream, this, session_id)->start();
+      }
 
-        if (connections_.size() < 2) {
-          do_accept();
-        } else {
-          int player1_id = connections_[0].second;
-          int player2_id = connections_[1].second;
-          for (auto& connection : connections_) {
-            PortableBinaryOutputArchive oarchive(*connection.first);
-            oarchive(GameAction::gameStartAction(player1_id, player2_id));
-            connection.first->flush();
-          }
-          do_game_loop();
-        }
+      if (connections_.size() < 2) {
+      do_accept();
+      } else {
+      int player1_id = connections_[0].second;
+      int player2_id = connections_[1].second;
+      for (auto& connection : connections_) {
+      PortableBinaryOutputArchive oarchive(*connection.first);
+      oarchive(GameAction::gameStartAction(player1_id, player2_id));
+      connection.first->flush();
+      }
+      do_game_loop();
+      }
       });
 }
 
@@ -122,12 +120,12 @@ bool ServerScene::init() {
 
   // create and initialize a label
   auto label =
-      Label::createWithTTF("Server is running", "fonts/Marker Felt.ttf", 24);
+    Label::createWithTTF("Server is running", "fonts/Marker Felt.ttf", 24);
 
   // position the label on the center of the screen
   label->setPosition(
       Vec2(origin.x + visibleSize.width / 2,
-           origin.y + visibleSize.height - label->getContentSize().height));
+        origin.y + visibleSize.height - label->getContentSize().height));
 
   // add the label as a child to this layer
   this->addChild(label, 1);

@@ -4,7 +4,6 @@
 
 #include <stdexcept>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 using namespace cocos2d;
@@ -12,11 +11,10 @@ using namespace cocos2d;
 using std::runtime_error;
 using std::string;
 using std::to_string;
-using std::unordered_set;
 using std::vector;
 
 ClientLevel* ClientLevel::createNetworkedWithMap(const string& tmxFile,
-                                                 const string& host) {
+    const string& host) {
   ClientLevel* ret = new ClientLevel(tmxFile);
   GameAction game_action;
   if (!ret->_client.connect(host)) {
@@ -32,38 +30,38 @@ ClientLevel* ClientLevel::createNetworkedWithMap(const string& tmxFile,
     ret->_client.read(&game_action);
   } while (game_action.type != GameAction::Type::GAME_START);
   ret->_otherPlayerId = game_action.player_id == ret->_localPlayerId
-                            ? game_action.other_player_id
-                            : game_action.player_id;
+    ? game_action.other_player_id
+    : game_action.player_id;
   CCLOG("Two players have connected");
   return ret;
 }
 
 void ClientLevel::handleInput() {
-  unordered_set<EventKeyboard::KeyCode> keys_pressed;
+  vector<EventKeyboard::KeyCode> keys_pressed;
   // Arrows
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
     CCLOG("right");
-    keys_pressed.insert(EventKeyboard::KeyCode::KEY_RIGHT_ARROW);
+    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_RIGHT_ARROW);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
     CCLOG("left");
-    keys_pressed.insert(EventKeyboard::KeyCode::KEY_LEFT_ARROW);
+    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_LEFT_ARROW);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
     CCLOG("up");
-    keys_pressed.insert(EventKeyboard::KeyCode::KEY_SPACE);
+    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_SPACE);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_1)) {
     CCLOG("1");
-    keys_pressed.insert(EventKeyboard::KeyCode::KEY_1);
+    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_1);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_2)) {
     CCLOG("2");
-    keys_pressed.insert(EventKeyboard::KeyCode::KEY_2);
+    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_2);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_3)) {
     CCLOG("3");
-    keys_pressed.insert(EventKeyboard::KeyCode::KEY_3);
+    keys_pressed.push_back(EventKeyboard::KeyCode::KEY_3);
   }
 
   _client.write(keys_pressed);

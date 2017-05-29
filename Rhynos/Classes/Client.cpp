@@ -15,7 +15,6 @@
 #include <cstring>
 #include <sstream>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 using namespace asio;
@@ -25,7 +24,6 @@ using cocos2d::ui::TextField;
 using std::ostringstream;
 using std::string;
 using std::to_string;
-using std::unordered_set;
 using std::vector;
 
 bool Client::is_open() const { return iostream_.rdbuf()->is_open(); }
@@ -35,7 +33,7 @@ bool Client::connect(const string& host) {
   return static_cast<bool>(iostream_);
 }
 
-void Client::write(const unordered_set<EventKeyboard::KeyCode> keys_pressed) {
+void Client::write(const vector<EventKeyboard::KeyCode> keys_pressed) {
   cereal::PortableBinaryOutputArchive oarchive(iostream_);
   oarchive(keys_pressed);
   iostream_.flush();
@@ -66,36 +64,36 @@ bool ClientScene::init() {
 
   // create and initialize a label
   auto host_field =
-      TextField::create("Enter the hostname or ip address of the server",
-                        "fonts/Marker Felt.ttf", 30);
+    TextField::create("Enter the hostname or ip address of the server",
+        "fonts/Marker Felt.ttf", 30);
 
   // position the label on the center of the screen
   host_field->setPosition(Vec2(
-      origin.x + visibleSize.width / 2,
-      origin.y + visibleSize.height - host_field->getContentSize().height));
+        origin.x + visibleSize.width / 2,
+        origin.y + visibleSize.height - host_field->getContentSize().height));
 
   auto keyListener = EventListenerKeyboard::create();
   keyListener->onKeyPressed = [=](EventKeyboard::KeyCode keyCode,
-                                  Event* event) {
+      Event* event) {
     switch (keyCode) {
       case EventKeyboard::KeyCode::KEY_ENTER: {
-        auto spritecache = cocos2d::SpriteFrameCache::getInstance();
-        spritecache->addSpriteFramesWithFile("images/textures.plist");
-        Level* level1 = ClientLevel::createNetworkedWithMap(
-            "images/track-2-noai.tmx", host_field->getString());
-        level1->loadLayers();
-        level1->loadObjects();
+                                                auto spritecache = cocos2d::SpriteFrameCache::getInstance();
+                                                spritecache->addSpriteFramesWithFile("images/textures.plist");
+                                                Level* level1 = ClientLevel::createNetworkedWithMap(
+                                                    "images/track-2-noai.tmx", host_field->getString());
+                                                level1->loadLayers();
+                                                level1->loadObjects();
 
-        Director::getInstance()->pushScene(level1);
-        break;
-      }
+                                                Director::getInstance()->pushScene(level1);
+                                                break;
+                                              }
       default:
-        break;
+                                              break;
     }
   };
 
   this->_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener,
-                                                                 this);
+      this);
 
   // add the label as a child to this layer
   this->addChild(host_field, 1);

@@ -8,38 +8,37 @@
 
 #include <cstdlib>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 using asio::ip::tcp;
 
 class Client {
- public:
-  Client() {}
+  public:
+    Client() {}
 
-  Client(const std::string &host) { connect(host); }
+    Client(const std::string &host) { connect(host); }
 
-  bool is_open() const;
-  bool connect(const std::string &host);
+    bool is_open() const;
+    bool connect(const std::string &host);
 
-  void write(
-      const std::unordered_set<cocos2d::EventKeyboard::KeyCode> keys_pressed);
+    void write(
+        const std::vector<cocos2d::EventKeyboard::KeyCode> keys_pressed);
 
-  void read(GameAction *game_action);
-  void read(std::vector<GameAction> *game_actions);
+    void read(GameAction *game_action);
+    void read(std::vector<GameAction> *game_actions);
 
- private:
-  tcp::iostream iostream_;
+  private:
+    tcp::iostream iostream_;
 };
 
 class ClientScene : public cocos2d::Scene {
- public:
-  virtual bool init() override;
+  public:
+    virtual bool init() override;
 
-  CREATE_FUNC(ClientScene);
+    CREATE_FUNC(ClientScene);
 
- private:
-  ClientScene() {}
+  private:
+    ClientScene() {}
 };
 
 #endif  // _CLIENT_H_
