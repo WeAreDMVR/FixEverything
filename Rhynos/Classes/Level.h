@@ -28,7 +28,6 @@ class Level : public cocos2d::Scene {
   pSprite* addObject(const std::string& className,
                      const cocos2d::ValueMap& properties);
   double getCurrentTime();
-  void handleInput();
   bool didWin(float x, float y);
 
  protected:
