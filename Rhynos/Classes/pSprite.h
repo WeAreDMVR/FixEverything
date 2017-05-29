@@ -26,6 +26,13 @@ class pSprite : public cocos2d::Node {
     _xposition = p.x;
     _yposition = p.y;
   }
+    inline void setBodyPosition(cocos2d::Point p) {
+        
+        this->_body->SetTransform(b2Vec2(p.x / PixelsPerMeter, p.y / PixelsPerMeter), 0);
+    }
+    
+    
+    
   inline float getPositionX() { return this->_xposition; }
   inline float getBodyPositionX() { return this->_body->GetPosition().x; }
   inline float getPositionY() { return this->_yposition; }

@@ -5,6 +5,7 @@
 #include "Level.h"
 #include "Rhyno.h"
 #include "Server.h"
+#include "SimpleAudioEngine.h"
 #include "World.h"
 
 #include <Box2D/Box2D.h>
@@ -38,10 +39,14 @@ bool Rhyno::init() {
   }
   const auto& visibleSize = Director::getInstance()->getVisibleSize();
   const Vec2& origin = Director::getInstance()->getVisibleOrigin();
+  auto audioSource = CocosDenshion::SimpleAudioEngine::getInstance();
+  audioSource->preloadBackgroundMusic("audio/menu_theme.mp3");
+  audioSource->preloadBackgroundMusic("audio/level_theme.mp3");
 
   // Set up the keyboard listener
   auto keyListener = cocos2d::EventListenerKeyboard::create();
-  keyListener->onKeyPressed = [](EventKeyboard::KeyCode keyCode, Event* event) {
+  keyListener->onKeyPressed = [audioSource](EventKeyboard::KeyCode keyCode,
+                                            Event* event) {
     switch (keyCode) {
       // Checks which key is pressed; if it is enter, start the game.
       case EventKeyboard::KeyCode::KEY_ENTER: {
@@ -51,6 +56,9 @@ bool Rhyno::init() {
         Level* level1 = AILevel::createWithMap("images/track-2.tmx");
         level1->loadLayers();
         level1->loadObjects();
+
+        audioSource->pauseBackgroundMusic();
+        audioSource->playBackgroundMusic("audio/level_theme.mp3");
 
         Director::getInstance()->pushScene(level1);
         break;
@@ -101,6 +109,9 @@ bool Rhyno::init() {
   this->addChild(label1, 1);
   this->addChild(label2, 1);
   this->addChild(label3, 1);
+
+  // add background music to the menu screen
+  audioSource->playBackgroundMusic("audio/menu_theme.mp3");
 
   // add "Rhyno" splash screen"
   // auto sprite = Sprite::create("HelloWorld.png");

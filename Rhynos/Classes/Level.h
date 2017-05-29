@@ -21,12 +21,15 @@ class Level : public cocos2d::Scene {
 
   cocos2d::Point positionForTileCoord(const cocos2d::Point& coordinate);
   cocos2d::Point tileCoordForPosition(const cocos2d::Point& position);
+  bool over;
 
  private:
   void createFixtures(cocos2d::TMXLayer* layer);
   pSprite* addObject(const std::string& className,
                      const cocos2d::ValueMap& properties);
   double getCurrentTime();
+  void handleInput();
+  bool didWin(float x, float y);
 
  protected:
   Level(const std::string& tmxFile);
