@@ -2,43 +2,54 @@
 #define _CLIENT_H_
 
 #include "asio.hpp"
+#include "cereal/archives/json.hpp"
 #include "cocos2d.h"
 
+#include "Connection.h"
 #include "GameAction.h"
 
 #include <cstdlib>
+#include <sstream>
 #include <string>
 #include <vector>
 
 using asio::ip::tcp;
 
 class Client {
-  public:
-    Client() {}
+ public:
+  Client() : conn_(new Connection(io_service_)) {}
 
-    Client(const std::string &host) { connect(host); }
+  Client(connection_ptr conn, const std::string& host) : Client() {
+    connect(host);
+  }
 
-    bool is_open() const;
-    bool connect(const std::string &host);
+  bool is_open() const;
+  asio::error_code connect(const std::string& host);
+  bool available();
 
-    void write(
-        const std::vector<cocos2d::EventKeyboard::KeyCode> keys_pressed);
+  template <typename T>
+  void write(const T& t) {
+    conn_->write(t);
+  }
 
-    void read(GameAction *game_action);
-    void read(std::vector<GameAction> *game_actions);
+  template <typename T>
+  void read(T& t) {
+    conn_->read(t);
+  }
 
-  private:
-    tcp::iostream iostream_;
+ private:
+  asio::io_service io_service_;
+  connection_ptr conn_;
 };
 
 class ClientScene : public cocos2d::Scene {
-  public:
-    virtual bool init() override;
+ public:
+  virtual bool init() override;
 
-    CREATE_FUNC(ClientScene);
+  CREATE_FUNC(ClientScene);
 
-  private:
-    ClientScene() {}
+ private:
+  ClientScene() {}
 };
 
 #endif  // _CLIENT_H_

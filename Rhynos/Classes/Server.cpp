@@ -10,9 +10,9 @@
 #include <cstdlib>
 #include <iostream>
 #include <memory>
+#include <thread>
 #include <utility>
 #include <vector>
-#include <thread>
 
 using namespace asio;
 using namespace cereal;
@@ -25,19 +25,11 @@ using std::move;
 using std::shared_ptr;
 using std::vector;
 
-static int next_session_id = 1;
-
-void session(tcp::iostream* iostream, Server* server, const int id) {
-  CCLOG("Sending identification to client %d", id);
-  PortableBinaryOutputArchive oarchive(*iostream);
-  oarchive(GameAction::connectionEstablishedAction(id));
-  iostream->flush();
-  CCLOG("Finished sending identification to client %d", id);
-
+void session(connection_ptr conn, Server* server) {
   while (true) {
     vector<EventKeyboard::KeyCode> keys_pressed;
-    PortableBinaryInputArchive iarchive(*iostream);
-    iarchive(keys_pressed);
+    conn->read(keys_pressed);
+
     for (const EventKeyboard::KeyCode code : keys_pressed) {
       switch (code) {
         case EventKeyboard::KeyCode::KEY_RIGHT_ARROW:
@@ -64,35 +56,41 @@ void session(tcp::iostream* iostream, Server* server, const int id) {
     }
     server->mut.lock();
     server->game_actions.push_back(
-        GameAction::keyPressedAction(keys_pressed, id));
+        GameAction::keyPressedAction(keys_pressed, conn->id()));
     server->mut.unlock();
   }
 }
 
-void Server::do_accept() {
-  tcp::iostream* iostream = new tcp::iostream();
-  int session_id = next_session_id++;
-  connections.push_back(make_pair(iostream, session_id));
-  acceptor.async_accept(
-      *iostream->rdbuf(), [this, iostream, session_id](error_code ec) {
-      if (!ec) {
-      std::thread(session, iostream, this, session_id);
-      }
-      CCLOG("%lu", connections.size());
+void Server::start() {
+  CCLOG("Server is running");
+  do_accept();
+}
 
-      if (connections.size() < 2) {
-      do_accept();
-      } else {
-      int player1_id = connections[0].second;
-      int player2_id = connections[1].second;
-      for (auto& connection : connections) {
-      PortableBinaryOutputArchive oarchive(*connection.first);
-      oarchive(GameAction::gameStartAction(player1_id, player2_id));
-      connection.first->flush();
-      }
-      do_game_loop();
-      }
-      });
+void Server::do_accept() {
+  static const int NUM_PLAYERS = 2;
+  for (int i = 0; i < NUM_PLAYERS; i++) {
+    connection_ptr new_conn(new Connection(acceptor.get_io_service()));
+    error_code ec;
+    acceptor.accept(new_conn->socket(), ec);
+    CCLOG("Accepted new connection");
+    if (ec) {
+      CCLOG(ec.message().c_str());
+      i--;
+    } else {
+      connections.push_back(new_conn);
+      CCLOG("Sending identification to client %d", new_conn->id());
+      new_conn->write(GameAction::connectionEstablishedAction(new_conn->id()));
+      CCLOG("Finished sending identification to client %d", new_conn->id());
+      std::thread(session, new_conn, this).detach();
+    }
+  }
+
+  int player1_id = connections[0]->id();
+  int player2_id = connections[1]->id();
+  for (auto& connection : connections) {
+    connection->write(GameAction::gameStartAction(player1_id, player2_id));
+  }
+  do_game_loop();
 }
 
 void Server::do_game_loop() {
@@ -101,10 +99,10 @@ void Server::do_game_loop() {
     mut.lock();
     actions.swap(game_actions);
     mut.unlock();
-    for (auto& connection : connections) {
-      PortableBinaryOutputArchive oarchive(*connection.first);
-      oarchive(actions);
-      connection.first->flush();
+    if (!actions.empty()) {
+      for (auto connection : connections) {
+        connection->write(actions);
+      }
     }
   }
 }
@@ -119,19 +117,17 @@ bool ServerScene::init() {
 
   // create and initialize a label
   auto label =
-    Label::createWithTTF("Server is running", "fonts/Marker Felt.ttf", 24);
+      Label::createWithTTF("Server is running", "fonts/Marker Felt.ttf", 24);
 
   // position the label on the center of the screen
   label->setPosition(
       Vec2(origin.x + visibleSize.width / 2,
-        origin.y + visibleSize.height - label->getContentSize().height));
+           origin.y + visibleSize.height - label->getContentSize().height));
 
   // add the label as a child to this layer
   this->addChild(label, 1);
 
-  scheduleUpdate();
+  server_.start();
 
   return true;
 }
-
-void ServerScene::update(float dt) { io_service_.run_one(); }

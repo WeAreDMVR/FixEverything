@@ -7,7 +7,8 @@ namespace NetworkingConstants {
 
 static constexpr short PORT = 1337;
 
-enum { network_buffer_length = 1024 };
+// The size of a fixed length header.
+static constexpr short HEADER_LENGTH = 8;
 
 }  // namespace NetworkingConstants
 

@@ -10,7 +10,7 @@ struct GameAction {
   enum class Type { CONNECTION_ESTABLISHED, GAME_START, KEY_PRESSED };
 
   static GameAction gameStartAction(const int player_id,
-      const int other_player_id) {
+                                    const int other_player_id) {
     return GameAction(Type::GAME_START, player_id, other_player_id);
   }
 
@@ -27,25 +27,24 @@ struct GameAction {
   GameAction() {}
 
   template <class Archive>
-    void serialize(Archive &ar) {
-      ar(type, keys_pressed, player_id, other_player_id);
-    }
+  void serialize(Archive &ar) {
+    ar(type, keys_pressed, player_id, other_player_id);
+  }
 
   Type type;
   std::vector<cocos2d::EventKeyboard::KeyCode> keys_pressed;
   int player_id;
   int other_player_id;
 
-  private:
+ private:
   GameAction(const Type type) : type(type) {}
-  GameAction(
-      const Type type,
-      const std::vector<cocos2d::EventKeyboard::KeyCode> &keys_pressed,
-      const int player_id)
-    : type(type), keys_pressed(keys_pressed), player_id(player_id) {}
+  GameAction(const Type type,
+             const std::vector<cocos2d::EventKeyboard::KeyCode> &keys_pressed,
+             const int player_id)
+      : type(type), keys_pressed(keys_pressed), player_id(player_id) {}
   GameAction(const Type type, const int player_id,
-      const int other_player_id = -1)
-    : type(type), player_id(player_id), other_player_id(other_player_id) {}
+             const int other_player_id = -1)
+      : type(type), player_id(player_id), other_player_id(other_player_id) {}
 };
 
 #endif  // _GAME_ACTION_H_
