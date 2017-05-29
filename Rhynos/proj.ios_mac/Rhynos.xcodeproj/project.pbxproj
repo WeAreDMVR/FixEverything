@@ -74,6 +74,10 @@
 		CD2504051EDBC9F900F024A2 /* Client.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD2503F81EDBC6D900F024A2 /* Client.cpp */; };
 		CD2504061EDBC9FD00F024A2 /* Platform.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD2503FB1EDBC6D900F024A2 /* Platform.cpp */; };
 		CD2504071EDBCA0100F024A2 /* Server.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD2503FD1EDBC6D900F024A2 /* Server.cpp */; };
+		CD25040A1EDBCD2A00F024A2 /* AILevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD2504081EDBCD2A00F024A2 /* AILevel.cpp */; };
+		CD25040E1EDBCD3200F024A2 /* ClientLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD25040B1EDBCD3200F024A2 /* ClientLevel.cpp */; };
+		CD25040F1EDBCD4700F024A2 /* ClientLevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD25040B1EDBCD3200F024A2 /* ClientLevel.cpp */; };
+		CD2504101EDBCD4B00F024A2 /* AILevel.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD2504081EDBCD2A00F024A2 /* AILevel.cpp */; };
 		CD7A0C9F1EABD74D0062C56B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C991EABD74D0062C56B /* Player.cpp */; };
 		CD7A0CA01EABD74D0062C56B /* pSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9B1EABD74D0062C56B /* pSprite.cpp */; };
 		CD7A0CA11EABD74D0062C56B /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9D1EABD74D0062C56B /* World.cpp */; };
@@ -199,6 +203,11 @@
 		CD2503FC1EDBC6D900F024A2 /* Platform.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Platform.h; sourceTree = "<group>"; };
 		CD2503FD1EDBC6D900F024A2 /* Server.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Server.cpp; sourceTree = "<group>"; };
 		CD2503FE1EDBC6D900F024A2 /* Server.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Server.h; sourceTree = "<group>"; };
+		CD2504081EDBCD2A00F024A2 /* AILevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = AILevel.cpp; sourceTree = "<group>"; };
+		CD2504091EDBCD2A00F024A2 /* AILevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AILevel.h; sourceTree = "<group>"; };
+		CD25040B1EDBCD3200F024A2 /* ClientLevel.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ClientLevel.cpp; sourceTree = "<group>"; };
+		CD25040C1EDBCD3200F024A2 /* ClientLevel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ClientLevel.h; sourceTree = "<group>"; };
+		CD25040D1EDBCD3200F024A2 /* GameAction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GameAction.h; sourceTree = "<group>"; };
 		CD7A0C991EABD74D0062C56B /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		CD7A0C9A1EABD74D0062C56B /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		CD7A0C9B1EABD74D0062C56B /* pSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pSprite.cpp; sourceTree = "<group>"; };
@@ -354,6 +363,11 @@
 		46880B8319C43A87006E1F66 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				CD25040B1EDBCD3200F024A2 /* ClientLevel.cpp */,
+				CD25040C1EDBCD3200F024A2 /* ClientLevel.h */,
+				CD25040D1EDBCD3200F024A2 /* GameAction.h */,
+				CD2504081EDBCD2A00F024A2 /* AILevel.cpp */,
+				CD2504091EDBCD2A00F024A2 /* AILevel.h */,
 				CD2503F51EDBC6D900F024A2 /* asio */,
 				CD2503F61EDBC6D900F024A2 /* asio.hpp */,
 				CD2503F71EDBC6D900F024A2 /* cereal */,
@@ -594,7 +608,9 @@
 				503AE10217EB989F00D1A890 /* RootViewController.mm in Sources */,
 				CD2504031EDBC6D900F024A2 /* Server.cpp in Sources */,
 				CD2504011EDBC6D900F024A2 /* Client.cpp in Sources */,
+				CD25040A1EDBCD2A00F024A2 /* AILevel.cpp in Sources */,
 				CD7A0CA01EABD74D0062C56B /* pSprite.cpp in Sources */,
+				CD25040E1EDBCD3200F024A2 /* ClientLevel.cpp in Sources */,
 				CD2504021EDBC6D900F024A2 /* Platform.cpp in Sources */,
 				503AE10117EB989F00D1A890 /* main.m in Sources */,
 			);
@@ -604,6 +620,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD2504101EDBCD4B00F024A2 /* AILevel.cpp in Sources */,
+				CD25040F1EDBCD4700F024A2 /* ClientLevel.cpp in Sources */,
 				CD2504071EDBCA0100F024A2 /* Server.cpp in Sources */,
 				CD2504061EDBC9FD00F024A2 /* Platform.cpp in Sources */,
 				CD2504051EDBC9F900F024A2 /* Client.cpp in Sources */,
