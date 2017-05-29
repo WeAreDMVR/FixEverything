@@ -24,6 +24,7 @@ class Level : public cocos2d::Scene {
 
   cocos2d::Point positionForTileCoord(const cocos2d::Point& coordinate);
   cocos2d::Point tileCoordForPosition(const cocos2d::Point& position);
+    bool over;
     
  private:
   void createFixtures(cocos2d::TMXLayer* layer);
@@ -31,6 +32,7 @@ class Level : public cocos2d::Scene {
                      const cocos2d::ValueMap& properties);
   double getCurrentTime();
   void handleInput();
+    bool didWin(float x, float y);
     
     
 

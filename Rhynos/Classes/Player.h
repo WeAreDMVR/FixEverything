@@ -25,6 +25,7 @@ class Player : public pSprite {
   bool isDestructable();
   bool isDead();
   bool isOffMap();
+    bool checkWin(cocos2d::Point p);
     
   int hurtBy(int damage);
   int healBy(int health);

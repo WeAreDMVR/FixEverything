@@ -59,7 +59,12 @@ inline int Player::getPlayerNum() {
 bool Player::isFloating() { return this->_floating; }
 bool Player::isDead() { return this->_health == 0; }
 bool Player::isOffMap() { return this->getPositionY() < 0.0; }
-
+bool Player::checkWin(Point p) {
+    if (this->getPositionX() > p.x) {
+        return true;
+    }
+    return false;
+}
 
 bool Player::isDestructable() { return this->_destructable; }
 

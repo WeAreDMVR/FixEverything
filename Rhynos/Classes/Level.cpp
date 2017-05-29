@@ -42,6 +42,7 @@ Level* Level::createWithMap(const string& tmxFile) {
 void Level::loadLayers() {
   // Physics Layers handling
   // isolate the "metax" layers from the map
+          this->over = false;
   const string& meta = "meta";
   for (int i = 1;; i++) {
     auto layer = this->_map->getLayer(meta + to_string(i));
@@ -231,11 +232,50 @@ void Level::update(float dt) {
   float camera_y = min(worldSize.height - (winSize.height / 2), rhynoPos.y);
   camera_y = max(camera_y, winSize.height / 2);
   Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
+
+    if (didWin(camera_x, camera_y)) {
+        // Make the game done
+        //delete this;
+    }
 }
 
+// Write function where if the player is localhost then update their UI
+// http://www.cocos2d-x.org/wiki/How_To_Create_A_HUD
 
+
+
+
+bool Level::didWin(float x, float y) {
+    // Currently only doing for AI and player
+    bool playerWin = this->_players["localhost"]->checkWin(Point(2000, 500));
+    bool AIWin = (static_cast<AI*> (this->_players["ai"]))->atTarget();
+    
+    const char* msg;
+    if (playerWin && !AIWin) {
+        msg = "Player 1 wins!";
+        this->over = true;
+        //MessageBox("Victory!", "Player 1 wins!");
+    } else if (AIWin && !playerWin) {
+        msg = "The AI wins!";
+        this->over = true;
+        //MessageBox("Defeat!", "The AI wins!");
+    } else {
+        return false;
+    }
+    
+    if (this->over) {
+        auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 24);
+        CCLOG("OK WE WON");
+    // position the label on the center of the screen
+        label->setPosition(
+                       Vec2(x, y));
+        this->addChild(label, 1);
+    }
+    return true;
+}
 
 void Level::handleInput() {
+
   // Arrows
   if (this->keyPoll->isKeyPressed(
           cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
