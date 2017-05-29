@@ -13,7 +13,7 @@ class AI : public Player {
         AI(Sprite* player);
 
         int atTarget();
-        int moveOther(Player::Player* play);
+        int moveOther(Player* play);
         int move();
 };
 #endif /* AI_hpp */
