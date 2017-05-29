@@ -66,6 +66,8 @@
 		BF1C47F01293687400B63C5D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BF1C47EA1293683800B63C5D /* QuartzCore.framework */; };
 		CD0F1F121EABCC9000B6B63D /* Rhyno.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0F1F101EABCC9000B6B63D /* Rhyno.cpp */; };
 		CD0F1F131EABCC9800B6B63D /* Rhyno.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD0F1F101EABCC9000B6B63D /* Rhyno.cpp */; };
+		CD2503571EDBBB6500F024A2 /* audio in Resources */ = {isa = PBXBuildFile; fileRef = CD2503561EDBBB6500F024A2 /* audio */; };
+		CD2503581EDBBBAA00F024A2 /* audio in Resources */ = {isa = PBXBuildFile; fileRef = CD2503561EDBBB6500F024A2 /* audio */; };
 		CD7A0C9F1EABD74D0062C56B /* Player.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C991EABD74D0062C56B /* Player.cpp */; };
 		CD7A0CA01EABD74D0062C56B /* pSprite.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9B1EABD74D0062C56B /* pSprite.cpp */; };
 		CD7A0CA11EABD74D0062C56B /* World.cpp in Sources */ = {isa = PBXBuildFile; fileRef = CD7A0C9D1EABD74D0062C56B /* World.cpp */; };
@@ -181,6 +183,7 @@
 		BF1C47EA1293683800B63C5D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		CD0F1F101EABCC9000B6B63D /* Rhyno.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Rhyno.cpp; sourceTree = "<group>"; };
 		CD0F1F111EABCC9000B6B63D /* Rhyno.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Rhyno.h; sourceTree = "<group>"; };
+		CD2503561EDBBB6500F024A2 /* audio */ = {isa = PBXFileReference; lastKnownFileType = folder; path = audio; sourceTree = "<group>"; };
 		CD7A0C991EABD74D0062C56B /* Player.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Player.cpp; sourceTree = "<group>"; };
 		CD7A0C9A1EABD74D0062C56B /* Player.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Player.h; sourceTree = "<group>"; };
 		CD7A0C9B1EABD74D0062C56B /* pSprite.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = pSprite.cpp; sourceTree = "<group>"; };
@@ -322,6 +325,7 @@
 		46880B7519C43A67006E1F66 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				CD2503561EDBBB6500F024A2 /* audio */,
 				CDFBA3F51EAFC1B10082DC3D /* images */,
 				521A8EA819F11F5000D177D7 /* fonts */,
 				3EACC98E19EE6D4300EB3C5E /* res */,
@@ -523,6 +527,7 @@
 				50EF62A217ECD613001EB2F8 /* Icon-29.png in Resources */,
 				50EF629617ECD46A001EB2F8 /* Icon-40.png in Resources */,
 				5087E78217EB970100C73F5D /* Icon-144.png in Resources */,
+				CD2503571EDBBB6500F024A2 /* audio in Resources */,
 				3EACC98F19EE6D4300EB3C5E /* res in Resources */,
 				50EF629817ECD46A001EB2F8 /* Icon-80.png in Resources */,
 				5087E78417EB970100C73F5D /* Icon-57.png in Resources */,
@@ -537,6 +542,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				CD2503581EDBBBAA00F024A2 /* audio in Resources */,
 				CDFBA3F71EAFC2280082DC3D /* images in Resources */,
 				46880B8219C43A67006E1F66 /* HelloWorld.png in Resources */,
 				503AE0F817EB97AB00D1A890 /* Icon.icns in Resources */,
