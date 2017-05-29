@@ -43,7 +43,7 @@ class ClientScene : public cocos2d::Scene {
 
   CREATE_FUNC(ClientScene);
 
-  void update(float delta);
+  void update(float delta) override;
 
  private:
   ClientScene() {}

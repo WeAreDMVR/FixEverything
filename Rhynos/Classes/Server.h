@@ -44,7 +44,7 @@ class ServerScene : public cocos2d::Scene {
 
   CREATE_FUNC(ServerScene);
 
-  void update(float delta);
+  void update(float delta) override;
 
  private:
   ServerScene();
