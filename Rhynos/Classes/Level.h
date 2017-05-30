@@ -1,43 +1,43 @@
 #ifndef _LEVEL_H_
 #define _LEVEL_H_
 
-#include "Player.h"
-#include "KeyboardPoller.h"
 #include "AI.hpp"
+#include "Client.h"
+#include "KeyboardPoller.h"
+#include "Player.h"
+
 #include "cocos2d.h"
 
 #include <chrono>
+#include <cstdlib>
 #include <string>
 #include <vector>
-#include <cstdlib>
-
-
 
 class Level : public cocos2d::Scene {
  public:
-  Level();
-
-  static Level* createWithMap(const std::string& tmxFile);
   void loadLayers();
   void loadObjects();
-  void update(float dt) override;
+  virtual void update(float dt) override;
 
   cocos2d::Point positionForTileCoord(const cocos2d::Point& coordinate);
   cocos2d::Point tileCoordForPosition(const cocos2d::Point& position);
-    bool over;
-    
+  bool over;
+
  private:
   void createFixtures(cocos2d::TMXLayer* layer);
   pSprite* addObject(const std::string& className,
                      const cocos2d::ValueMap& properties);
   double getCurrentTime();
-  void handleInput();
-    bool didWin(float x, float y);
-    
-    
-
+  bool didWin(float x, float y);
 
  protected:
+  Level(const std::string& tmxFile);
+
+  virtual void handleInput() = 0;
+  virtual void addPlayer(const std::string& className, Player* player) = 0;
+  virtual void extraUpdates() {}
+
+  Player* _localPlayer;
   b2World* _world;
   const cocos2d::TMXTiledMap* _map;
   std::vector<pSprite*> _sprites;

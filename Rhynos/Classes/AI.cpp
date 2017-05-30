@@ -1,15 +1,13 @@
+#include <cstdlib>
 #include "AI.hpp"
 #include "Player.h"
-#include <cstdlib>
 using namespace cocos2d;
-
 
 AI::AI(Sprite* sprite) : Player(sprite) {
   this->target = Point(800, 20);
   this->failProb = 0.1;
   this->type = "AI";
 }
-
 
 int AI::atTarget() {
   // Only check x-coordinate for checkpoint for now
@@ -23,7 +21,7 @@ int AI::atTarget() {
 
 int AI::move() {
   int val = std::rand();
-  float prob = val / (float) RAND_MAX;
+  float prob = val / (float)RAND_MAX;
 
   // Check if we made it boys
   if (this->atTarget()) {
@@ -42,6 +40,4 @@ int AI::move() {
   }
 
   return 1;
-
 }
-

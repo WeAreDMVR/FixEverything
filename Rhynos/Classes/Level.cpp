@@ -1,48 +1,46 @@
-#include "KeyboardPoller.h"
 #include "Level.h"
+
+#include "KeyboardPoller.h"
+#include "World.h"
 
 #include "cocos2d.h"
 
 #include <algorithm>
 #include <string>
+#include <vector>
 
 using namespace cocos2d;
 
 using std::max;
 using std::min;
+using std::runtime_error;
 using std::string;
 using std::to_string;
+using std::vector;
 
 static const Size tileSize(75.0, 75.0);
 static const Size mapSize(40.0, 12.0);
 static const Size worldSize(tileSize.width* mapSize.width,
                             tileSize.height* mapSize.height);
 
-Level::Level() {}
-
-Level* Level::createWithMap(const string& tmxFile) {
-  Level* ret = new (std::nothrow) Level();
+Level::Level(const string& tmxFile) {
   TMXTiledMap* map = TMXTiledMap::create(tmxFile);
   b2World* world = World::init();
-  if (ret && map && ret->init()) {
-    ret->_map = map;
-    ret->_world = world;
-    ret->autorelease();
-    ret->scheduleUpdate();
-    KeyboardPoller* layer = KeyboardPoller::create();
-    ret->keyPoll = layer;
-    ret->addChild(layer);
-    ret->addChild(map);
-    return ret;
-  } else {
-    return nullptr;
-  }
+  init();
+  _map = map;
+  _world = world;
+  autorelease();
+  scheduleUpdate();
+  KeyboardPoller* layer = KeyboardPoller::create();
+  keyPoll = layer;
+  addChild(layer);
+  addChild(map);
 }
 
 void Level::loadLayers() {
   // Physics Layers handling
   // isolate the "metax" layers from the map
-          this->over = false;
+  this->over = false;
   const string& meta = "meta";
   for (int i = 1;; i++) {
     auto layer = this->_map->getLayer(meta + to_string(i));
@@ -82,10 +80,10 @@ void Level::createFixtures(TMXLayer* layer) {
       Sprite* tileSprite = layer->getTileAt(Point(x, y));
       if (tileSprite) {
         // We work with the centers of all the objects
-        tileSprite->setAnchorPoint(Point(0.5,0.5));
+        tileSprite->setAnchorPoint(Point(0.5, 0.5));
         // get properties of the tile
         const int tileGID = layer->getTileGIDAt(Point(x, y));
-        
+
         const cocos2d::ValueMap properties =
             this->_map->getPropertiesForGID(tileGID).asValueMap();
         cocos2d::ValueMap* ptr_properties = new ValueMap(properties);
@@ -137,14 +135,14 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
     // create Player
     Player* player = new Player(sprite);
     player->setProperties(&properties);
-    this->_players["localhost"] = player;
+    addPlayer(className, player);
     object = player;
 
   } else if (className == "AI") {
     // Create an AI
     AI* ai = new AI(sprite);
     ai->setProperties(&properties);
-    this->_players["ai"] = ai;
+    addPlayer(className, ai);
     object = ai;
   } else {
     // create pSprite
@@ -165,7 +163,8 @@ Point Level::positionForTileCoord(const Point& coordinate) {
   // We return the center of each tile
   const float x = coordinate.x * tileSize.width + (PixelsPerMeter / 2.0);
   const float y = (mapSize.height * tileSize.height) -
-  ((coordinate.y + 1) * tileSize.height) + (PixelsPerMeter / 2.0);
+                  ((coordinate.y + 1) * tileSize.height) +
+                  (PixelsPerMeter / 2.0);
   return Point(x, y);
 }
 
@@ -187,55 +186,55 @@ double Level::getCurrentTime() {
 }
 
 void Level::update(float dt) {
-  const double currentTime = this->getCurrentTime();
-  if (!this->_lastTime) {
-    this->_lastTime = currentTime;
-  }
-
-  double frameTime = currentTime - this->_lastTime;
-
-  while (frameTime > TimeStep) {
-    // Check inputs
-    if (this->_players["localhost"]->isOffMap()) {
-        cocos2d::Point original = this->_players["localhost"]->getDefaultPosition();
-        CCLOG("Got default position");
-        this->_players["localhost"]->setBodyPosition(positionForTileCoord(original));
-        CCLOG("Set curr pos to def pos");
+    const double currentTime = this->getCurrentTime();
+    if (!this->_lastTime) {
+        this->_lastTime = currentTime;
     }
-      
-      
-    this->handleInput();
     
-    // Have to cast AI to player cuz its in a list of players
-    (static_cast<AI*> (this->_players["ai"]))->move();
-    // Step Physics
-    World::step(this->_world);
-    frameTime -= TimeStep;
-    this->_lastTime += TimeStep;
-  }
-
-  // Update non-player sprites
-  for (pSprite* p : this->_sprites) {
-    // Not positive that all of these things actually have
-    // sprites/bodies.
-    // p->updateSprite();
-  }
-
-  // Update Players
-  this->_players["localhost"]->updateSprite();
-  this->_players["ai"]->updateSprite();
-
-  const Vec2& rhynoPos = this->_players["localhost"]->getCurrentPosition();
-  const Size& winSize = Director::getInstance()->getWinSizeInPixels();
+    double frameTime = currentTime - this->_lastTime;
     
-  float camera_x = min(worldSize.width - (winSize.width / 2), rhynoPos.x);
-  camera_x = max(camera_x, winSize.width / 2);
+    while (frameTime > TimeStep) {
+        // Check inputs
+        if (this->_players["localhost"]->isOffMap()) {
+            cocos2d::Point original = this->_players["localhost"]->getDefaultPosition();
+            CCLOG("Got default position");
+            this->_players["localhost"]->setBodyPosition(positionForTileCoord(original));
+            CCLOG("Set curr pos to def pos");
+        }
+        
+        
+        this->handleInput();
+        
+        // Have to cast AI to player cuz its in a list of players
+        (static_cast<AI*> (this->_players["ai"]))->move();
+        // Step Physics
+        World::step(this->_world);
+        frameTime -= TimeStep;
+        this->_lastTime += TimeStep;
+    }
     
-  float camera_y = min(worldSize.height - (winSize.height / 2), rhynoPos.y);
-  camera_y = max(camera_y, winSize.height / 2);
+    // Update non-player sprites
+    for (pSprite* p : this->_sprites) {
+        // Not positive that all of these things actually have
+        // sprites/bodies.
+        // p->updateSprite();
+    }
     
-  Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
-
+    // Update Players
+    this->_players["localhost"]->updateSprite();
+    this->_players["ai"]->updateSprite();
+    
+    const Vec2& rhynoPos = this->_players["localhost"]->getCurrentPosition();
+    const Size& winSize = Director::getInstance()->getWinSizeInPixels();
+    
+    float camera_x = min(worldSize.width - (winSize.width / 2), rhynoPos.x);
+    camera_x = max(camera_x, winSize.width / 2);
+    
+    float camera_y = min(worldSize.height - (winSize.height / 2), rhynoPos.y);
+    camera_y = max(camera_y, winSize.height / 2);
+    
+    Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
+    
     if (didWin(camera_x, camera_y)) {
         if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_ENTER)) {
             Director::getInstance()->popScene();
@@ -268,7 +267,7 @@ bool Level::didWin(float x, float y) {
     
     if (this->over) {
         auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 48);
-    // position the label on the center of the screen
+        // position the label on the center of the screen
         label->setPosition(Vec2(x, y));
         label->setName("winning");
         this->removeChildByName("winning", true);
@@ -278,36 +277,36 @@ bool Level::didWin(float x, float y) {
 }
 
 void Level::handleInput() {
-
+    
     if (this->over) {
         return;
     }
     
-  // Arrows
-  if (this->keyPoll->isKeyPressed(
-          cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
-    CCLOG("right");
-    this->_players["localhost"]->applyMoveRight();
-  }
-  if (this->keyPoll->isKeyPressed(
-          cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-    CCLOG("left");
-    this->_players["localhost"]->applyMoveLeft();
-  }
-  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
-    CCLOG("up");
-    this->_players["localhost"]->applyJump();
-  }
-  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_1)) {
-    CCLOG("1");
-    this->_players["localhost"]->setLayer(1);
-  }
-  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_2)) {
-    CCLOG("2");
-    this->_players["localhost"]->setLayer(2);
-  }
-  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_3)) {
-    CCLOG("3");
-    this->_players["localhost"]->setLayer(3);
-  }
+    // Arrows
+    if (this->keyPoll->isKeyPressed(
+                                    cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
+        CCLOG("right");
+        this->_players["localhost"]->applyMoveRight();
+    }
+    if (this->keyPoll->isKeyPressed(
+                                    cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
+        CCLOG("left");
+        this->_players["localhost"]->applyMoveLeft();
+    }
+    if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
+        CCLOG("up");
+        this->_players["localhost"]->applyJump();
+    }
+    if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_1)) {
+        CCLOG("1");
+        this->_players["localhost"]->setLayer(1);
+    }
+    if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_2)) {
+        CCLOG("2");
+        this->_players["localhost"]->setLayer(2);
+    }
+    if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_3)) {
+        CCLOG("3");
+        this->_players["localhost"]->setLayer(3);
+    }
 }
