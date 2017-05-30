@@ -132,6 +132,7 @@ file(GLOB_RECURSE GAME_SRC
 
 file(GLOB_RECURSE GAME_HEADERS
   Classes/*.h
+  Classes/*.hpp
   ${PLATFORM_SPECIFIC_HEADERS}
 )
 

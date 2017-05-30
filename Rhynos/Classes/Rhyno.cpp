@@ -1,6 +1,10 @@
 #include <typeinfo>
+
+#include "AILevel.h"
+#include "Client.h"
 #include "Level.h"
 #include "Rhyno.h"
+#include "Server.h"
 #include "SimpleAudioEngine.h"
 #include "World.h"
 
@@ -49,7 +53,7 @@ bool Rhyno::init() {
         // Check to switch to the level
         auto spritecache = cocos2d::SpriteFrameCache::getInstance();
         spritecache->addSpriteFramesWithFile("images/textures.plist");
-        Level* level1 = Level::createWithMap("images/track-2.tmx");
+        Level* level1 = AILevel::createWithMap("images/track-2.tmx");
         level1->loadLayers();
         level1->loadObjects();
 
@@ -57,6 +61,14 @@ bool Rhyno::init() {
         audioSource->playBackgroundMusic("audio/level_theme.mp3");
 
         Director::getInstance()->pushScene(level1);
+        break;
+      }
+      case EventKeyboard::KeyCode::KEY_S: {
+        Director::getInstance()->pushScene(ServerScene::create());
+        break;
+      }
+      case EventKeyboard::KeyCode::KEY_C: {
+        Director::getInstance()->pushScene(ClientScene::create());
         break;
       }
       default:
@@ -73,16 +85,30 @@ bool Rhyno::init() {
   // add a label shows "Rhyno"
   // create and initialize a label
 
-  auto label =
-      Label::createWithTTF("Press Enter to Play", "fonts/Marker Felt.ttf", 24);
+  auto label1 = Label::createWithTTF("Press Enter to play against AI",
+                                     "fonts/Marker Felt.ttf", 24);
+  auto label2 = Label::createWithTTF("Press S to start a server",
+                                     "fonts/Marker Felt.ttf", 24);
+  auto label3 = Label::createWithTTF("Press C to start a client",
+                                     "fonts/Marker Felt.ttf", 24);
 
   // position the label on the center of the screen
-  label->setPosition(
+  label1->setPosition(
       Vec2(origin.x + visibleSize.width / 2,
-           origin.y + visibleSize.height - label->getContentSize().height));
+           origin.y + visibleSize.height - label1->getContentSize().height));
+  label2->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                           origin.y + visibleSize.height -
+                               label1->getContentSize().height -
+                               label2->getContentSize().height));
+  label3->setPosition(Vec2(
+      origin.x + visibleSize.width / 2,
+      origin.y + visibleSize.height - label1->getContentSize().height -
+          label2->getContentSize().height - label3->getContentSize().height));
 
   // add the label as a child to this layer
-  this->addChild(label, 1);
+  this->addChild(label1, 1);
+  this->addChild(label2, 1);
+  this->addChild(label3, 1);
 
   // add background music to the menu screen
   audioSource->playBackgroundMusic("audio/menu_theme.mp3");

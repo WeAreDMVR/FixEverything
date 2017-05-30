@@ -1,48 +1,46 @@
-#include "KeyboardPoller.h"
 #include "Level.h"
+
+#include "KeyboardPoller.h"
+#include "World.h"
 
 #include "cocos2d.h"
 
 #include <algorithm>
 #include <string>
+#include <vector>
 
 using namespace cocos2d;
 
 using std::max;
 using std::min;
+using std::runtime_error;
 using std::string;
 using std::to_string;
+using std::vector;
 
 static const Size tileSize(75.0, 75.0);
 static const Size mapSize(40.0, 12.0);
 static const Size worldSize(tileSize.width* mapSize.width,
                             tileSize.height* mapSize.height);
 
-Level::Level() {}
-
-Level* Level::createWithMap(const string& tmxFile) {
-  Level* ret = new (std::nothrow) Level();
+Level::Level(const string& tmxFile) {
   TMXTiledMap* map = TMXTiledMap::create(tmxFile);
   b2World* world = World::init();
-  if (ret && map && ret->init()) {
-    ret->_map = map;
-    ret->_world = world;
-    ret->autorelease();
-    ret->scheduleUpdate();
-    KeyboardPoller* layer = KeyboardPoller::create();
-    ret->keyPoll = layer;
-    ret->addChild(layer);
-    ret->addChild(map);
-    return ret;
-  } else {
-    return nullptr;
-  }
+  init();
+  _map = map;
+  _world = world;
+  autorelease();
+  scheduleUpdate();
+  KeyboardPoller* layer = KeyboardPoller::create();
+  keyPoll = layer;
+  addChild(layer);
+  addChild(map);
 }
 
 void Level::loadLayers() {
   // Physics Layers handling
   // isolate the "metax" layers from the map
-          this->over = false;
+  this->over = false;
   const string& meta = "meta";
   for (int i = 1;; i++) {
     auto layer = this->_map->getLayer(meta + to_string(i));
@@ -82,10 +80,10 @@ void Level::createFixtures(TMXLayer* layer) {
       Sprite* tileSprite = layer->getTileAt(Point(x, y));
       if (tileSprite) {
         // We work with the centers of all the objects
-        tileSprite->setAnchorPoint(Point(0.5,0.5));
+        tileSprite->setAnchorPoint(Point(0.5, 0.5));
         // get properties of the tile
         const int tileGID = layer->getTileGIDAt(Point(x, y));
-        
+
         const cocos2d::ValueMap properties =
             this->_map->getPropertiesForGID(tileGID).asValueMap();
         cocos2d::ValueMap* ptr_properties = new ValueMap(properties);
@@ -137,14 +135,14 @@ pSprite* Level::addObject(const string& className, const ValueMap& properties) {
     // create Player
     Player* player = new Player(sprite);
     player->setProperties(&properties);
-    this->_players["localhost"] = player;
+    addPlayer(className, player);
     object = player;
 
   } else if (className == "AI") {
     // Create an AI
     AI* ai = new AI(sprite);
     ai->setProperties(&properties);
-    this->_players["ai"] = ai;
+    addPlayer(className, ai);
     object = ai;
   } else {
     // create pSprite
@@ -165,7 +163,8 @@ Point Level::positionForTileCoord(const Point& coordinate) {
   // We return the center of each tile
   const float x = coordinate.x * tileSize.width + (PixelsPerMeter / 2.0);
   const float y = (mapSize.height * tileSize.height) -
-  ((coordinate.y + 1) * tileSize.height) + (PixelsPerMeter / 2.0);
+                  ((coordinate.y + 1) * tileSize.height) +
+                  (PixelsPerMeter / 2.0);
   return Point(x, y);
 }
 
@@ -197,17 +196,21 @@ void Level::update(float dt) {
   while (frameTime > TimeStep) {
     // Check inputs
     if (this->_players["localhost"]->isOffMap()) {
-        cocos2d::Point original = this->_players["localhost"]->getDefaultPosition();
-        CCLOG("Got default position");
-        this->_players["localhost"]->setBodyPosition(positionForTileCoord(original));
-        CCLOG("Set curr pos to def pos");
+      cocos2d::Point original =
+          this->_players["localhost"]->getDefaultPosition();
+      CCLOG("Got default position");
+      this->_players["localhost"]->setBodyPosition(
+          positionForTileCoord(original));
+      CCLOG("Set curr pos to def pos");
     }
-      
-      
+
     this->handleInput();
-    
-    // Have to cast AI to player cuz its in a list of players
-    (static_cast<AI*> (this->_players["ai"]))->move();
+    this->extraUpdates();
+
+    if (this->_players.count("ai") > 0) {
+      // Have to cast AI to player cuz its in a list of players
+      (static_cast<AI*>(this->_players["ai"]))->move();
+    }
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;
@@ -222,10 +225,11 @@ void Level::update(float dt) {
   }
 
   // Update Players
-  this->_players["localhost"]->updateSprite();
-  this->_players["ai"]->updateSprite();
+  for (auto player : this->_players) {
+    player.second->updateSprite();
+  }
 
-  const Vec2& rhynoPos = this->_players["localhost"]->getCurrentPosition();
+  const Vec2& rhynoPos = this->_localPlayer->getCurrentPosition();
   const Size& winSize = Director::getInstance()->getWinSizeInPixels();
   float camera_x = min(worldSize.width - (winSize.width / 2), rhynoPos.x);
   camera_x = max(camera_x, winSize.width / 2);
@@ -233,49 +237,44 @@ void Level::update(float dt) {
   camera_y = max(camera_y, winSize.height / 2);
   Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
 
-    if (didWin(camera_x, camera_y)) {
-        // Make the game done
-        //delete this;
-    }
+  if (didWin(camera_x, camera_y)) {
+    // Make the game done
+    // delete this;
+  }
 }
 
 // Write function where if the player is localhost then update their UI
 // http://www.cocos2d-x.org/wiki/How_To_Create_A_HUD
 
-
-
-
 bool Level::didWin(float x, float y) {
-    // Currently only doing for AI and player
-    bool playerWin = this->_players["localhost"]->checkWin(Point(2000, 500));
-    bool AIWin = (static_cast<AI*> (this->_players["ai"]))->atTarget();
-    
-    const char* msg;
-    if (playerWin && !AIWin) {
-        msg = "Player 1 wins!";
-        this->over = true;
-        //MessageBox("Victory!", "Player 1 wins!");
-    } else if (AIWin && !playerWin) {
-        msg = "The AI wins!";
-        this->over = true;
-        //MessageBox("Defeat!", "The AI wins!");
-    } else {
-        return false;
-    }
-    
-    if (this->over) {
-        auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 24);
-        CCLOG("OK WE WON");
+  // Currently only doing for AI and player
+  bool playerWin = this->_players["localhost"]->checkWin(Point(2000, 500));
+  bool AIWin = (static_cast<AI*>(this->_players["ai"]))->atTarget();
+
+  const char* msg;
+  if (playerWin && !AIWin) {
+    msg = "Player 1 wins!";
+    this->over = true;
+    // MessageBox("Victory!", "Player 1 wins!");
+  } else if (AIWin && !playerWin) {
+    msg = "The AI wins!";
+    this->over = true;
+    // MessageBox("Defeat!", "The AI wins!");
+  } else {
+    return false;
+  }
+
+  if (this->over) {
+    auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 24);
+    CCLOG("OK WE WON");
     // position the label on the center of the screen
-        label->setPosition(
-                       Vec2(x, y));
-        this->addChild(label, 1);
-    }
-    return true;
+    label->setPosition(Vec2(x, y));
+    this->addChild(label, 1);
+  }
+  return true;
 }
 
 void Level::handleInput() {
-
   // Arrows
   if (this->keyPoll->isKeyPressed(
           cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {

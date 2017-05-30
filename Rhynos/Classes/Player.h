@@ -3,6 +3,8 @@
 
 #include "pSprite.h"
 
+#include "cocos2d.h"
+
 enum class PlayerStatus { normal, invincible };
 
 class Player : public pSprite {
@@ -43,11 +45,13 @@ class Player : public pSprite {
   void applyMoveLeft();
   void applyJump();
   void resetJumpTime();
-    
+
   int moveAI();
   int atTarget();
 
   void setLayer(int layerNum);
+
+  void applyInput(const cocos2d::EventKeyboard::KeyCode key);
 
  private:
   typedef pSprite super;
