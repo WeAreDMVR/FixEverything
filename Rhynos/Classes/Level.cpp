@@ -227,15 +227,19 @@ void Level::update(float dt) {
 
   const Vec2& rhynoPos = this->_players["localhost"]->getCurrentPosition();
   const Size& winSize = Director::getInstance()->getWinSizeInPixels();
+    
   float camera_x = min(worldSize.width - (winSize.width / 2), rhynoPos.x);
   camera_x = max(camera_x, winSize.width / 2);
+    
   float camera_y = min(worldSize.height - (winSize.height / 2), rhynoPos.y);
   camera_y = max(camera_y, winSize.height / 2);
+    
   Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
 
     if (didWin(camera_x, camera_y)) {
-        // Make the game done
-        //delete this;
+        if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_ENTER)) {
+            Director::getInstance()->popScene();
+        }
     }
 }
 
@@ -247,28 +251,28 @@ void Level::update(float dt) {
 
 bool Level::didWin(float x, float y) {
     // Currently only doing for AI and player
+    if (this-> over) {
+        return true;
+    }
+    
     bool playerWin = this->_players["localhost"]->checkWin(Point(2000, 500));
     bool AIWin = (static_cast<AI*> (this->_players["ai"]))->atTarget();
     
     const char* msg;
     if (playerWin && !AIWin) {
-        msg = "Player 1 wins!";
+        msg = "Player 1 wins! \n Press Enter to go to the main menu.";
         this->over = true;
-        //MessageBox("Victory!", "Player 1 wins!");
     } else if (AIWin && !playerWin) {
-        msg = "The AI wins!";
+        msg = "The AI wins! \n Press Enter to go to the main menu.";
         this->over = true;
-        //MessageBox("Defeat!", "The AI wins!");
     } else {
         return false;
     }
     
     if (this->over) {
-        auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 24);
-        CCLOG("OK WE WON");
+        auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 48);
     // position the label on the center of the screen
-        label->setPosition(
-                       Vec2(x, y));
+        label->setPosition(Vec2(x, y));
         this->addChild(label, 1);
     }
     return true;
@@ -276,6 +280,10 @@ bool Level::didWin(float x, float y) {
 
 void Level::handleInput() {
 
+    if (this->over) {
+        return;
+    }
+    
   // Arrows
   if (this->keyPoll->isKeyPressed(
           cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
