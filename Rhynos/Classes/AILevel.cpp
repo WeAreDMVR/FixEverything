@@ -15,6 +15,10 @@ AILevel* AILevel::createWithMap(const string& tmxFile) {
 
 void AILevel::handleInput() {
   // Arrows
+    if (this->over) {
+        return;
+    }
+    
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
     CCLOG("right");
     this->_players["localhost"]->applyInput(
