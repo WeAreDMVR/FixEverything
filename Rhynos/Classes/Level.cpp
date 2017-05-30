@@ -251,9 +251,6 @@ void Level::update(float dt) {
 
 bool Level::didWin(float x, float y) {
     // Currently only doing for AI and player
-    if (this-> over) {
-        return true;
-    }
     
     bool playerWin = this->_players["localhost"]->checkWin(Point(2000, 500));
     bool AIWin = (static_cast<AI*> (this->_players["ai"]))->atTarget();
@@ -273,7 +270,9 @@ bool Level::didWin(float x, float y) {
         auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 48);
     // position the label on the center of the screen
         label->setPosition(Vec2(x, y));
-        this->addChild(label, 1);
+        label->setName("winning");
+        this->removeChildByName("winning", true);
+        this->addChild(label, 1, "winning");
     }
     return true;
 }
