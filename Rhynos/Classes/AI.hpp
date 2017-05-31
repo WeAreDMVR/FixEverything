@@ -15,5 +15,6 @@ class AI : public Player {
   int atTarget();
   int moveOther(Player* play);
   int move();
+    void analyzeMap(TMXTiledMap* map);
 };
 #endif /* AI_hpp */

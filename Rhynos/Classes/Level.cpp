@@ -235,7 +235,7 @@ void Level::update(float dt) {
     
     Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
     
-    if (didWin(camera_x, camera_y)) {
+    if (didWin(camera_x, camera_y) || this->over) {
         if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_ENTER)) {
             Director::getInstance()->popScene();
         }
