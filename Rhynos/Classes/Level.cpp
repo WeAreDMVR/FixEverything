@@ -2,6 +2,7 @@
 
 #include "KeyboardPoller.h"
 #include "World.h"
+#include "SimpleAudioEngine.h"
 
 #include "cocos2d.h"
 
@@ -56,9 +57,13 @@ void Level::loadLayers() {
 
   // Graphics Layers handling
   // isolate "fgx" and "bgx" layers from the map
+  setActiveFGandBG(1);
+}
+
+void Level::setActiveFGandBG(int layerNum) {
   const string& fg = "fg";
   const string& bg = "bg";
-  for (int i = 1;; i++) {
+  for (int i = 1; i <=3; i++) {
     auto FGLayer = this->_map->getLayer(fg + to_string(i));
     auto BGLayer = this->_map->getLayer(bg + to_string(i));
 
@@ -66,9 +71,16 @@ void Level::loadLayers() {
       break;
     }
 
-    // add fg tiles in front and bg layers behind all fg layers
-    FGLayer->setPositionZ(10 - i);
-    BGLayer->setPositionZ(5 - i);
+    if (i == layerNum) {
+      FGLayer->setPositionZ(10);
+      BGLayer->setPositionZ(5);
+    }
+    else {
+      FGLayer->setPositionZ(10-i);
+      BGLayer->setPositionZ(5-i);
+    }
+    FGLayer->setVisible(true);
+    BGLayer->setVisible(true);
   }
 }
 
@@ -238,6 +250,9 @@ void Level::update(float dt) {
     if (didWin(camera_x, camera_y)) {
         if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_ENTER)) {
             Director::getInstance()->popScene();
+            auto audioSource = CocosDenshion::SimpleAudioEngine::getInstance();
+            audioSource->pauseBackgroundMusic();
+            audioSource->playBackgroundMusic("audio/menu_theme.mp3", true);
         }
     }
 }
@@ -302,13 +317,16 @@ void Level::handleInput() {
     if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_1)) {
         CCLOG("1");
         this->_players["localhost"]->setLayer(1);
+        setActiveFGandBG(1);
     }
     if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_2)) {
         CCLOG("2");
         this->_players["localhost"]->setLayer(2);
+        setActiveFGandBG(2);
     }
     if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_3)) {
         CCLOG("3");
         this->_players["localhost"]->setLayer(3);
+        setActiveFGandBG(3);
     }
 }

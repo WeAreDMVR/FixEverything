@@ -5,7 +5,6 @@
 #include "Level.h"
 #include "Rhyno.h"
 #include "Server.h"
-#include "SimpleAudioEngine.h"
 #include "World.h"
 
 #include <Box2D/Box2D.h>
@@ -58,7 +57,7 @@ bool Rhyno::init() {
         level1->loadObjects();
 
         audioSource->pauseBackgroundMusic();
-        audioSource->playBackgroundMusic("audio/level_theme.mp3");
+        audioSource->playBackgroundMusic("audio/level_theme.mp3", true);
 
         Director::getInstance()->pushScene(level1);
         break;
@@ -111,7 +110,7 @@ bool Rhyno::init() {
   this->addChild(label3, 1);
 
   // add background music to the menu screen
-  audioSource->playBackgroundMusic("audio/menu_theme.mp3");
+  audioSource->playBackgroundMusic("audio/menu_theme.mp3", true);
 
   // add "Rhyno" splash screen"
   // auto sprite = Sprite::create("HelloWorld.png");

@@ -140,6 +140,7 @@ void Player::applyJump() {
   if (this->canJump()) {
     if (this->_jumpTime <= 0) {
       this->_body->ApplyLinearImpulse(b2Vec2(0, this->_jmp), worldCenter, true);
+      applyJumpSound();
     } else {
       this->_body->ApplyForceToCenter(b2Vec2(0, this->_jmp), true);
     }
@@ -153,6 +154,10 @@ void Player::applyJump() {
 }
 
 void Player::resetJumpTime() { this->_jumpTime = 0.0; }
+
+void Player::applyJumpSound() { 
+  CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("audio/tap.wav");
+}
 
 // currently does not account for slopes!
 // players can't initiate a jump in free-fall

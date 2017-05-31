@@ -15,7 +15,6 @@ class AILevel : public Level {
   static AILevel* createWithMap(const std::string& tmxFile);
 
  protected:
-  void handleInput() override;
   void addPlayer(const std::string& className, Player* player) override;
 };
 

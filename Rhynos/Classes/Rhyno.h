@@ -4,6 +4,7 @@
 #include "KeyboardPoller.h"
 #include "Level.h"
 #include "Player.h"
+#include "SimpleAudioEngine.h"
 
 #include <Box2D/Box2D.h>
 

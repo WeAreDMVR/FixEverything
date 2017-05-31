@@ -46,6 +46,8 @@ class Player : public pSprite {
   void applyJump();
   void resetJumpTime();
 
+  virtual void applyJumpSound();
+
   int moveAI();
   int atTarget();
 

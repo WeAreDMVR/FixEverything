@@ -17,6 +17,7 @@ class Level : public cocos2d::Scene {
  public:
   void loadLayers();
   void loadObjects();
+  void setActiveFGandBG(int layerNum);
   virtual void update(float dt) override;
 
   cocos2d::Point positionForTileCoord(const cocos2d::Point& coordinate);
@@ -33,7 +34,7 @@ class Level : public cocos2d::Scene {
  protected:
   Level(const std::string& tmxFile);
 
-  virtual void handleInput() = 0;
+  virtual void handleInput();
   virtual void addPlayer(const std::string& className, Player* player) = 0;
   virtual void extraUpdates() {}
 
@@ -44,6 +45,7 @@ class Level : public cocos2d::Scene {
   std::unordered_map<std::string, Player*> _players;
   double _lastTime;
   KeyboardPoller* keyPoll;
+  std::vector<cocos2d::TMXLayer*> _layers;
 };
 
 #endif  // _LEVEL_H_

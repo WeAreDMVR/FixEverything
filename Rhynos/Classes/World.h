@@ -2,6 +2,7 @@
 #define _WORLD_H_
 
 #include <Box2D/Box2D.h>
+#include "SimpleAudioEngine.h"
 
 constexpr float TimeStep = 1 / 120.0;
 constexpr float PixelsPerMeter = 75.0;

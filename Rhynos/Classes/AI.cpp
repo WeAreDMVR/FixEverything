@@ -4,7 +4,7 @@
 using namespace cocos2d;
 
 AI::AI(Sprite* sprite) : Player(sprite) {
-  this->target = Point(800, 20);
+  this->target = Point(3000, 20);
   this->failProb = 0.1;
   this->type = "AI";
 }
@@ -41,3 +41,5 @@ int AI::move() {
 
   return 1;
 }
+
+void AI::applyJumpSound() { return; }
