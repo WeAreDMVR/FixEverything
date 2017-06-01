@@ -195,6 +195,7 @@ double Level::getCurrentTime() {
 }
 
 void Level::update(float dt) {
+    // Check if the game is already over and then don't render graphics or physics
     if (this->over) {
         if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_ENTER)) {
             Director::getInstance()->popScene();
@@ -225,18 +226,15 @@ void Level::update(float dt) {
     // Have to cast AI to player cuz its in a list of players
     if (this->_players.count("ai") > 0) {
       (static_cast<AI*>(this->_players["ai"]))->analyzeMap(this->_map);
+      if (this->_players["ai"]->isOffMap()) {
+            cocos2d::Point original = this->_players["ai"]->getDefaultPosition();
+            this->_players["ai"]->setBodyPosition(positionForTileCoord(original));
+        }
     }
     // Step Physics
     World::step(this->_world);
     frameTime -= TimeStep;
     this->_lastTime += TimeStep;
-  }
-
-  // Update non-player sprites
-  for (pSprite* p : this->_sprites) {
-    // Not positive that all of these things actually have
-    // sprites/bodies.
-    // p->updateSprite();
   }
 
   // Update Players

@@ -13,34 +13,6 @@ AILevel* AILevel::createWithMap(const string& tmxFile) {
   return new AILevel(tmxFile);
 }
 
-//void AILevel::handleInput() {
-//  // Arrows
-//  if (this->over) {
-//      return;
-//  }
-//    
-//  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
-//    this->_players["localhost"]->applyInput(
-//        EventKeyboard::KeyCode::KEY_RIGHT_ARROW);
-//  }
-//  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-//    this->_players["localhost"]->applyInput(
-//        EventKeyboard::KeyCode::KEY_LEFT_ARROW);
-//  }
-//  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
-//    this->_players["localhost"]->applyInput(EventKeyboard::KeyCode::KEY_SPACE);
-//  }
-//  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_1)) {
-//    this->_players["localhost"]->applyInput(EventKeyboard::KeyCode::KEY_1);
-//  }
-//  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_2)) {
-//    this->_players["localhost"]->applyInput(EventKeyboard::KeyCode::KEY_2);
-//  }
-//  if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_3)) {
-//    this->_players["localhost"]->applyInput(EventKeyboard::KeyCode::KEY_3);
-//  }
-//}
-
 void AILevel::addPlayer(const std::string& className, Player* player) {
   if (className == "Player") {
     this->_players["localhost"] = player;
@@ -53,8 +25,8 @@ void AILevel::addPlayer(const std::string& className, Player* player) {
 bool AILevel::didWin(float x, float y) {
   // Currently only doing for AI and player
 
-  bool playerWin = this->_players["localhost"]->checkWin(Point(2000, 500));
-  bool AIWin = (static_cast<AI*>(this->_players["ai"]))->atTarget();
+  bool playerWin = this->_players["localhost"]->checkWin(Point(2700, 500));
+  bool AIWin = this->_players["ai"]->checkWin(Point(2700, 500));
 
   const char* msg;
   if (playerWin && !AIWin) {

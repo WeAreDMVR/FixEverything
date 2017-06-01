@@ -35,7 +35,6 @@ int AI::move() {
     return 1;
   }
 
-
   // Check if we going to mess up
   if (prob < 0) {
     return 0;
@@ -60,7 +59,6 @@ Point tileCoordForPosition(const Point& position) {
 
 
 void AI::analyzeMap(const TMXTiledMap* map) {
-    //this->setLayer(2);
     int val = std::rand();
     float prob = val / (float)RAND_MAX;
     
@@ -68,6 +66,10 @@ void AI::analyzeMap(const TMXTiledMap* map) {
     if (this->atTarget())
         return;
     
+    if (prob < 0.94) {
+        // AI WILL "MESS UP"
+        //return;
+    }
     
     auto y_pos = this->getPositionY();
     auto x_pos = this->getPositionX();
