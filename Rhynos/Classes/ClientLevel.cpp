@@ -2,12 +2,14 @@
 
 #include "cocos2d.h"
 
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <vector>
 
 using namespace cocos2d;
 
+using std::ostringstream;
 using std::runtime_error;
 using std::string;
 using std::to_string;
@@ -96,4 +98,29 @@ void ClientLevel::extraUpdates() {
       }
     }
   }
+}
+
+bool ClientLevel::didWin(float x, float y) {
+  const char* msg;
+  for (auto& player : this->_players) {
+    if (player.second->checkWin(Point(2000, 500)) && !over) {
+      ostringstream oss;
+      oss << "Player " << player.first
+          << " wins! \n Press Enter to go to the main menu.";
+      msg = oss.str().c_str();
+      this->over = true;
+    }
+  }
+
+  if (this->over) {
+    auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 48);
+    // position the label on the center of the screen
+    label->setPosition(Vec2(x, y));
+
+    // Keeep the message in the middle of the screen
+    label->setName("winning");
+    this->removeChildByName("winning", true);
+    this->addChild(label, 1, "winning");
+  }
+  return this->over;
 }

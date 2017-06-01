@@ -1,8 +1,8 @@
 #include "Level.h"
 
 #include "KeyboardPoller.h"
-#include "World.h"
 #include "SimpleAudioEngine.h"
+#include "World.h"
 
 #include "cocos2d.h"
 
@@ -63,7 +63,7 @@ void Level::loadLayers() {
 void Level::setActiveFGandBG(int layerNum) {
   const string& fg = "fg";
   const string& bg = "bg";
-  for (int i = 1; i <=3; i++) {
+  for (int i = 1; i <= 3; i++) {
     auto FGLayer = this->_map->getLayer(fg + to_string(i));
     auto BGLayer = this->_map->getLayer(bg + to_string(i));
 
@@ -74,10 +74,9 @@ void Level::setActiveFGandBG(int layerNum) {
     if (i == layerNum) {
       FGLayer->setPositionZ(10);
       BGLayer->setPositionZ(5);
-    }
-    else {
-      FGLayer->setPositionZ(10-i);
-      BGLayer->setPositionZ(5-i);
+    } else {
+      FGLayer->setPositionZ(10 - i);
+      BGLayer->setPositionZ(5 - i);
     }
     FGLayer->setVisible(true);
     BGLayer->setVisible(true);
@@ -198,135 +197,104 @@ double Level::getCurrentTime() {
 }
 
 void Level::update(float dt) {
-    const double currentTime = this->getCurrentTime();
-    if (!this->_lastTime) {
-        this->_lastTime = currentTime;
+  const double currentTime = this->getCurrentTime();
+  if (!this->_lastTime) {
+    this->_lastTime = currentTime;
+  }
+
+  double frameTime = currentTime - this->_lastTime;
+
+  while (frameTime > TimeStep) {
+    // Check inputs
+    if (this->_localPlayer->isOffMap()) {
+      cocos2d::Point original = this->_localPlayer->getDefaultPosition();
+      CCLOG("Got default position");
+      this->_localPlayer->setBodyPosition(positionForTileCoord(original));
+      CCLOG("Set curr pos to def pos");
     }
-    
-    double frameTime = currentTime - this->_lastTime;
-    
-    while (frameTime > TimeStep) {
-        // Check inputs
-        if (this->_players["localhost"]->isOffMap()) {
-            cocos2d::Point original = this->_players["localhost"]->getDefaultPosition();
-            CCLOG("Got default position");
-            this->_players["localhost"]->setBodyPosition(positionForTileCoord(original));
-            CCLOG("Set curr pos to def pos");
-        }
-        
-        
-        this->handleInput();
-        
-        // Have to cast AI to player cuz its in a list of players
-        (static_cast<AI*> (this->_players["ai"]))->move();
-        // Step Physics
-        World::step(this->_world);
-        frameTime -= TimeStep;
-        this->_lastTime += TimeStep;
+
+    this->handleInput();
+
+    // Have to cast AI to player cuz its in a list of players
+    if (this->_players.count("ai") > 0) {
+      (static_cast<AI*>(this->_players["ai"]))->move();
     }
-    
-    // Update non-player sprites
-    for (pSprite* p : this->_sprites) {
-        // Not positive that all of these things actually have
-        // sprites/bodies.
-        // p->updateSprite();
+    // Step Physics
+    World::step(this->_world);
+    frameTime -= TimeStep;
+    this->_lastTime += TimeStep;
+  }
+
+  // Update non-player sprites
+  for (pSprite* p : this->_sprites) {
+    // Not positive that all of these things actually have
+    // sprites/bodies.
+    // p->updateSprite();
+  }
+
+  // Update Players
+  for (auto& player : this->_players) {
+    player.second->updateSprite();
+  }
+
+  const Vec2& rhynoPos = this->_localPlayer->getCurrentPosition();
+  const Size& winSize = Director::getInstance()->getWinSizeInPixels();
+
+  float camera_x = min(worldSize.width - (winSize.width / 2), rhynoPos.x);
+  camera_x = max(camera_x, winSize.width / 2);
+
+  float camera_y = min(worldSize.height - (winSize.height / 2), rhynoPos.y);
+  camera_y = max(camera_y, winSize.height / 2);
+
+  Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
+
+  if (didWin(camera_x, camera_y)) {
+    if (this->keyPoll->isKeyPressed(
+            cocos2d::EventKeyboard::KeyCode::KEY_ENTER)) {
+      Director::getInstance()->popScene();
+      auto audioSource = CocosDenshion::SimpleAudioEngine::getInstance();
+      audioSource->pauseBackgroundMusic();
+      audioSource->playBackgroundMusic("audio/menu_theme.mp3", true);
     }
-    
-    // Update Players
-    this->_players["localhost"]->updateSprite();
-    this->_players["ai"]->updateSprite();
-    
-    const Vec2& rhynoPos = this->_players["localhost"]->getCurrentPosition();
-    const Size& winSize = Director::getInstance()->getWinSizeInPixels();
-    
-    float camera_x = min(worldSize.width - (winSize.width / 2), rhynoPos.x);
-    camera_x = max(camera_x, winSize.width / 2);
-    
-    float camera_y = min(worldSize.height - (winSize.height / 2), rhynoPos.y);
-    camera_y = max(camera_y, winSize.height / 2);
-    
-    Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
-    
-    if (didWin(camera_x, camera_y)) {
-        if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_ENTER)) {
-            Director::getInstance()->popScene();
-            auto audioSource = CocosDenshion::SimpleAudioEngine::getInstance();
-            audioSource->pauseBackgroundMusic();
-            audioSource->playBackgroundMusic("audio/menu_theme.mp3", true);
-        }
-    }
+  }
 }
 
 // Write function where if the player is localhost then update their UI
 // http://www.cocos2d-x.org/wiki/How_To_Create_A_HUD
 
-
-
-
-bool Level::didWin(float x, float y) {
-    // Currently only doing for AI and player
-    
-    bool playerWin = this->_players["localhost"]->checkWin(Point(2000, 500));
-    bool AIWin = (static_cast<AI*> (this->_players["ai"]))->atTarget();
-    
-    const char* msg;
-    if (playerWin && !AIWin) {
-        msg = "Player 1 wins! \n Press Enter to go to the main menu.";
-        this->over = true;
-    } else if (AIWin && !playerWin) {
-        msg = "The AI wins! \n Press Enter to go to the main menu.";
-        this->over = true;
-    } else {
-        return false;
-    }
-    
-    if (this->over) {
-        auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 48);
-        // position the label on the center of the screen
-        label->setPosition(Vec2(x, y));
-        
-        // Keeep the message in the middle of the screen
-        label->setName("winning");
-        this->removeChildByName("winning", true);
-        this->addChild(label, 1, "winning");
-    }
-    return true;
-}
-
 void Level::handleInput() {
-    
-    if (this->over) {
-        return;
-    }
-    
-    // Arrows
-    if (this->keyPoll->isKeyPressed(
-                                    cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
-        CCLOG("right");
-        this->_players["localhost"]->applyMoveRight();
-    }
-    if (this->keyPoll->isKeyPressed(
-                                    cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-        CCLOG("left");
-        this->_players["localhost"]->applyMoveLeft();
-    }
-    if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
-        CCLOG("up");
-        this->_players["localhost"]->applyJump();
-    }
-    if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_1)) {
-        CCLOG("1");
-        this->_players["localhost"]->setLayer(1);
-        setActiveFGandBG(1);
-    }
-    if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_2)) {
-        CCLOG("2");
-        this->_players["localhost"]->setLayer(2);
-        setActiveFGandBG(2);
-    }
-    if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_3)) {
-        CCLOG("3");
-        this->_players["localhost"]->setLayer(3);
-        setActiveFGandBG(3);
-    }
+  if (this->over) {
+    return;
+  }
+
+  // Arrows
+  if (this->keyPoll->isKeyPressed(
+          cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
+    CCLOG("right");
+    this->_localPlayer->applyMoveRight();
+  }
+  if (this->keyPoll->isKeyPressed(
+          cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
+    CCLOG("left");
+    this->_localPlayer->applyMoveLeft();
+  }
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
+    CCLOG("up");
+    this->_localPlayer->applyJump();
+  }
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_1)) {
+    CCLOG("1");
+    this->_localPlayer->setLayer(1);
+    setActiveFGandBG(1);
+  }
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_2)) {
+    CCLOG("2");
+    this->_localPlayer->setLayer(2);
+    setActiveFGandBG(2);
+  }
+  if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_3)) {
+    CCLOG("3");
+    this->_localPlayer->setLayer(3);
+    setActiveFGandBG(3);
+  }
 }

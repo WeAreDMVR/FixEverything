@@ -16,6 +16,7 @@ class AILevel : public Level {
 
  protected:
   void addPlayer(const std::string& className, Player* player) override;
+  bool didWin(float x, float y) override;
 };
 
 #endif  // _AI_LEVEL_H_

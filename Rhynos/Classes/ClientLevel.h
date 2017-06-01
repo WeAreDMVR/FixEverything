@@ -19,6 +19,7 @@ class ClientLevel : public Level {
   void handleInput() override;
   void addPlayer(const std::string& className, Player* player) override;
   void extraUpdates() override;
+  bool didWin(float x, float y) override;
 
  private:
   Client _client;

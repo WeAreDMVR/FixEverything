@@ -28,13 +28,13 @@ class Level : public cocos2d::Scene {
   pSprite* addObject(const std::string& className,
                      const cocos2d::ValueMap& properties);
   double getCurrentTime();
-  bool didWin(float x, float y);
 
  protected:
   Level(const std::string& tmxFile);
 
   virtual void handleInput();
   virtual void addPlayer(const std::string& className, Player* player) = 0;
+  virtual bool didWin(float x, float y) = 0;
   virtual void extraUpdates() {}
 
   Player* _localPlayer;
