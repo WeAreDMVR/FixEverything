@@ -19,7 +19,8 @@ ClientLevel* ClientLevel::createWithMap(const string& tmxFile) {
   return new ClientLevel(tmxFile);
 }
 
-ClientLevel* ClientLevel::init(ClientLevel* client_level, const string& host) {
+ClientLevel* ClientLevel::connect(ClientLevel* client_level,
+                                  const string& host) {
   GameAction game_action;
   CCLOG("connecting to server");
   asio::error_code ec = client_level->_client.connect(host);

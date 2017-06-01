@@ -13,8 +13,6 @@ class ClientScene : public cocos2d::Scene {
  public:
   virtual bool init() override;
 
-  void update(float delta) override;
-
   static ClientScene* create(CocosDenshion::SimpleAudioEngine* audioSource) {
     ClientScene* pRet = new (std::nothrow) ClientScene(audioSource);
     if (pRet && pRet->init()) {
