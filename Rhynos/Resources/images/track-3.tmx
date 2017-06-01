@@ -165,11 +165,11 @@
  </layer>
  <layer name="meta1" width="113" height="10" opacity="0.2">
   <properties>
-      <property name="BodyType" type="int" value="0"/>
-      <property name="CategoryBits" type="int" value="1"/>
-      <property name="Damage" type="int" value="0"/>
-      <property name="Destructable" type="bool" value="false"/>
-      <property name="Floating" type="bool" value="true"/>
+   <property name="BodyType" type="int" value="0"/>
+   <property name="CategoryBits" type="int" value="1"/>
+   <property name="Damage" type="int" value="0"/>
+   <property name="Destructable" type="bool" value="false"/>
+   <property name="Floating" type="bool" value="true"/>
   </properties>
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
