@@ -91,10 +91,10 @@ void Level::createFixtures(TMXLayer* layer) {
         // We work with the centers of all the objects
         tileSprite->setAnchorPoint(Point(0.5, 0.5));
         // get properties of the tile
-        const int tileGID = layer->getTileGIDAt(Point(x, y));
+        //const int tileGID = layer->getTileGIDAt(Point(x, y));
 
-        const cocos2d::ValueMap properties =
-            this->_map->getPropertiesForGID(tileGID).asValueMap();
+        const cocos2d::ValueMap properties = layer->getProperties();
+            //this->_map->getPropertiesForGID(tileGID).asValueMap();
         cocos2d::ValueMap* ptr_properties = new ValueMap(properties);
         // create pSprite
         this->_sprites.emplace_back(new pSprite(tileSprite));
