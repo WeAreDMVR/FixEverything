@@ -115,10 +115,11 @@ void ClientLevel::extraUpdates() {
   }
 }
 
+static const char* msg;
+
 bool ClientLevel::didWin(float x, float y) {
-  const char* msg;
   for (auto& player : this->_players) {
-    if (player.second->checkWin(Point(2000, 500)) && !over) {
+    if (player.second->checkWin(Point(2700, 500))) {
       ostringstream oss;
       oss << "Player " << player.first
           << " wins! \n Press Enter to go to the main menu.";
@@ -128,15 +129,13 @@ bool ClientLevel::didWin(float x, float y) {
   }
 
   if (this->over) {
+    CCLOG(msg);
     auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 48);
     // position the label on the center of the screen
     label->setPosition(Vec2(x, y));
-      /*
     // Keeep the message in the middle of the screen
     label->setName("winning");
-    this->removeChildByName("winning", true);
     this->addChild(label, 1, "winning");
-       */
   }
   return this->over;
 }

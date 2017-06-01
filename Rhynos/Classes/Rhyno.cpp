@@ -36,12 +36,12 @@ bool Rhyno::init() {
   if (!Scene::init()) {
     return false;
   }
-  
+
   // Get coordinates to display menu
   const auto& visibleSize = Director::getInstance()->getVisibleSize();
   const Vec2& origin = Director::getInstance()->getVisibleOrigin();
   auto audioSource = CocosDenshion::SimpleAudioEngine::getInstance();
-  
+
   // Add sound files
   audioSource->preloadBackgroundMusic("audio/menu_theme.mp3");
   audioSource->preloadBackgroundMusic("audio/level_theme.mp3");
@@ -90,9 +90,8 @@ bool Rhyno::init() {
   // add a label shows "Rhyno"
   // create and initialize a label
 
-    
-  auto title = Label::createWithTTF("Welcome to Rhynos!",
-                                    "fonts/Marker Felt.ttf", 48);
+  auto title =
+      Label::createWithTTF("Welcome to Rhynos!", "fonts/Marker Felt.ttf", 48);
   auto label1 = Label::createWithTTF("Press Enter to play against AI",
                                      "fonts/Marker Felt.ttf", 24);
   auto label2 = Label::createWithTTF("Press S to start a server",
@@ -101,25 +100,24 @@ bool Rhyno::init() {
                                      "fonts/Marker Felt.ttf", 24);
 
   // position the label on the center of the screen
-  
+
   auto padding = 20;
   auto spacing = title->getContentSize().height + padding;
-    
+
   title->setPosition(Vec2(origin.x + visibleSize.width / 2,
                           origin.y + visibleSize.height - spacing));
-    
+
   spacing += label1->getContentSize().height + padding;
   label1->setPosition(Vec2(origin.x + visibleSize.width / 2,
                            origin.y + visibleSize.height - spacing));
-    
+
   spacing += label2->getContentSize().height;
   label2->setPosition(Vec2(origin.x + visibleSize.width / 2,
                            origin.y + visibleSize.height - spacing));
-    
+
   spacing += label3->getContentSize().height;
-  label3->setPosition(Vec2(
-      origin.x + visibleSize.width / 2,
-      origin.y + visibleSize.height - spacing));
+  label3->setPosition(Vec2(origin.x + visibleSize.width / 2,
+                           origin.y + visibleSize.height - spacing));
 
   // add the label as a child to this layer
   this->addChild(title, 1);
@@ -131,14 +129,14 @@ bool Rhyno::init() {
   audioSource->playBackgroundMusic("audio/menu_theme.mp3", true);
 
   // add "Rhyno" splash screen"
-   auto sprite = Sprite::create("HelloWorld.png");
+  auto sprite = Sprite::create("HelloWorld.png");
 
   // position the sprite on the center of the screen
-   sprite->setPosition(Vec2(visibleSize.width/2 + origin.x,
-   visibleSize.height/2 + origin.y));
+  sprite->setPosition(Vec2(visibleSize.width / 2 + origin.x,
+                           visibleSize.height / 2 + origin.y));
 
   // add the sprite as a child to this layer
-   this->addChild(sprite, 0);
+  this->addChild(sprite, 0);
 
   //////////////////////////////
   // 3. New Code
