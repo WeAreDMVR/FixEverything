@@ -2,6 +2,7 @@
 
 #include "cocos2d.h"
 
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -9,6 +10,7 @@
 
 using namespace cocos2d;
 
+using std::endl;
 using std::ostringstream;
 using std::runtime_error;
 using std::string;
@@ -115,21 +117,20 @@ void ClientLevel::extraUpdates() {
   }
 }
 
-static const char* msg;
+static string msg;
 
 bool ClientLevel::didWin(float x, float y) {
   for (auto& player : this->_players) {
     if (player.second->checkWin(Point(2700, 500))) {
       ostringstream oss;
-      oss << "Player " << player.first
-          << " wins! \n Press Enter to go to the main menu.";
-      msg = oss.str().c_str();
+      oss << "Player " << player.first << " wins! " << endl
+          << "Press Enter to go to the main menu.";
+      msg = oss.str();
       this->over = true;
     }
   }
 
   if (this->over) {
-    CCLOG(msg);
     auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 48);
     // position the label on the center of the screen
     label->setPosition(Vec2(x, y));
