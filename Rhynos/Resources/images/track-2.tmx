@@ -203,7 +203,7 @@
 </data>
  </layer>
  <objectgroup name="obj1">
-  <object id="1" name="user" x="75" y="0" width="75" height="75">
+  <object id="1" name="AI" x="75" y="0" width="75" height="75">
    <properties>
     <property name="Acceleration" type="float" value="100"/>
     <property name="BodyType" type="int" value="2"/>
@@ -215,12 +215,12 @@
     <property name="MaxJumpTime" type="float" value="10.2"/>
     <property name="MaxSpeed" type="float" value="3"/>
     <property name="name" value="rhyno-75x75.png"/>
-    <property name="type" value="Player"/>
+    <property name="type" value="AI"/>
     <property name="x" type="int" value="1"/>
     <property name="y" type="int" value="0"/>
    </properties>
   </object>
-  <object id="2" name="AI" x="75" y="300" width="75" height="75">
+  <object id="2" name="user" x="75" y="300" width="75" height="75">
    <properties>
     <property name="Acceleration" type="float" value="100"/>
     <property name="BodyType" type="int" value="2"/>
@@ -228,11 +228,11 @@
     <property name="Damage" type="int" value="0"/>
     <property name="Deceleration" type="float" value="80"/>
     <property name="Health" type="int" value="3"/>
-    <property name="JumpAcceleration" type="float" value="5.25"/>
-    <property name="MaxJumpTime" type="float" value="10.2"/>
-    <property name="MaxSpeed" type="float" value="3"/>
+    <property name="JumpAcceleration" type="float" value="3.75"/>
+    <property name="MaxJumpTime" type="float" value="8.2"/>
+    <property name="MaxSpeed" type="float" value="3.5"/>
     <property name="name" value="tricr-75x75.png"/>
-    <property name="type" value="AI"/>
+    <property name="type" value="Player"/>
     <property name="x" type="int" value="1"/>
     <property name="y" type="int" value="5"/>
    </properties>
