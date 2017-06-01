@@ -5,6 +5,7 @@
 using namespace cocos2d;
 using std::string;
 using std::to_string;
+
 static const Size tileSize(75.0, 75.0);
 static const Size mapSize(40.0, 12.0);
 
@@ -35,7 +36,7 @@ int AI::move() {
   }
 
   // Check if we going to mess up
-  if (prob < .1) {
+  if (prob < 0) {
     return 0;
   }
 
