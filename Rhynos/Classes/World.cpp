@@ -1,5 +1,5 @@
-#include "World.h"
 #include "Player.h"
+#include "World.h"
 
 #include <Box2D/Box2D.h>
 #include <iostream>
@@ -11,6 +11,7 @@ class MyContactListener : public b2ContactListener
     void BeginContact(b2Contact* contact) {
         // Was a player involved?
         Player* p = NULL;
+        AI* ai = NULL;
 
         // Determine if either fixture belongs to a player
         void* fixtureDataA = contact->GetFixtureA()->GetBody()->GetUserData();
@@ -24,12 +25,11 @@ class MyContactListener : public b2ContactListener
             if (typeA == "Player") {
                 p = static_cast<Player*>(tA);
             } else if (typeA == "AI") {
-                AI* p = static_cast<AI*>(tA);
+                ai = static_cast<AI*>(tA);
             } else if (typeA == "Obstacle") {
                 // Read user data as an obstacle, or do further processing
             } else {
                 // Don't care
-
             }
         }
 
@@ -40,36 +40,34 @@ class MyContactListener : public b2ContactListener
             if (typeB == "Player") {
                 p = static_cast<Player*>(tB);
             } else if (typeB == "AI") {
-                p = static_cast<AI*>(tB);
+                ai = static_cast<AI*>(tB);
             } else if (typeB == "Obstacle") {
                 // Read user data as an obstacle etc.
             } else {
                 // Don't care
-
             }
         }
 
-        // Now that we know what was involved in the collision, handle it
-        if (p) {
-          // Perhaps call a player function
-          
-          // Reset Jump time because we collided with something
-          // Could be more specific
-          p->resetJumpTime();
-        }
+    // Now that we know what was involved in the collision, handle it
+    if (p) {
+      // Perhaps call a player function
 
+      // Reset Jump time because we collided with something
+      // Could be more specific
+      p->resetJumpTime();
     }
+  }
 
-    void EndContact(b2Contact* contact) {
-        // Check fixtures as above
-        // Perhaps change a flag in a class, like playerIsTouchingGround
-    }
+  void EndContact(b2Contact* contact) {
+    // Check fixtures as above
+    // Perhaps change a flag in a class, like playerIsTouchingGround
+  }
 };
 
 b2World* World::init() {
   const b2Vec2 gravity(0, Gravity);
   b2World* world = new b2World(gravity);
-  world->SetAllowSleeping(true);
+  world->SetAllowSleeping(false);
   world->SetContinuousPhysics(true);
   world->SetContactListener(new MyContactListener());
   return world;
@@ -81,4 +79,3 @@ void World::step(b2World* world) {
 
   world->Step(TimeStep, velocityIterations, positionIterations);
 }
-

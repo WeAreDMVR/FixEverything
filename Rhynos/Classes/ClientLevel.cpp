@@ -131,11 +131,12 @@ bool ClientLevel::didWin(float x, float y) {
     auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 48);
     // position the label on the center of the screen
     label->setPosition(Vec2(x, y));
-
+      /*
     // Keeep the message in the middle of the screen
     label->setName("winning");
     this->removeChildByName("winning", true);
     this->addChild(label, 1, "winning");
+       */
   }
   return this->over;
 }
