@@ -58,7 +58,7 @@ Point tileCoordForPosition(const Point& position) {
 
 
 void AI::analyzeMap(const TMXTiledMap* map) {
-    this->setLayer(2);
+    //this->setLayer(2);
     int val = std::rand();
     float prob = val / (float)RAND_MAX;
     
@@ -74,34 +74,41 @@ void AI::analyzeMap(const TMXTiledMap* map) {
     auto currLayer = this->getLayerNum();
     
     // Check for out of bounds
-    if (this->isOffMap() || pt.x > mapSize.width - 5 || pt.y > mapSize.height - 5) {
+    if (this->isOffMap() || pt.x < 0 || pt.y < 0) {
         return;
     }
     
-    for (int j= currLayer; j < currLayer + 3; j++) {
-        // Cycle through the three layer starting at the current one
-        int i = (j % 3);
-        if (i==0) {
-            i = 3;
-        }
-
-        TMXLayer* layer1 = map->getLayer("meta" + to_string(i));
     
-    	// Start at top right then go to bottom left
-        for (int y = pt.y+5; y > pt.y; y--) {
-            for (int x = pt.x+5; x > pt.x; x--) {
+    for (int x = pt.x; x < pt.x+ 5; x++) {
+        for (int y = pt.y - 5; y < pt.y + 5; y++) {
+
+                if (x >= mapSize.width || y >= mapSize.height || x < 0 || y < 0) {
+                    continue;
+                }
+                
+                for (int j= currLayer; j < currLayer + 3; j++) {
+                    
+                    // Cycle through the three layer starting at the current one
+                    int i = (j % 3);
+                    if (i==0) {
+                        i = 3;
+                    }
+                    
+                    TMXLayer* layer1 = map->getLayer("meta" + to_string(i));
                 Sprite* tileSprite = layer1->getTileAt(pt);
 
             	// Test where its starting
-            	layer1->removeChild(tileSprite);
                 if (true) {
-                    tileSprite->setAnchorPoint(Point(0.5, 0.5));
-                    
-                    const int tileGID = layer1->getTileGIDAt(pt);
-                    const cocos2d::ValueMap properties = map->getPropertiesForGID(tileGID).asValueMap();
-                    cocos2d::ValueMap* ptr_properties = new ValueMap(properties);
+                    int tileGID = layer1->getTileGIDAt(pt);
+                    //const cocos2d::ValueMap properties = map->getPropertiesForGID(tileGID).asValueMap();
+                    //cocos2d::ValueMap* ptr_properties = new ValueMap(properties);
                 
-
+                    if (tileGID != 0) {
+                        this->setLayer(i);
+                        CCLOG("theres gotta be something");
+                        //goto action;
+                    }
+                    
 
  					// The next tile is there on this layer so just keep going straight	               
                     if (x == pt.x+1 && y == pt.y+1 && tileGID !=0) {
@@ -126,6 +133,7 @@ void AI::analyzeMap(const TMXTiledMap* map) {
                         goto action;
                     }
                     
+                    
                 }
             }
         }
@@ -134,7 +142,7 @@ void AI::analyzeMap(const TMXTiledMap* map) {
 action:
     
     if ((this->prev.x == x_pos) && (this->prev.y == y_pos)) {
-        CCLOG("WHY NO WORK");
+        //CCLOG("WHY NO WORK");
         //this->applyJump();
     }
     

@@ -9,9 +9,6 @@
 class MyContactListener : public b2ContactListener
 {
     void BeginContact(b2Contact* contact) {
-
-        CCLOG("BeginContact");
-
         // Was a player involved?
         Player* p = NULL;
 
@@ -24,13 +21,10 @@ class MyContactListener : public b2ContactListener
         if (fixtureDataA) {
             pSprite* tA = static_cast<pSprite*>(fixtureDataA);
             std::string typeA = tA->type;
-            CCLOG("%s", typeA.c_str());
             if (typeA == "Player") {
-                CCLOG("detected A");
                 p = static_cast<Player*>(tA);
             } else if (typeA == "AI") {
                 AI* p = static_cast<AI*>(tA);
-                CCLOG("AI SHOULD MOVE A");
             } else if (typeA == "Obstacle") {
                 // Read user data as an obstacle, or do further processing
             } else {
@@ -43,14 +37,10 @@ class MyContactListener : public b2ContactListener
         if (fixtureDataB) {
             pSprite* tB = static_cast<pSprite*>(fixtureDataB);
             std::string typeB = tB->type;
-            CCLOG("%s", typeB.c_str());
             if (typeB == "Player") {
-                CCLOG("Detected B");
                 p = static_cast<Player*>(tB);
-                //p->moveAI();
             } else if (typeB == "AI") {
                 p = static_cast<AI*>(tB);
-                CCLOG("AI SHOULD MOVE B");
             } else if (typeB == "Obstacle") {
                 // Read user data as an obstacle etc.
             } else {

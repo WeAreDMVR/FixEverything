@@ -201,6 +201,11 @@ void Level::update(float dt) {
             this->_players["localhost"]->setBodyPosition(positionForTileCoord(original));
         }
         
+        if (this->_players["ai"]->isOffMap()) {
+            cocos2d::Point original = this->_players["ai"]->getDefaultPosition();
+            this->_players["ai"]->setBodyPosition(positionForTileCoord(original));
+        }
+        
         
         this->handleInput();
         
