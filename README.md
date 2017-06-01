@@ -55,6 +55,8 @@ including the track and the locations of the player(s) and AI(s).  The output
 of the graphics engine will be rendered graphics that the player can see.  We
 plan on using Cocos2D to implement our graphics engine.
 
+We use the TMX format (tiled XML maps) to translate graphical, layer, and meta data to the game state. TMX tiles have properties, which we set according to our style guide in docs, Rhyno TMX. These are then part of larger tilesets that form the basis for our layers. Objects' properties for the Player and AI (such as their starting location, acceleration/max speed values, and sprite choice) are also encoded into our TMX files. 
+
 ### Game State Manager
 
 The game state manager will be responsible for keeping track of the state of
@@ -142,6 +144,12 @@ an update for the player that is sent to the physics engine.
 This component is responsible for reading in files in a track format and
 loading this initial track into the game state manager.  This component allows
 users to specify their own game tracks.
+
+### Audio
+
+Our audio is integrated using Cocos' SimpleAudioEngine, with which we preload our two main tracks (a menu theme and level theme) at initialization time to prevent lag from loading the track into the buffer at specific points. These tracks are then called and looped in their respective locations; for the menu, this is when the menu becomes visible, and the level is obviously for when the player chooses a game style. We also use sound effects, which are realized for the player but not for the AI to prevent confusion.
+
+Our two main tracks are created by the user Waterflame and are used with permission by his licensing terms.
 
 ## Interactions Between Components
 
