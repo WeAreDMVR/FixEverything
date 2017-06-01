@@ -32,6 +32,8 @@ The first object of the game is to be the first to the finish line.
 Alternative game play modes include racing against time and getting high scores
 from collecting items.
 
+### Controls
+
 For controls, we will map x-axis movement to the left and right arrow keys and
 jump to Space, but we’d like them to be configurable (stretch goal).  Two
 additional buttons (probably Q and E) will be used to cycle between tracks.
@@ -43,7 +45,7 @@ concerned with jumping and acceleration, controls for the user, and reading
 from file formats to parse and render tracks.  All components will be
 implemented in C++.
 
-## Graphics Engine
+### Graphics Engine
 
 The graphics engine will be responsible for generating graphics so that the
 player can view the game world.  The input to the graphics engine will come
@@ -52,7 +54,7 @@ including the track and the locations of the player(s) and AI(s).  The output
 of the graphics engine will be rendered graphics that the player can see.  We
 plan on using Oxygine to implement our graphics engine.
 
-## Game State Manager
+### Game State Manager
 
 The game state manager will be responsible for keeping track of the state of
 the game world at every update cycle.  It is also responsible for initializing
@@ -62,7 +64,7 @@ the current state of the game at every update cycle to the graphics engine, AI
 agent, and physics engine.  It will also output the actions of the current
 player to the networking component if the game is in multiplayer mode.
 
-## AI Agent
+### AI Agent
 
 The AI Agent is responsible for planning out and executing the action of each
 AI racer in the game.  The initial implementation of the AI will be supplied a
@@ -74,7 +76,7 @@ moves for each of the AI racers based on the supplied AI path and any obstacles
 in that path.  It will send these next moves to the physics engine so that it
 updates the state of the AI racers.
 
-## Networking Manager
+### Networking Manager
 
 The networking manager is used to communicate with other players while playing
 in multiplayer mode.  If the game is in multiplayer mode, each update from the
@@ -82,23 +84,34 @@ user will be sent to the networking manager to be sent to all the other players
 playing the game.  Whenever an update is received from another user, the
 networking manager will send it to the physics engine to be processed.
 
-## Physics Engine
+### Physics Engine
 
-The physics engine is responsible for computing each world update during the
-update cycle.  It receives the current state of the game from the game state
-manager, the AI updates from the AI agent, the user updates from the user
-controls, and the other player updates from the networking manager if the game
-is in multiplayer mode.  It will then use all of these inputs to compute a full
-update cycle for the game physics, and send the updated state of the world to
-the game state manager.  We plan on using Box2d to implement our physics
-engine.
+We used Box2D to implement our world. The main mechanic, layer swapping, was
+achieved using an interesting feature of Box2D. Every object in Box2D has
+category bits and mask bits. Category bits are used to define what an object
+is. For example, you might have a category called "Players" and assign them to
+category 1 (Binary: 0001). Thus anything that lives on the "Player" layer will
+be given that category bit. Then, you have some other category like "Layer 1,"
+(Binary: 0010). Objects that exclusively reside in Layer 1 (e.g. terrain,
+obstacles) will have category 0010.
 
-## User Controls
+In addition to category bits, each object also has mask bits. These mask bits
+are used to indicate what the object will collide with. Thus to achieve layer
+swapping, we just have to adjust the player's mask bits. If we want the player
+to collide with layer 1, then  we adjust it's mask bits to include layer 1's
+category bits (0010). So if the player has mask bits 0010 (the player wants to
+collide with layer 1) and the objects in layer 1 have mask bits 0001 (the layer
+wants to collide with the player), then we will have a collision. For a
+collision to occur, both objects have to agree to collide. Thus, we can set the
+layers to always collide with the player, and then manually set on the player
+which layers it can collide with.
+
+### User Controls
 
 This component is responsible for capturing user input and transforming it into
 an update for the player that is sent to the physics engine.
 
-## File Parser
+### File Parser
 
 This component is responsible for reading in files in a track format and
 loading this initial track into the game state manager.  This component allows
