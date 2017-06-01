@@ -39,16 +39,12 @@ bool ClientScene::init() {
           spritecache->addSpriteFramesWithFile("images/textures.plist");
           auto client_level =
               ClientLevel::createWithMap("images/track-2-noai.tmx");
-          client_level_future_ = async(launch::async, ClientLevel::init,
-                                       client_level, host_field_->getString());
+          ClientLevel::connect(client_level, host_field_->getString());
 
-          this->removeChild(host_field_);
-          auto label = Label::createWithTTF("Waiting for another player",
-                                            "fonts/Marker Felt.ttf", 24);
-          label->setPosition(Vec2(
-              origin.x + visibleSize.width / 2,
-              origin.y + visibleSize.height - label->getContentSize().height));
-          this->addChild(label, 1);
+          client_level->loadLayers();
+          client_level->loadObjects();
+          audioSource_->playBackgroundMusic("audio/level_theme.mp3", true);
+          Director::getInstance()->replaceScene(client_level);
         }
         break;
       }
@@ -60,25 +56,8 @@ bool ClientScene::init() {
   this->_eventDispatcher->addEventListenerWithSceneGraphPriority(keyListener,
                                                                  this);
 
-  this->scheduleUpdate();
-
   // add the label as a child to this layer
   this->addChild(host_field_, 1);
 
   return true;
-}
-
-void ClientScene::update(float delta) {
-  if (client_level_future_.valid()) {
-    future_status status =
-        client_level_future_.wait_for(std::chrono::milliseconds(1));
-    if (status != future_status::timeout) {
-      Level* level1 = client_level_future_.get();
-      level1->loadLayers();
-      level1->loadObjects();
-
-      audioSource_->playBackgroundMusic("audio/level_theme.mp3", true);
-      Director::getInstance()->replaceScene(level1);
-    }
-  }
 }

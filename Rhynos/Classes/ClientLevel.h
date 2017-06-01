@@ -13,7 +13,8 @@ class ClientLevel : public Level {
 
   static ClientLevel* createWithMap(const std::string& tmxFile);
 
-  static ClientLevel* init(ClientLevel* client_level, const std::string& host);
+  static ClientLevel* connect(ClientLevel* client_level,
+                              const std::string& host);
 
  protected:
   void handleInput() override;

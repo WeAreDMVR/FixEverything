@@ -214,6 +214,7 @@ void Level::update(float dt) {
     }
 
     this->handleInput();
+    this->extraUpdates();
 
     // Have to cast AI to player cuz its in a list of players
     if (this->_players.count("ai") > 0) {
