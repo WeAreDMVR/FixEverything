@@ -2,7 +2,6 @@
 #define _LEVEL_H_
 
 #include "AI.hpp"
-#include "Client.h"
 #include "KeyboardPoller.h"
 #include "Player.h"
 

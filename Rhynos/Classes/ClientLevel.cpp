@@ -13,30 +13,33 @@ using std::string;
 using std::to_string;
 using std::vector;
 
-ClientLevel* ClientLevel::createNetworkedWithMap(const string& tmxFile,
-                                                 const string& host) {
-  ClientLevel* ret = new ClientLevel(tmxFile);
+ClientLevel* ClientLevel::createWithMap(const string& tmxFile) {
+  return new ClientLevel(tmxFile);
+}
+
+ClientLevel* ClientLevel::init(ClientLevel* client_level, const string& host) {
   GameAction game_action;
   CCLOG("connecting to server");
-  asio::error_code ec = ret->_client.connect(host);
+  asio::error_code ec = client_level->_client.connect(host);
   if (ec) {
     CCLOG(ec.message().c_str());
     throw runtime_error("Could not connect to " + host);
   }
   do {
-    ret->_client.read(game_action);
+    client_level->_client.read(game_action);
   } while (game_action.type != GameAction::Type::CONNECTION_ESTABLISHED);
   CCLOG("Connected as player %d", game_action.player_id);
-  ret->_localPlayerId = game_action.player_id;
+  client_level->_localPlayerId = game_action.player_id;
   CCLOG("Waiting for another player");
   do {
-    ret->_client.read(game_action);
+    client_level->_client.read(game_action);
   } while (game_action.type != GameAction::Type::GAME_START);
-  ret->_otherPlayerId = game_action.player_id == ret->_localPlayerId
-                            ? game_action.other_player_id
-                            : game_action.player_id;
+  client_level->_otherPlayerId =
+      game_action.player_id == client_level->_localPlayerId
+          ? game_action.other_player_id
+          : game_action.player_id;
   CCLOG("Two players have connected");
-  return ret;
+  return client_level;
 }
 
 void ClientLevel::handleInput() {

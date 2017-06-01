@@ -7,11 +7,10 @@
 
 #include "Connection.h"
 #include "GameAction.h"
+#include "Level.h"
 
 #include <cstdlib>
-#include <sstream>
 #include <string>
-#include <vector>
 
 using asio::ip::tcp;
 
@@ -40,16 +39,6 @@ class Client {
  private:
   asio::io_service io_service_;
   connection_ptr conn_;
-};
-
-class ClientScene : public cocos2d::Scene {
- public:
-  virtual bool init() override;
-
-  CREATE_FUNC(ClientScene);
-
- private:
-  ClientScene() {}
 };
 
 #endif  // _CLIENT_H_

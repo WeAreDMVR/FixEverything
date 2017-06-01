@@ -11,8 +11,9 @@ class ClientLevel : public Level {
  public:
   using Level::Level;
 
-  static ClientLevel* createNetworkedWithMap(const std::string& tmxFile,
-                                             const std::string& host);
+  static ClientLevel* createWithMap(const std::string& tmxFile);
+
+  static ClientLevel* init(ClientLevel* client_level, const std::string& host);
 
  protected:
   void handleInput() override;

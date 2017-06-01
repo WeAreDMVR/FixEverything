@@ -61,46 +61,41 @@ void session(connection_ptr conn, Server* server) {
   }
 }
 
-void Server::start() {
-  CCLOG("Server is running");
-  do_accept();
-}
-
-void Server::do_accept() {
+void Server::do_accept(Server* server) {
   static const int NUM_PLAYERS = 2;
   for (int i = 0; i < NUM_PLAYERS; i++) {
-    connection_ptr new_conn(new Connection(acceptor.get_io_service()));
+    connection_ptr new_conn(new Connection(server->acceptor.get_io_service()));
     error_code ec;
-    acceptor.accept(new_conn->socket(), ec);
+    server->acceptor.accept(new_conn->socket(), ec);
     CCLOG("Accepted new connection");
     if (ec) {
       CCLOG(ec.message().c_str());
       i--;
     } else {
-      connections.push_back(new_conn);
+      server->connections.push_back(new_conn);
       CCLOG("Sending identification to client %d", new_conn->id());
       new_conn->write(GameAction::connectionEstablishedAction(new_conn->id()));
       CCLOG("Finished sending identification to client %d", new_conn->id());
-      std::thread(session, new_conn, this).detach();
+      std::thread(session, new_conn, server).detach();
     }
   }
 
-  int player1_id = connections[0]->id();
-  int player2_id = connections[1]->id();
-  for (auto& connection : connections) {
+  int player1_id = server->connections[0]->id();
+  int player2_id = server->connections[1]->id();
+  for (auto& connection : server->connections) {
     connection->write(GameAction::gameStartAction(player1_id, player2_id));
   }
-  do_game_loop();
+  Server::do_game_loop(server);
 }
 
-void Server::do_game_loop() {
+void Server::do_game_loop(Server* server) {
   while (true) {
     vector<GameAction> actions;
-    mut.lock();
-    actions.swap(game_actions);
-    mut.unlock();
+    server->mut.lock();
+    actions.swap(server->game_actions);
+    server->mut.unlock();
     if (!actions.empty()) {
-      for (auto connection : connections) {
+      for (auto connection : server->connections) {
         connection->write(actions);
       }
     }
@@ -126,8 +121,6 @@ bool ServerScene::init() {
 
   // add the label as a child to this layer
   this->addChild(label, 1);
-
-  server_.start();
 
   return true;
 }

@@ -1,7 +1,7 @@
 #include <typeinfo>
 
 #include "AILevel.h"
-#include "Client.h"
+#include "ClientScene.h"
 #include "Level.h"
 #include "Rhyno.h"
 #include "Server.h"
@@ -63,11 +63,13 @@ bool Rhyno::init() {
         break;
       }
       case EventKeyboard::KeyCode::KEY_S: {
+        audioSource->pauseBackgroundMusic();
         Director::getInstance()->pushScene(ServerScene::create());
         break;
       }
       case EventKeyboard::KeyCode::KEY_C: {
-        Director::getInstance()->pushScene(ClientScene::create());
+        audioSource->pauseBackgroundMusic();
+        Director::getInstance()->pushScene(ClientScene::create(audioSource));
         break;
       }
       default:

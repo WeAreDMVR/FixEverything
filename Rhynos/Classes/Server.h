@@ -10,6 +10,7 @@
 
 #include <memory>
 #include <mutex>
+#include <thread>
 #include <utility>
 #include <vector>
 
@@ -21,11 +22,13 @@ void session(connection_ptr conn, Server* server);
 
 struct Server {
   Server(asio::io_service& io_service, short port)
-      : acceptor(io_service, tcp::endpoint(tcp::v4(), port)) {}
+      : acceptor(io_service, tcp::endpoint(tcp::v4(), port)) {
+    std::thread(Server::do_accept, this).detach();
+    CCLOG("Server is running");
+  }
 
-  void start();
-  void do_accept();
-  void do_game_loop();
+  static void do_accept(Server* server);
+  static void do_game_loop(Server* server);
 
   tcp::acceptor acceptor;
   std::vector<connection_ptr> connections;
