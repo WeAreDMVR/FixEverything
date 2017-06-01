@@ -269,30 +269,24 @@ void Level::handleInput() {
   // Arrows
   if (this->keyPoll->isKeyPressed(
           cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
-    CCLOG("right");
     this->_localPlayer->applyMoveRight();
   }
   if (this->keyPoll->isKeyPressed(
           cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-    CCLOG("left");
     this->_localPlayer->applyMoveLeft();
   }
   if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
-    CCLOG("up");
     this->_localPlayer->applyJump();
   }
   if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_1)) {
-    CCLOG("1");
     this->_localPlayer->setLayer(1);
     setActiveFGandBG(1);
   }
   if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_2)) {
-    CCLOG("2");
     this->_localPlayer->setLayer(2);
     setActiveFGandBG(2);
   }
   if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_3)) {
-    CCLOG("3");
     this->_localPlayer->setLayer(3);
     setActiveFGandBG(3);
   }
