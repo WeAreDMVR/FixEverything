@@ -141,7 +141,7 @@
 0,1882,1883,1884,1885,1886,1887,1888,1889,1890,1891,1892,1893,1894,1895,1896,1897,1898,1899,1900,1901,1902,1903,1904,1905,1906,1907,1908,1909,1910,1911,1912,1913,1914,1915,1916,1917,1918,1919,1920
 </data>
  </layer>
- <layer name="meta3" width="40" height="12" opacity="0.59">
+ <layer name="meta3" width="40" height="12" opacity="0.0">
   <properties>
    <property name="CategoryBits" type="int" value="4"/>
   </properties>
@@ -160,7 +160,7 @@
 0,0,0,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,0,0,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,2807,0,0,2807,2807,2807,2807,2807,0
 </data>
  </layer>
- <layer name="meta2" width="40" height="12" opacity="0.7">
+ <layer name="meta2" width="40" height="12" opacity="0.0">
   <properties>
    <property name="CategoryBits" type="int" value="2"/>
   </properties>
@@ -179,7 +179,7 @@
 0,0,0,0,0,2327,2327,2327,2327,0,0,2327,2327,2327,0,0,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,2327,0,0,0,0,0,0,0,0,0
 </data>
  </layer>
- <layer name="meta1" width="40" height="12" opacity="0.41">
+ <layer name="meta1" width="40" height="12" opacity="0.0">
   <properties>
    <property name="BodyType" type="int" value="0"/>
    <property name="CategoryBits" type="int" value="1"/>
@@ -228,17 +228,10 @@
     <property name="Damage" type="int" value="0"/>
     <property name="Deceleration" type="float" value="80"/>
     <property name="Health" type="int" value="3"/>
-<<<<<<< HEAD
-    <property name="JumpAcceleration" type="float" value="10"/>
-    <property name="MaxJumpTime" type="float" value="4"/>
-    <property name="MaxSpeed" type="float" value="5"/>
-    <property name="name" value="tricr-75x75.png"/>
-=======
     <property name="JumpAcceleration" type="float" value="5.25"/>
     <property name="MaxJumpTime" type="float" value="10.2"/>
     <property name="MaxSpeed" type="float" value="3"/>
-    <property name="name" value="tricer-75x75.png"/>
->>>>>>> 3c09fdc504db8deaf334edb7af59ba77204d2448
+    <property name="name" value="tricr-75x75.png"/>
     <property name="type" value="AI"/>
     <property name="x" type="int" value="1"/>
     <property name="y" type="int" value="5"/>
