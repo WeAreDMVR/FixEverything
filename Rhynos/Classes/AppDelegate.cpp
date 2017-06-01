@@ -13,8 +13,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
   auto glview = director->getOpenGLView();
   if (!glview) {
     glview = GLViewImpl::create("Rhyno");
-    glview->setFrameSize(1500, 900);
-    glview->setDesignResolutionSize(1500, 900, ResolutionPolicy::EXACT_FIT);
+    glview->setFrameSize(800, 600);
+    glview->setDesignResolutionSize(800, 600, ResolutionPolicy::EXACT_FIT);
     director->setOpenGLView(glview);
   }
 
