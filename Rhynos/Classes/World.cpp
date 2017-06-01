@@ -11,6 +11,7 @@ class MyContactListener : public b2ContactListener
     void BeginContact(b2Contact* contact) {
         // Was a player involved?
         Player* p = NULL;
+        AI* ai = NULL;
 
         // Determine if either fixture belongs to a player
         void* fixtureDataA = contact->GetFixtureA()->GetBody()->GetUserData();
@@ -24,7 +25,7 @@ class MyContactListener : public b2ContactListener
             if (typeA == "Player") {
                 p = static_cast<Player*>(tA);
             } else if (typeA == "AI") {
-                AI* p = static_cast<AI*>(tA);
+                ai = static_cast<AI*>(tA);
             } else if (typeA == "Obstacle") {
                 // Read user data as an obstacle, or do further processing
             } else {
@@ -40,7 +41,7 @@ class MyContactListener : public b2ContactListener
             if (typeB == "Player") {
                 p = static_cast<Player*>(tB);
             } else if (typeB == "AI") {
-                p = static_cast<AI*>(tB);
+                ai = static_cast<AI*>(tB);
             } else if (typeB == "Obstacle") {
                 // Read user data as an obstacle etc.
             } else {
@@ -69,7 +70,7 @@ class MyContactListener : public b2ContactListener
 b2World* World::init() {
   const b2Vec2 gravity(0, Gravity);
   b2World* world = new b2World(gravity);
-  world->SetAllowSleeping(true);
+  world->SetAllowSleeping(false);
   world->SetContinuousPhysics(true);
   world->SetContactListener(new MyContactListener());
   return world;
