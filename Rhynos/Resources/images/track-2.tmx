@@ -231,7 +231,7 @@
     <property name="JumpAcceleration" type="float" value="10"/>
     <property name="MaxJumpTime" type="float" value="4"/>
     <property name="MaxSpeed" type="float" value="5"/>
-    <property name="name" value="rhyno-75x75.png"/>
+    <property name="name" value="tricr-75x75.png"/>
     <property name="type" value="AI"/>
     <property name="x" type="int" value="1"/>
     <property name="y" type="int" value="5"/>
