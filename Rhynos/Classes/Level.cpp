@@ -72,11 +72,11 @@ void Level::setActiveFGandBG(int layerNum) {
     }
 
     if (i == layerNum) {
-      FGLayer->setZOrder(10);
-      BGLayer->setZOrder(5);
+      FGLayer->setLocalZOrder(10);
+      BGLayer->setLocalZOrder(5);
     } else {
-      FGLayer->setZOrder(10 - i);
-      BGLayer->setZOrder(5 - i);
+      FGLayer->setLocalZOrder(10 - i);
+      BGLayer->setLocalZOrder(5 - i);
     }
   }
 }
