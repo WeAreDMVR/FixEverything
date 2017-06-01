@@ -17,7 +17,7 @@ Department of Mammal Vehicles, Rhino edition
 
 ## Group Members
 
-Lee Ehudin, Steven Hernandez, Patrick Dougherty, Michelle Ross, Long Pham
+Patrick Dougherty, Lee Ehudin, Steven Hernandez, Long Pham, Michelle Ross
 
 ## Gameplay Overview (controls, graphics, scoring, etc.)
 
@@ -28,16 +28,17 @@ at the touch of a button to overcome obstacles that would be impossible to
 cross on just one path. The levels will incorporate different terrains and
 obstacles.
 
-The first object of the game is to be the first to the finish line.
-Alternative game play modes include racing against time and getting high scores
-from collecting items.
+The object of the game is to be the first to the finish line.
 
 ### Controls
 
 For controls, we will map x-axis movement to the left and right arrow keys and
-jump to Space, but we’d like them to be configurable (stretch goal).  Two
-additional buttons (probably Q and E) will be used to cycle between tracks.
-Major Architectural Components (graphics engine, AI agents, networking, ...)
+jump to Space, but we’d like them to be configurable (stretch goal).  Three
+additional buttons (1,2,3) will be used to cycle between tracks.
+
+
+### Major Architectural Components (graphics engine, AI agents, networking, ...)
+
 The major components we will be implementing and integrating into our game
 include a bit graphic engine, a game state manager for the game world, at least
 one AI agent, networking across computers, a basic 2D physics engine largely
@@ -47,12 +48,12 @@ implemented in C++.
 
 ### Graphics Engine
 
-The graphics engine will be responsible for generating graphics so that the
+The graphics engine is responsible for generating graphics so that the
 player can view the game world.  The input to the graphics engine will come
 from the game state manager.  This input will be the state of the game,
 including the track and the locations of the player(s) and AI(s).  The output
 of the graphics engine will be rendered graphics that the player can see.  We
-plan on using Oxygine to implement our graphics engine.
+plan on using Cocos2D to implement our graphics engine.
 
 ### Game State Manager
 
@@ -67,22 +68,47 @@ player to the networking component if the game is in multiplayer mode.
 ### AI Agent
 
 The AI Agent is responsible for planning out and executing the action of each
-AI racer in the game.  The initial implementation of the AI will be supplied a
-path for each AI racer based on the current track, and the AI racers will
-attempt to follow the paths as closely as possible, at a set speed for each
-portion of the path.  At each update cycle, the game state manager will send
-the state of the game to the AI agent.  The AI agent will then process the next
-moves for each of the AI racers based on the supplied AI path and any obstacles
-in that path.  It will send these next moves to the physics engine so that it
-updates the state of the AI racers.
+AI racer in the game. It is a subclass of the player classs and therefore
+inherits all its movement functions. At each update cycle, the game state 
+manager will send the state of the game to the AI agent.  The AI agent will then 
+analyze the tiles in a 5 tile radius around itself to determine the optimal move it should
+make (whether it be switching layers, jumping or both).  This behavior is based
+on a heuristic where the agent will try to get as high as possible while
+moving towards the goal.  Furthermore, since jumping has a high acceleration
+factor, the AI calculates the furthest distance it can jump at each update
+cycle without dying (as well as increase its heuristic). Thus, it prefers
+jumping over not jumping.  To ensure that the AI does not always win, it has
+a set probability that it will fail to move at all, which is changed based
+on the difficulty we set for the game.
+
 
 ### Networking Manager
 
 The networking manager is used to communicate with other players while playing
-in multiplayer mode.  If the game is in multiplayer mode, each update from the
-user will be sent to the networking manager to be sent to all the other players
-playing the game.  Whenever an update is received from another user, the
-networking manager will send it to the physics engine to be processed.
+in multiplayer mode.  The networked game has a client-server architecture.
+Players can opt to create a client or server in addition to the single-player AI
+game.  Once two clients have connected to the same server, the networking game
+begins, and clients see the updates from all other clients in their game through
+input reflection from the server.
+
+The protocol we use has only four messages:
+  * CONNECTION_ESTABLISHED is the initial message the server sends to a client
+    to let it know that it has successfully connected to the server and to
+    assign it a unique id.
+  * GAME_START is a message that is sent to all clients once two players have
+    connected to the server. It contains a list of the id of every player
+    currently connected, so the client and server have a shared way of
+    communicating about actions from each player.
+  * When the game has started and the client presses a key, it sends over the
+    key code of that key press to the server.
+  * KEY_PRESSED is a message that is send to every client when the server
+    receives a notification from a client that it has pressed a key. This
+    message contains the key code of the key that was pressed and the id of the
+    player that pressed it.
+
+We used asio as our networking library and cereal as our serialization library.
+Both our server and clients communicate over TCP using synchronous (blocking)
+function calls in multiple threads.
 
 ### Physics Engine
 
@@ -166,9 +192,9 @@ Michelle: graphics, assets, sound
 
 Steven: physics, data
 
-Lee: graphics, code style, networking
+Lee: graphics, networking
 
-Long: assets, data, networking
+Long: AI, gameplay, collision physics
 
 Patrick: physics, AI
 

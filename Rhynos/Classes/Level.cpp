@@ -72,14 +72,12 @@ void Level::setActiveFGandBG(int layerNum) {
     }
 
     if (i == layerNum) {
-      FGLayer->setPositionZ(10);
-      BGLayer->setPositionZ(5);
+      FGLayer->setLocalZOrder(10);
+      BGLayer->setLocalZOrder(5);
     } else {
-      FGLayer->setPositionZ(10 - i);
-      BGLayer->setPositionZ(5 - i);
+      FGLayer->setLocalZOrder(10 - i);
+      BGLayer->setLocalZOrder(5 - i);
     }
-    FGLayer->setVisible(true);
-    BGLayer->setVisible(true);
   }
 }
 

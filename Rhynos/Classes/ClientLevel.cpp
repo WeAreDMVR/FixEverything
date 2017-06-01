@@ -95,6 +95,20 @@ void ClientLevel::extraUpdates() {
       if (action.type == GameAction::Type::KEY_PRESSED) {
         for (const EventKeyboard::KeyCode key : action.keys_pressed) {
           _players[to_string(action.player_id)]->applyInput(key);
+          // apply layer switching
+          switch (key) {
+            case EventKeyboard::KeyCode::KEY_1:
+              setActiveFGandBG(1);
+              break;
+            case EventKeyboard::KeyCode::KEY_2:
+              setActiveFGandBG(2);
+              break;
+            case EventKeyboard::KeyCode::KEY_3:
+              setActiveFGandBG(3);
+              break;
+            default:
+              break;
+          }
         }
       }
     }
