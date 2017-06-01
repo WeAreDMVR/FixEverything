@@ -66,7 +66,7 @@ void AI::analyzeMap(const TMXTiledMap* map) {
 
   if (prob < 0.94) {
     // AI WILL "MESS UP"
-    return;
+    // return;
   }
 
   auto y_pos = this->getPositionY();
