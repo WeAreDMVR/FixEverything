@@ -79,10 +79,30 @@ updates the state of the AI racers.
 ### Networking Manager
 
 The networking manager is used to communicate with other players while playing
-in multiplayer mode.  If the game is in multiplayer mode, each update from the
-user will be sent to the networking manager to be sent to all the other players
-playing the game.  Whenever an update is received from another user, the
-networking manager will send it to the physics engine to be processed.
+in multiplayer mode.  The networked game has a client-server architecture.
+Players can opt to create a client or server in addition to the single-player AI
+game.  Once two clients have connected to the same server, the networking game
+begins, and clients see the updates from all other clients in their game through
+input reflection from the server.
+
+The protocol we use has only four messages:
+  * CONNECTION_ESTABLISHED is the initial message the server sends to a client
+    to let it know that it has successfully connected to the server and to
+    assign it a unique id.
+  * GAME_START is a message that is sent to all clients once two players have
+    connected to the server. It contains a list of the id of every player
+    currently connected, so the client and server have a shared way of
+    communicating about actions from each player.
+  * When the game has started and the client presses a key, it sends over the
+    key code of that key press to the server.
+  * KEY_PRESSED is a message that is send to every client when the server
+    receives a notification from a client that it has pressed a key. This
+    message contains the key code of the key that was pressed and the id of the
+    player that pressed it.
+
+We used asio as our networking library and cereal as our serialization library.
+Both our server and clients communicate over TCP using synchronous (blocking)
+function calls in multiple threads.
 
 ### Physics Engine
 
@@ -166,9 +186,9 @@ Michelle: graphics, assets, sound
 
 Steven: physics, data
 
-Lee: graphics, code style, networking
+Lee: graphics, networking
 
-Long: assets, data, networking
+Long: AI
 
 Patrick: physics, AI
 
