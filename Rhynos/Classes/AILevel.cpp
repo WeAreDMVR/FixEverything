@@ -25,8 +25,8 @@ void AILevel::addPlayer(const std::string& className, Player* player) {
 bool AILevel::didWin(float x, float y) {
   // Currently only doing for AI and player
 
-  bool playerWin = this->_players["localhost"]->checkWin(Point(2000, 500));
-  bool AIWin = (static_cast<AI*>(this->_players["ai"]))->atTarget();
+  bool playerWin = this->_players["localhost"]->checkWin(Point(2700, 500));
+  bool AIWin = this->_players["ai"]->checkWin(Point(2700, 500));
 
   const char* msg;
   if (playerWin && !AIWin) {

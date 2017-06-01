@@ -14,10 +14,11 @@ void Player::setProperties(const ValueMap* properties) {
   this->_maxSpeed = properties->at("MaxSpeed").asFloat();
   this->_maxJumpTime = properties->at("MaxJumpTime").asFloat();
   this->_status = PlayerStatus::normal;
-    
+
   int x = properties->at("x").asInt();
   int y = properties->at("y").asInt();
   this->defaultPosition = Point(x, y);
+    
     
 }
 
@@ -169,6 +170,10 @@ bool Player::canJump() {
     return false;
   }
 }
+
+
+
+
 
 void Player::setLayer(int layerNum) {
   this->_layernum = layerNum;

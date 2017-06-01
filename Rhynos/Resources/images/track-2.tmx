@@ -228,10 +228,17 @@
     <property name="Damage" type="int" value="0"/>
     <property name="Deceleration" type="float" value="80"/>
     <property name="Health" type="int" value="3"/>
+<<<<<<< HEAD
     <property name="JumpAcceleration" type="float" value="10"/>
     <property name="MaxJumpTime" type="float" value="4"/>
     <property name="MaxSpeed" type="float" value="5"/>
     <property name="name" value="tricr-75x75.png"/>
+=======
+    <property name="JumpAcceleration" type="float" value="5.25"/>
+    <property name="MaxJumpTime" type="float" value="10.2"/>
+    <property name="MaxSpeed" type="float" value="3"/>
+    <property name="name" value="tricer-75x75.png"/>
+>>>>>>> 3c09fdc504db8deaf334edb7af59ba77204d2448
     <property name="type" value="AI"/>
     <property name="x" type="int" value="1"/>
     <property name="y" type="int" value="5"/>
