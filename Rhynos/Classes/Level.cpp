@@ -177,7 +177,7 @@ Point Level::positionForTileCoord(const Point& coordinate) {
   return Point(x, y);
 }
 
-// Don't know if this function is used, if so might need to adjust for phys pos
+// Convert Physical Coordinates to Tile Coordinates
 Point Level::tileCoordForPosition(const Point& position) {
   const int x = position.x / tileSize.width;
   const int y = mapSize.height - (position.y / tileSize.height) - 1;
@@ -195,6 +195,16 @@ double Level::getCurrentTime() {
 }
 
 void Level::update(float dt) {
+    if (this->over) {
+        if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_ENTER)) {
+            Director::getInstance()->popScene();
+            auto audioSource = CocosDenshion::SimpleAudioEngine::getInstance();
+            audioSource->pauseBackgroundMusic();
+            audioSource->playBackgroundMusic("audio/menu_theme.mp3", true);
+        }
+        return;
+    }
+    
   const double currentTime = this->getCurrentTime();
   if (!this->_lastTime) {
     this->_lastTime = currentTime;
@@ -206,9 +216,7 @@ void Level::update(float dt) {
     // Check inputs
     if (this->_localPlayer->isOffMap()) {
       cocos2d::Point original = this->_localPlayer->getDefaultPosition();
-      CCLOG("Got default position");
       this->_localPlayer->setBodyPosition(positionForTileCoord(original));
-      CCLOG("Set curr pos to def pos");
     }
 
     this->handleInput();
@@ -216,7 +224,7 @@ void Level::update(float dt) {
 
     // Have to cast AI to player cuz its in a list of players
     if (this->_players.count("ai") > 0) {
-      (static_cast<AI*>(this->_players["ai"]))->move();
+      (static_cast<AI*>(this->_players["ai"]))->analyzeMap(this->_map);
     }
     // Step Physics
     World::step(this->_world);
@@ -247,15 +255,10 @@ void Level::update(float dt) {
 
   Camera::getDefaultCamera()->setPosition(Point(camera_x, camera_y));
 
-  if (didWin(camera_x, camera_y)) {
-    if (this->keyPoll->isKeyPressed(
-            cocos2d::EventKeyboard::KeyCode::KEY_ENTER)) {
-      Director::getInstance()->popScene();
-      auto audioSource = CocosDenshion::SimpleAudioEngine::getInstance();
-      audioSource->pauseBackgroundMusic();
-      audioSource->playBackgroundMusic("audio/menu_theme.mp3", true);
+    if (didWin(camera_x, camera_y)) {
+        this->over = true;
     }
-  }
+
 }
 
 // Write function where if the player is localhost then update their UI
