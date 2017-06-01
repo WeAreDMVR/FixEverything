@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <string>
 #include <vector>
+#include "SimpleAudioEngine.h"
 
 using namespace cocos2d;
 
@@ -130,6 +131,7 @@ bool ClientLevel::didWin(float x, float y) {
 
   if (this->over) {
     CCLOG(msg);
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("audio/fanfare.wav");
     auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 48);
     // position the label on the center of the screen
     label->setPosition(Vec2(x, y));

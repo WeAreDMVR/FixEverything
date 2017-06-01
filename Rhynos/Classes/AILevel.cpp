@@ -2,6 +2,7 @@
 
 #include <Box2D/Box2D.h>
 #include "cocos2d.h"
+#include "SimpleAudioEngine.h"
 
 #include <string>
 
@@ -40,6 +41,7 @@ bool AILevel::didWin(float x, float y) {
   }
 
   if (this->over) {
+    CocosDenshion::SimpleAudioEngine::sharedEngine()->playEffect("audio/fanfare.wav");
     auto label = Label::createWithTTF(msg, "fonts/Marker Felt.ttf", 48);
     // position the label on the center of the screen
     label->setPosition(Vec2(x, y));
