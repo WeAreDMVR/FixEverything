@@ -1,12 +1,18 @@
 #include <cstdlib>
 #include "AI.hpp"
+#include "World.h"
 #include "Player.h"
 using namespace cocos2d;
+using std::string;
+using std::to_string;
+static const Size tileSize(75.0, 75.0);
+static const Size mapSize(40.0, 12.0);
 
 AI::AI(Sprite* sprite) : Player(sprite) {
   this->target = Point(3000, 20);
   this->failProb = 0.1;
   this->type = "AI";
+  this->prev = Point(-100, -100);
 }
 
 int AI::atTarget() {
@@ -42,30 +48,91 @@ int AI::move() {
   return 1;
 }
 
-void AI::analyzeMap(TMXTiledMap* map) {
-    TMXLayer* layer1 = map->getLayer("meta1");
+Point tileCoordForPosition(const Point& position) {
+    const int x = position.x / tileSize.width;
+    const int y = mapSize.height - (position.y / tileSize.height) - 1;
+    return Point(x, y);
+}
+
+
+void AI::analyzeMap(const TMXTiledMap* map) {
+    this->setLayer(2);
+    int val = std::rand();
+    float prob = val / (float)RAND_MAX;
+    
+    // Check win
+    if (this->atTarget())
+        return;
+    
     
     auto y_pos = this->getPositionY();
     auto x_pos = this->getPositionX();
     
-    for (int y = y_pos; y < y_pos + 5; y++) {
-        for (int x = x_pos; x < x_pos; x++) {
-            Sprite* tileSprite = layer1->getTileAt(Point(x, y));
+    CCLOG("PREV");
+    CCLOG( "%.2f, %.2f", this->prev.x, this->prev.y);
+    CCLOG("NEW POS");
+    CCLOG( "%.2f, %.2f", x_pos, y_pos);
+    
+    auto pt = tileCoordForPosition(Point(x_pos, y_pos));
+    auto currLayer = this->getLayerNum();
+    
+    if (this->isOffMap()) {
+        return;
+    }
+    
+    for (int j= currLayer; j < currLayer + 3; j++) {
+        int i = (j % 3);
+        if (i==0) {
+            i = 3;
+        }
+        TMXLayer* layer1 = map->getLayer("meta" + to_string(i));
+    
+        for (int y = pt.y+5; y > pt.y; y--) {
+            for (int x = pt.x+5; x > pt.x; x--) {
+                Sprite* tileSprite = layer1->getTileAt(pt);
             
-            if (tileSprite) {
-                tileSprite->setAnchorPoint(Point(0.5, 0.5));
-                const int tileGID = layer1->getTileGIDAt(Point(x, y));
-                const cocos2d::ValueMap properties =
-                map->getPropertiesForGID(tileGID).asValueMap();
-                cocos2d::ValueMap* ptr_properties = new ValueMap(properties);
+                if (tileSprite) {
+                    tileSprite->setAnchorPoint(Point(0.5, 0.5));
+                    const int tileGID = layer1->getTileGIDAt(pt);
+                    const cocos2d::ValueMap properties =
+                    map->getPropertiesForGID(tileGID).asValueMap();
+                    cocos2d::ValueMap* ptr_properties = new ValueMap(properties);
                 
-                // if no tile there and y_pos < 2, check for jumping pos
-                
-                
-                
+                    if (x == pt.x+1 && y == pt.y+1 && tileGID !=0) {
+                        CCLOG("straight");
+                        this->applyMoveRight();
+                        goto action;
+                    }
+                    
+                    if (x > pt.x + 2 && tileGID != 0) {
+                        CCLOG("here");
+                        this->applyJump();
+                        goto action;
+                    }
+                    
+                    
+                    
+                    
+                    if (tileGID == 0 && x < pt.x + 3) {
+                        this->applyJump();
+                        this->setLayer(i);
+                        goto action;
+                    }
+                    
+                }
             }
         }
     }
+    
+action:
+    
+    if ((this->prev.x == x_pos) && (this->prev.y == y_pos)) {
+        CCLOG("WHY NO WORK");
+        //this->applyJump();
+    }
+    
+    this->prev = Point(x_pos, y_pos);
+    this->applyMoveRight();
 }
 
 

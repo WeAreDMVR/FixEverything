@@ -20,29 +20,28 @@ void AILevel::handleInput() {
     }
     
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
-    CCLOG("right");
+
     this->_players["localhost"]->applyInput(
         EventKeyboard::KeyCode::KEY_RIGHT_ARROW);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-    CCLOG("left");
+
     this->_players["localhost"]->applyInput(
         EventKeyboard::KeyCode::KEY_LEFT_ARROW);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_SPACE)) {
-    CCLOG("up");
+
     this->_players["localhost"]->applyInput(EventKeyboard::KeyCode::KEY_SPACE);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_1)) {
-    CCLOG("1");
+
     this->_players["localhost"]->applyInput(EventKeyboard::KeyCode::KEY_1);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_2)) {
-    CCLOG("2");
+
     this->_players["localhost"]->applyInput(EventKeyboard::KeyCode::KEY_2);
   }
   if (this->keyPoll->isKeyPressed(EventKeyboard::KeyCode::KEY_3)) {
-    CCLOG("3");
     this->_players["localhost"]->applyInput(EventKeyboard::KeyCode::KEY_3);
   }
 }

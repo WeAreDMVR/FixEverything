@@ -194,19 +194,18 @@ void Level::update(float dt) {
     double frameTime = currentTime - this->_lastTime;
     
     while (frameTime > TimeStep) {
-        // Check inputs
+        
+        // Check if player needs to respawn
         if (this->_players["localhost"]->isOffMap()) {
             cocos2d::Point original = this->_players["localhost"]->getDefaultPosition();
-            CCLOG("Got default position");
             this->_players["localhost"]->setBodyPosition(positionForTileCoord(original));
-            CCLOG("Set curr pos to def pos");
         }
         
         
         this->handleInput();
         
         // Have to cast AI to player cuz its in a list of players
-        (static_cast<AI*> (this->_players["ai"]))->move();
+        (static_cast<AI*> (this->_players["ai"]))->analyzeMap(this->_map);
         // Step Physics
         World::step(this->_world);
         frameTime -= TimeStep;
@@ -287,28 +286,28 @@ void Level::handleInput() {
     // Arrows
     if (this->keyPoll->isKeyPressed(
                                     cocos2d::EventKeyboard::KeyCode::KEY_RIGHT_ARROW)) {
-        CCLOG("right");
+        
         this->_players["localhost"]->applyMoveRight();
     }
     if (this->keyPoll->isKeyPressed(
                                     cocos2d::EventKeyboard::KeyCode::KEY_LEFT_ARROW)) {
-        CCLOG("left");
+        
         this->_players["localhost"]->applyMoveLeft();
     }
     if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_SPACE)) {
-        CCLOG("up");
+        
         this->_players["localhost"]->applyJump();
     }
     if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_1)) {
-        CCLOG("1");
+        
         this->_players["localhost"]->setLayer(1);
     }
     if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_2)) {
-        CCLOG("2");
+        
         this->_players["localhost"]->setLayer(2);
     }
     if (this->keyPoll->isKeyPressed(cocos2d::EventKeyboard::KeyCode::KEY_3)) {
-        CCLOG("3");
+        
         this->_players["localhost"]->setLayer(3);
     }
 }
