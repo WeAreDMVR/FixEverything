@@ -1,5 +1,5 @@
-#include "World.h"
 #include "Player.h"
+#include "World.h"
 
 #include <Box2D/Box2D.h>
 #include <iostream>
@@ -30,7 +30,6 @@ class MyContactListener : public b2ContactListener
                 // Read user data as an obstacle, or do further processing
             } else {
                 // Don't care
-
             }
         }
 
@@ -46,25 +45,23 @@ class MyContactListener : public b2ContactListener
                 // Read user data as an obstacle etc.
             } else {
                 // Don't care
-
             }
         }
 
-        // Now that we know what was involved in the collision, handle it
-        if (p) {
-          // Perhaps call a player function
-          
-          // Reset Jump time because we collided with something
-          // Could be more specific
-          p->resetJumpTime();
-        }
+    // Now that we know what was involved in the collision, handle it
+    if (p) {
+      // Perhaps call a player function
 
+      // Reset Jump time because we collided with something
+      // Could be more specific
+      p->resetJumpTime();
     }
+  }
 
-    void EndContact(b2Contact* contact) {
-        // Check fixtures as above
-        // Perhaps change a flag in a class, like playerIsTouchingGround
-    }
+  void EndContact(b2Contact* contact) {
+    // Check fixtures as above
+    // Perhaps change a flag in a class, like playerIsTouchingGround
+  }
 };
 
 b2World* World::init() {
@@ -82,4 +79,3 @@ void World::step(b2World* world) {
 
   world->Step(TimeStep, velocityIterations, positionIterations);
 }
-
