@@ -25,7 +25,7 @@ class MyContactListener : public b2ContactListener
             if (typeA == "Player") {
                 p = static_cast<Player*>(tA);
             } else if (typeA == "AI") {
-                ai = static_cast<AI*>(tA);
+                p = static_cast<AI*>(tA);
             } else if (typeA == "Obstacle") {
                 // Read user data as an obstacle, or do further processing
             } else {
@@ -40,7 +40,7 @@ class MyContactListener : public b2ContactListener
             if (typeB == "Player") {
                 p = static_cast<Player*>(tB);
             } else if (typeB == "AI") {
-                ai = static_cast<AI*>(tB);
+                p = static_cast<AI*>(tB);
             } else if (typeB == "Obstacle") {
                 // Read user data as an obstacle etc.
             } else {
